@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asistencia NER Nueva Alianza - V1.9</title>
+<title>Asistencia NER Nueva Alianza - V2.0</title>
 
 <style>
 *{
@@ -483,7 +483,7 @@ tr:nth-child(even){
 
 <header>
     <h1>ASISTENCIA NER NUEVA ALIANZA</h1>
-    <p>Sistema de Control Diario de Asistencia — V1.9</p>
+    <p>Sistema de Control Diario de Asistencia — V2.0</p>
 </header>
 
 <div class="container">
@@ -499,6 +499,9 @@ tr:nth-child(even){
     <div class="info">
         Fecha de trabajo:
         <strong id="fechaDashboard"></strong>
+        <span id="estadoServidor" style="float:right;font-weight:bold;">
+            ☁️ Conectando...
+        </span>
     </div>
 
     <div id="estadoJornada" class="jornada pendiente">
@@ -975,7 +978,7 @@ tr:nth-child(even){
 
 
 <div class="footer">
-    Sistema de Asistencia NER Nueva Alianza — V1.9
+    Sistema de Asistencia NER Nueva Alianza — V2.0
     <br>
     Control diario de asistencia
 </div>
@@ -1033,6 +1036,11 @@ const ESCUELAS = [
 
 const STORAGE_KEY =
     "ner_nueva_alianza_reportes";
+
+const API_URL =
+    "https://script.google.com/macros/s/AKfycby2_HMfdZq7tpdnBX6ev1IUwI-LKGwtQxav7sZkaxcVGl-UoHtV3ZJJl9VN9O_HS4xo/exec";
+
+let servidorDisponible = false;
 
 let escuelaActual = null;
 
@@ -2126,7 +2134,7 @@ function calcularTotales(){
    GUARDAR
 ===================================================== */
 
-function guardarReporte(){
+async function guardarReporte(){
 
     limpiarMensaje();
 
@@ -2410,9 +2418,40 @@ function guardarReporte(){
 
     mostrarMensaje(
         "formMessage",
-        "✓ Reporte guardado correctamente.",
-        "success"
+        "⏳ Reporte guardado localmente. Enviando a datos compartidos...",
+        "warning"
     );
+
+
+    try{
+
+        await enviarReporteCompartido(
+            reporte
+        );
+
+        guardarDatos();
+
+        mostrarMensaje(
+            "formMessage",
+            "✅ Reporte guardado correctamente y compartido con el NER.",
+            "success"
+        );
+
+    }catch(error){
+
+        reporte.compartido = false;
+
+        guardarDatos();
+
+        mostrarMensaje(
+            "formMessage",
+            "⚠ Reporte guardado localmente, pero no se pudo sincronizar con el servidor. Puede intentarlo nuevamente.",
+            "warning"
+        );
+
+        console.error(error);
+
+    }
 
 
     actualizarDashboard();
@@ -2792,6 +2831,367 @@ function actualizarDashboard(){
 }
 
 
+
+/* =====================================================
+   DATOS COMPARTIDOS — V2.0
+===================================================== */
+
+async function cargarDatosCompartidos(){
+
+    try{
+
+        const respuesta =
+            await fetch(
+                API_URL,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
+
+        if(!respuesta.ok){
+            throw new Error(
+                "No se pudo consultar el servidor."
+            );
+        }
+
+        const datos =
+            await respuesta.json();
+
+        if(!datos.ok){
+            throw new Error(
+                datos.error ||
+                "Error del servidor."
+            );
+        }
+
+        integrarReportesCompartidos(
+            datos.reportes || []
+        );
+
+        servidorDisponible = true;
+
+        actualizarDashboard();
+        mostrarEscuelas();
+        actualizarEstadoServidor();
+
+        return true;
+
+    }catch(error){
+
+        servidorDisponible = false;
+
+        actualizarEstadoServidor();
+
+        console.warn(
+            "Datos compartidos no disponibles:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+function integrarReportesCompartidos(lista){
+
+    lista.forEach(
+        fila => {
+
+            const fecha =
+                convertirFechaServidor(
+                    fila["Fecha"]
+                );
+
+            const codigo =
+                String(
+                    fila["Código"] || ""
+                );
+
+            if(!fecha || !codigo){
+                return;
+            }
+
+            if(!historial[fecha]){
+                historial[fecha] = {
+                    reportes:[]
+                };
+            }
+
+            let reporte =
+                historial[fecha].reportes.find(
+                    r =>
+                    String(r.codigo) ===
+                    codigo
+                );
+
+            if(!reporte){
+
+                const escuela =
+                    ESCUELAS.find(
+                        e =>
+                        e.codigo ===
+                        codigo
+                    );
+
+                if(!escuela){
+                    return;
+                }
+
+                reporte =
+                    crearReporte(
+                        escuela
+                    );
+
+                reporte.fecha =
+                    fecha;
+
+                historial[fecha].reportes.push(
+                    reporte
+                );
+
+            }
+
+            reporte.nombre =
+                fila["Centro Educativo"] ||
+                reporte.nombre;
+
+            reporte.codigo =
+                codigo;
+
+            reporte.fecha =
+                fecha;
+
+            reporte.modalidad =
+                fila["Modalidad"] ||
+                reporte.modalidad;
+
+            reporte.turno =
+                fila["Turno"] ||
+                reporte.turno;
+
+            reporte.matM =
+                Number(
+                    fila["Matrícula M"]
+                ) || 0;
+
+            reporte.matF =
+                Number(
+                    fila["Matrícula F"]
+                ) || 0;
+
+            reporte.matTotal =
+                Number(
+                    fila["Matrícula Total"]
+                ) ||
+                (
+                    reporte.matM +
+                    reporte.matF
+                );
+
+            reporte.asiM =
+                Number(
+                    fila["Asistencia M"]
+                ) || 0;
+
+            reporte.asiF =
+                Number(
+                    fila["Asistencia F"]
+                ) || 0;
+
+            reporte.asiTotal =
+                Number(
+                    fila["Asistencia Total"]
+                ) ||
+                (
+                    reporte.asiM +
+                    reporte.asiF
+                );
+
+            reporte.porcentaje =
+                Number(
+                    fila["Porcentaje"]
+                ) || 0;
+
+            reporte.docM =
+                Number(
+                    fila["Docentes M"]
+                ) || 0;
+
+            reporte.docF =
+                Number(
+                    fila["Docentes F"]
+                ) || 0;
+
+            reporte.docTotal =
+                Number(
+                    fila["Docentes Total"]
+                ) ||
+                (
+                    reporte.docM +
+                    reporte.docF
+                );
+
+            reporte.jusM =
+                Number(
+                    fila["Justificados M"]
+                ) || 0;
+
+            reporte.jusF =
+                Number(
+                    fila["Justificados F"]
+                ) || 0;
+
+            reporte.jusTotal =
+                Number(
+                    fila["Justificados Total"]
+                ) ||
+                (
+                    reporte.jusM +
+                    reporte.jusF
+                );
+
+            reporte.injM =
+                Number(
+                    fila["Injustificados M"]
+                ) || 0;
+
+            reporte.injF =
+                Number(
+                    fila["Injustificados F"]
+                ) || 0;
+
+            reporte.injTotal =
+                Number(
+                    fila["Injustificados Total"]
+                ) ||
+                (
+                    reporte.injM +
+                    reporte.injF
+                );
+
+            reporte.guardado = true;
+            reporte.compartido = true;
+
+        }
+    );
+
+    guardarDatos();
+
+}
+
+
+function convertirFechaServidor(fecha){
+
+    if(!fecha){
+        return "";
+    }
+
+    if(
+        typeof fecha ===
+        "string"
+    ){
+
+        if(
+            /^\\d{4}-\\d{2}-\\d{2}$/.test(
+                fecha
+            )
+        ){
+            return fecha;
+        }
+
+        const encontrado =
+            fecha.match(
+                /^(\\d{4}-\\d{2}-\\d{2})/
+            );
+
+        if(encontrado){
+            return encontrado[1];
+        }
+
+    }
+
+    const fechaObjeto =
+        new Date(fecha);
+
+    if(isNaN(fechaObjeto)){
+        return "";
+    }
+
+    return fechaObjeto
+        .toISOString()
+        .slice(0,10);
+
+}
+
+
+async function enviarReporteCompartido(reporte){
+
+    const payload = {
+
+        fecha: reporte.fecha,
+        codigo: reporte.codigo,
+        centro: reporte.nombre,
+        modalidad: reporte.modalidad,
+        turno: reporte.turno,
+
+        matM: reporte.matM,
+        matF: reporte.matF,
+        matTotal: reporte.matTotal,
+
+        asiM: reporte.asiM,
+        asiF: reporte.asiF,
+        asiTotal: reporte.asiTotal,
+
+        porcentaje: reporte.porcentaje,
+
+        docM: reporte.docM,
+        docF: reporte.docF,
+        docTotal: reporte.docTotal,
+
+        jusM: reporte.jusM,
+        jusF: reporte.jusF,
+        jusTotal: reporte.jusTotal,
+
+        injM: reporte.injM,
+        injF: reporte.injF,
+        injTotal: reporte.injTotal,
+
+        estado:"RECIBIDO"
+
+    };
+
+    /*
+       Se usa text/plain + no-cors para evitar
+       una solicitud CORS previa. Apps Script
+       recibe el cuerpo como JSON normal.
+    */
+
+    await fetch(
+        API_URL,
+        {
+            method:"POST",
+            mode:"no-cors",
+            headers:{
+                "Content-Type":
+                    "text/plain;charset=UTF-8"
+            },
+            body:
+                JSON.stringify(payload)
+        }
+    );
+
+    servidorDisponible = true;
+
+    reporte.compartido = true;
+
+    return true;
+
+}
+
+
 /* =====================================================
    CONSOLIDADO
 ===================================================== */
@@ -3122,7 +3522,7 @@ function imprimirConsolidado(){
         function(){
 
             document.title =
-                "Asistencia NER Nueva Alianza - V1.9";
+                "Asistencia NER Nueva Alianza - V2.0";
 
         },
         1000
@@ -3679,6 +4079,26 @@ document.addEventListener(
 );
 
 
+
+function actualizarEstadoServidor(){
+
+    const elemento =
+        document.getElementById(
+            "estadoServidor"
+        );
+
+    if(!elemento){
+        return;
+    }
+
+    elemento.textContent =
+        servidorDisponible
+        ? "☁️ Datos compartidos activos"
+        : "📱 Modo local / servidor pendiente";
+
+}
+
+
 /* =====================================================
    INICIALIZACIÓN
 ===================================================== */
@@ -3686,6 +4106,15 @@ document.addEventListener(
 actualizarDashboard();
 
 mostrarEscuelas();
+
+actualizarEstadoServidor();
+
+cargarDatosCompartidos()
+    .then(
+        () => {
+            actualizarEstadoServidor();
+        }
+    );
 
 </script>
 
