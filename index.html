@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asistencia NER Nueva Alianza - V2.0</title>
+
+<title>Asistencia NER Nueva Alianza V2.0</title>
 
 <style>
 *{
@@ -18,11 +19,10 @@ body{
 }
 
 header{
-    background:linear-gradient(135deg,#0f4c81,#1769aa);
+    background:linear-gradient(135deg,#0f766e,#2563eb);
     color:white;
-    padding:22px 15px;
+    padding:22px;
     text-align:center;
-    box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
 
 header h1{
@@ -32,26 +32,29 @@ header h1{
 
 header p{
     margin:6px 0 0;
-    font-size:14px;
+    opacity:.9;
 }
 
 .container{
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
+    width:min(1200px,94%);
+    margin:20px auto;
 }
 
-.panel{
+.server{
     background:white;
-    border-radius:14px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
+    border-radius:12px;
+    padding:12px 16px;
+    margin-bottom:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    font-weight:bold;
 }
 
-.panel h2{
-    margin-top:0;
-    color:#0f4c81;
+.server.ok{
+    color:#047857;
+}
+
+.server.error{
+    color:#b91c1c;
 }
 
 .dashboard{
@@ -64,106 +67,87 @@ header p{
 .card{
     background:white;
     border-radius:12px;
-    padding:16px;
-    text-align:center;
-    box-shadow:0 3px 10px rgba(0,0,0,.07);
-    border-top:4px solid #1769aa;
-}
-
-.card .number{
-    font-size:27px;
-    font-weight:bold;
-    color:#0f4c81;
-}
-
-.card .label{
-    font-size:13px;
-    margin-top:5px;
-    color:#64748b;
-}
-
-.jornada{
     padding:18px;
-    border-radius:12px;
-    margin-bottom:20px;
     text-align:center;
-    font-weight:bold;
-    font-size:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.jornada.completa{
-    background:#dcfce7;
-    color:#166534;
-    border:1px solid #86efac;
+.card strong{
+    display:block;
+    font-size:27px;
+    margin-top:7px;
+    color:#2563eb;
 }
 
-.jornada.pendiente{
-    background:#fef3c7;
-    color:#92400e;
-    border:1px solid #fcd34d;
-}
-
-.jornada.domingo{
-    background:#fee2e2;
-    color:#991b1b;
-    border:1px solid #fca5a5;
-}
-
-.school-grid{
+.schools{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:14px;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:12px;
+    margin-bottom:20px;
 }
 
-.school-btn{
+.school{
     border:0;
     border-radius:12px;
-    padding:18px 12px;
-    background:#1769aa;
-    color:white;
+    background:white;
+    padding:15px;
     cursor:pointer;
-    font-size:16px;
-    font-weight:bold;
+    text-align:left;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
     transition:.2s;
 }
 
-.school-btn:hover{
+.school:hover{
     transform:translateY(-2px);
 }
 
-.school-btn.recibido{
-    background:#15803d;
+.school.active{
+    outline:3px solid #2563eb;
 }
 
-.school-btn.incompleto{
-    background:#ca8a04;
+.school .name{
+    font-weight:bold;
+    margin-bottom:5px;
 }
 
-.school-btn.pendiente{
-    background:#64748b;
+.school .code{
+    color:#64748b;
+    font-size:13px;
 }
 
-.school-btn small{
-    display:block;
-    margin-top:6px;
-    font-weight:normal;
+.status{
+    margin-top:8px;
+    font-size:13px;
+    font-weight:bold;
 }
 
-.form-grid{
+.form-box{
+    background:white;
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.form-box h2{
+    margin-top:0;
+    color:#0f766e;
+}
+
+.grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
     gap:15px;
 }
 
 .field{
     display:flex;
     flex-direction:column;
+    gap:6px;
 }
 
 .field label{
     font-weight:bold;
-    margin-bottom:6px;
-    color:#334155;
+    font-size:14px;
 }
 
 input,select{
@@ -172,308 +156,115 @@ input,select{
     border:1px solid #cbd5e1;
     border-radius:8px;
     font-size:15px;
-    background:white;
 }
 
 input:focus,select:focus{
-    outline:none;
-    border-color:#1769aa;
+    outline:2px solid #93c5fd;
+    border-color:#2563eb;
 }
 
-input[readonly]{
-    background:#f1f5f9;
+.total{
+    background:#eff6ff;
     font-weight:bold;
 }
 
-.section-title{
-    margin-top:25px;
-    margin-bottom:12px;
-    color:#0f4c81;
-    border-bottom:2px solid #e2e8f0;
-    padding-bottom:7px;
+.warning{
+    margin:15px 0;
+    padding:13px;
+    border-radius:9px;
+    background:#fff7ed;
+    color:#9a3412;
+    font-weight:bold;
 }
 
-.actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:22px;
+.info{
+    margin:15px 0;
+    padding:13px;
+    border-radius:9px;
+    background:#eff6ff;
+    color:#1d4ed8;
+    font-weight:bold;
 }
 
-button{
+.success{
+    margin:15px 0;
+    padding:13px;
+    border-radius:9px;
+    background:#ecfdf5;
+    color:#047857;
+    font-weight:bold;
+}
+
+button.primary{
+    margin-top:20px;
     border:0;
-    border-radius:8px;
-    padding:12px 18px;
-    cursor:pointer;
-    font-size:15px;
+    border-radius:9px;
+    padding:13px 22px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
     font-weight:bold;
+    cursor:pointer;
 }
 
-.btn-primary{
-    background:#1769aa;
-    color:white;
+button.primary:hover{
+    background:#1d4ed8;
 }
 
-.btn-success{
-    background:#15803d;
-    color:white;
-}
-
-.btn-warning{
-    background:#d97706;
-    color:white;
-}
-
-.btn-secondary{
+button.secondary{
+    margin-top:20px;
+    margin-left:8px;
+    border:0;
+    border-radius:9px;
+    padding:13px 22px;
     background:#64748b;
     color:white;
+    font-size:16px;
+    cursor:pointer;
 }
 
-.btn-print{
-    background:#334155;
-    color:white;
-}
-
-.message{
-    padding:12px;
-    border-radius:8px;
-    margin-top:15px;
-    display:none;
-    font-weight:bold;
-}
-
-.message.success{
-    display:block;
-    background:#dcfce7;
-    color:#166534;
-}
-
-.message.warning{
-    display:block;
-    background:#fef3c7;
-    color:#92400e;
-}
-
-.message.error{
-    display:block;
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-.table-container{
-    overflow-x:auto;
+.table-box{
+    margin-top:20px;
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    overflow:auto;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:950px;
+    min-width:900px;
 }
 
 th,td{
-    border:1px solid #cbd5e1;
     padding:9px;
+    border-bottom:1px solid #e2e8f0;
     text-align:center;
     font-size:13px;
 }
 
 th{
-    background:#0f4c81;
-    color:white;
-}
-
-tr:nth-child(even){
     background:#f8fafc;
 }
 
-.total-row{
-    background:#dbeafe !important;
-    font-weight:bold;
-}
-
-.status{
-    display:inline-block;
-    padding:5px 9px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-.status.recibido{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.status.incompleto{
-    background:#fef3c7;
-    color:#92400e;
-}
-
-.status.pendiente{
-    background:#e2e8f0;
-    color:#475569;
-}
-
-.pending-list{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:10px;
-    margin-top:15px;
-}
-
-.pending-item{
-    padding:12px;
-    border-radius:8px;
-    background:#fef3c7;
-    color:#92400e;
-    font-weight:bold;
-}
-
-.complete-box{
-    background:#dcfce7;
-    color:#166534;
-    padding:15px;
-    border-radius:10px;
+footer{
     text-align:center;
-    font-weight:bold;
-}
-
-.info{
-    background:#eff6ff;
-    color:#1e40af;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:15px;
-    font-size:14px;
+    padding:30px;
+    color:#64748b;
 }
 
 .hidden{
-    display:none !important;
+    display:none;
 }
-
-.footer{
-    text-align:center;
-    color:#64748b;
-    font-size:13px;
-    padding:25px;
-}
-
-
-/* =====================================================
-   ESTILOS EXCLUSIVOS PARA IMPRESIÓN
-===================================================== */
-
-@media print{
-
-    body{
-        background:white;
-        color:black;
-    }
-
-    header{
-        background:white !important;
-        color:black;
-        box-shadow:none;
-        border-bottom:2px solid #000;
-        padding:10px;
-    }
-
-    header h1{
-        font-size:22px;
-    }
-
-    header p{
-        font-size:12px;
-    }
-
-    .container{
-        max-width:none;
-        padding:0;
-    }
-
-    .panel{
-        box-shadow:none;
-        border-radius:0;
-        margin:0;
-        padding:10px;
-    }
-
-    .dashboard,
-    .school-grid,
-    .actions,
-    .footer,
-    #inicioPanel,
-    #dashboardPanel,
-    #formPanel,
-    #historialPanel{
-        display:none !important;
-    }
-
-    #consolidadoPanel{
-        display:block !important;
-    }
-
-    .table-container{
-        overflow:visible;
-    }
-
-    table{
-        width:100%;
-        min-width:0;
-        font-size:10px;
-    }
-
-    th,td{
-        font-size:10px;
-        padding:6px;
-        border:1px solid #000;
-    }
-
-    th{
-        background:#ddd !important;
-        color:#000 !important;
-    }
-
-    .status{
-        background:white !important;
-        color:#000 !important;
-        padding:0;
-    }
-
-    .jornada{
-        border:1px solid #000 !important;
-        background:white !important;
-        color:#000 !important;
-        font-size:14px;
-    }
-
-    @page{
-        size:landscape;
-        margin:10mm;
-    }
-}
-
 
 @media(max-width:600px){
-
     header h1{
         font-size:22px;
     }
 
-    .container{
-        padding:10px;
-    }
-
-    .panel{
-        padding:14px;
-    }
-
-    .school-grid{
-        grid-template-columns:1fr;
-    }
-
-    .dashboard{
-        grid-template-columns:repeat(2,1fr);
+    .form-box{
+        padding:15px;
     }
 }
 </style>
@@ -483,506 +274,253 @@ tr:nth-child(even){
 
 <header>
     <h1>ASISTENCIA NER NUEVA ALIANZA</h1>
-    <p>Sistema de Control Diario de Asistencia — V2.0</p>
+    <p>Control diario de asistencia escolar — V2.0</p>
 </header>
 
 <div class="container">
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
-
-<div id="dashboardPanel" class="panel">
-
-    <h2>📊 Resumen del día</h2>
-
-    <div class="info">
-        Fecha de trabajo:
-        <strong id="fechaDashboard"></strong>
-        <span id="estadoServidor" style="float:right;font-weight:bold;">
-            ☁️ Conectando...
-        </span>
-    </div>
-
-    <div id="estadoJornada" class="jornada pendiente">
-        Cargando estado...
+    <div id="serverStatus" class="server">
+        🔄 Conectando con datos compartidos...
     </div>
 
     <div class="dashboard">
 
         <div class="card">
-            <div class="number" id="dashMatricula">0</div>
-            <div class="label">Matrícula total</div>
+            Matrícula
+            <strong id="dashMat">0</strong>
         </div>
 
         <div class="card">
-            <div class="number" id="dashAsistencia">0</div>
-            <div class="label">Asistencia total</div>
+            Asistencia
+            <strong id="dashAsi">0</strong>
         </div>
 
         <div class="card">
-            <div class="number" id="dashDocentes">0</div>
-            <div class="label">Docentes</div>
+            Docentes
+            <strong id="dashDoc">0</strong>
         </div>
 
         <div class="card">
-            <div class="number" id="dashRecibidos">0/8</div>
-            <div class="label">Reportes recibidos</div>
+            Justificados
+            <strong id="dashJus">0</strong>
         </div>
 
         <div class="card">
-            <div class="number" id="dashJustificados">0</div>
-            <div class="label">Justificados</div>
+            Injustificados
+            <strong id="dashInj">0</strong>
         </div>
 
         <div class="card">
-            <div class="number" id="dashInjustificados">0</div>
-            <div class="label">Injustificados</div>
-        </div>
-
-        <div class="card">
-            <div class="number" id="dashPorcentaje">0%</div>
-            <div class="label">Asistencia general</div>
-        </div>
-
-        <div class="card">
-            <div class="number" id="dashPendientes">8</div>
-            <div class="label">Pendientes</div>
+            Reportes
+            <strong id="dashReportes">0/8</strong>
         </div>
 
     </div>
 
-    <div id="listaPendientes"></div>
+    <div class="form-box">
 
-</div>
+        <h2>📅 Selección de fecha</h2>
 
+        <div class="grid">
 
-<!-- =====================================================
-     INICIO
-===================================================== -->
+            <div class="field">
+                <label>Fecha</label>
+                <input type="date" id="fecha">
+            </div>
 
-<div id="inicioPanel" class="panel">
+        </div>
 
-    <h2>🏫 Seleccione el centro educativo</h2>
-
-    <div class="info">
-        Seleccione una escuela para ingresar o modificar
-        el reporte diario.
-    </div>
-
-    <div id="schoolGrid" class="school-grid"></div>
-
-    <div class="actions">
-
-        <button class="btn-primary"
-                onclick="mostrarConsolidado()">
-            📋 Consolidado del NER
-        </button>
-
-        <button class="btn-secondary"
-                onclick="mostrarHistorial()">
-            📅 Historial
-        </button>
+        <div id="diaMensaje"></div>
 
     </div>
 
-</div>
+    <br>
 
+    <div class="form-box">
 
-<!-- =====================================================
-     FORMULARIO
-===================================================== -->
+        <h2>🏫 Centros Educativos</h2>
 
-<div id="formPanel" class="panel hidden">
-
-    <h2>📝 Reporte diario</h2>
-
-    <div id="formInfo" class="info"></div>
-
-    <div class="form-grid">
-
-        <div class="field">
-            <label>Fecha</label>
-            <input type="date" id="fecha">
-        </div>
-
-        <div class="field">
-            <label>Código de centro</label>
-            <input type="text" id="codigo" readonly>
-        </div>
-
-        <div class="field">
-            <label>Centro educativo</label>
-            <input type="text" id="nombreCentro" readonly>
-        </div>
-
-        <div class="field">
-            <label>Modalidad</label>
-
-            <select id="modalidad">
-
-                <option value="Educación Inicial">
-                    Educación Inicial
-                </option>
-
-                <option value="Educación Primaria">
-                    Educación Primaria
-                </option>
-
-                <option value="Secundaria a Distancia">
-                    Secundaria a Distancia
-                </option>
-
-            </select>
-        </div>
-
-        <div class="field">
-            <label>Turno</label>
-
-            <select id="turno">
-
-                <option value="Diurno">
-                    Diurno
-                </option>
-
-                <option value="Sabatino">
-                    Sabatino
-                </option>
-
-            </select>
-        </div>
+        <div id="schools" class="schools"></div>
 
     </div>
 
+    <br>
 
-    <h3 class="section-title">
-        👥 Matrícula del día
-    </h3>
+    <div id="formulario" class="form-box hidden">
 
-    <div class="form-grid">
+        <h2 id="tituloCentro">Reporte de asistencia</h2>
 
-        <div class="field">
-            <label>Masculino</label>
+        <div class="grid">
 
-            <input type="number"
-                   id="matM"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales(); controlarAsistencia('M')">
+            <div class="field">
+                <label>Código de centro</label>
+                <input id="codigo" readonly>
+            </div>
+
+            <div class="field">
+                <label>Centro educativo</label>
+                <input id="centro" readonly>
+            </div>
+
+            <div class="field">
+                <label>Modalidad</label>
+                <select id="modalidad">
+                    <option value="Inicial">Educación Inicial</option>
+                    <option value="Primaria">Primaria</option>
+                    <option value="Secundaria a Distancia">Secundaria a Distancia</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Turno</label>
+                <select id="turno">
+                    <option value="Matutino">Matutino</option>
+                    <option value="Vespertino">Vespertino</option>
+                    <option value="Sabatino">Sabatino</option>
+                </select>
+            </div>
+
         </div>
 
-        <div class="field">
-            <label>Femenino</label>
+        <hr>
 
-            <input type="number"
-                   id="matF"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales(); controlarAsistencia('F')">
+        <h3>👨‍🎓 Matrícula</h3>
+
+        <div class="grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="matM" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="matF" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Total</label>
+                <input class="total" type="number" id="matTotal" readonly>
+            </div>
+
         </div>
 
-        <div class="field">
-            <label>Total matrícula</label>
+        <h3>✅ Asistencia</h3>
 
-            <input type="number"
-                   id="matTotal"
-                   readonly>
+        <div class="grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="asiM" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="asiF" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Total</label>
+                <input class="total" type="number" id="asiTotal" readonly>
+            </div>
+
+            <div class="field">
+                <label>Porcentaje</label>
+                <input class="total" type="number" id="porcentaje" readonly>
+            </div>
+
         </div>
 
-    </div>
+        <h3>👩‍🏫 Docentes</h3>
 
+        <div class="grid">
 
-    <h3 class="section-title">
-        ✅ Asistencia de hoy
-    </h3>
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="docM" min="0" value="0">
+            </div>
 
-    <div class="form-grid">
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="docF" min="0" value="0">
+            </div>
 
-        <div class="field">
-            <label>Masculino</label>
+            <div class="field">
+                <label>Total</label>
+                <input class="total" type="number" id="docTotal" readonly>
+            </div>
 
-            <input type="number"
-                   id="asiM"
-                   min="0"
-                   value="0"
-                   oninput="controlarAsistencia('M'); calcularTotales()">
         </div>
 
-        <div class="field">
-            <label>Femenino</label>
+        <h3>🟢 Justificados</h3>
 
-            <input type="number"
-                   id="asiF"
-                   min="0"
-                   value="0"
-                   oninput="controlarAsistencia('F'); calcularTotales()">
+        <div class="grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="jusM" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="jusF" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Total</label>
+                <input class="total" type="number" id="jusTotal" readonly>
+            </div>
+
         </div>
 
-        <div class="field">
-            <label>Total asistencia</label>
+        <h3>🔴 Injustificados</h3>
 
-            <input type="number"
-                   id="asiTotal"
-                   readonly>
+        <div class="grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="injM" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="injF" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Total</label>
+                <input class="total" type="number" id="injTotal" readonly>
+            </div>
+
         </div>
 
-        <div class="field">
-            <label>Porcentaje</label>
+        <div id="formMensaje"></div>
 
-            <input type="text"
-                   id="porcentaje"
-                   readonly>
-        </div>
-
-    </div>
-
-
-    <h3 class="section-title">
-        👨‍🏫 Docentes
-    </h3>
-
-    <div class="form-grid">
-
-        <div class="field">
-            <label>Docentes masculino</label>
-
-            <input type="number"
-                   id="docM"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales()">
-        </div>
-
-        <div class="field">
-            <label>Docentes femenino</label>
-
-            <input type="number"
-                   id="docF"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales()">
-        </div>
-
-        <div class="field">
-            <label>Total docentes</label>
-
-            <input type="number"
-                   id="docTotal"
-                   readonly>
-        </div>
-
-    </div>
-
-
-    <h3 class="section-title">
-        🟡 Docentes justificados
-    </h3>
-
-    <div class="form-grid">
-
-        <div class="field">
-            <label>Masculino</label>
-
-            <input type="number"
-                   id="jusM"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales()">
-        </div>
-
-        <div class="field">
-            <label>Femenino</label>
-
-            <input type="number"
-                   id="jusF"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales()">
-        </div>
-
-        <div class="field">
-            <label>Total justificados</label>
-
-            <input type="number"
-                   id="jusTotal"
-                   readonly>
-        </div>
-
-    </div>
-
-
-    <h3 class="section-title">
-        🔴 Docentes injustificados
-    </h3>
-
-    <div class="form-grid">
-
-        <div class="field">
-            <label>Masculino</label>
-
-            <input type="number"
-                   id="injM"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales()">
-        </div>
-
-        <div class="field">
-            <label>Femenino</label>
-
-            <input type="number"
-                   id="injF"
-                   min="0"
-                   value="0"
-                   oninput="calcularTotales()">
-        </div>
-
-        <div class="field">
-            <label>Total injustificados</label>
-
-            <input type="number"
-                   id="injTotal"
-                   readonly>
-        </div>
-
-    </div>
-
-
-    <div id="formMessage" class="message"></div>
-
-
-    <div class="actions">
-
-        <button class="btn-success"
-                onclick="guardarReporte()">
+        <button class="primary" onclick="guardarReporte()">
             💾 Guardar reporte
         </button>
 
-        <button class="btn-secondary"
-                onclick="volverInicio()">
-            ↩ Regresar
+        <button class="secondary" onclick="limpiarFormulario()">
+            Limpiar
         </button>
 
     </div>
 
-</div>
+    <div class="table-box">
 
+        <h2>📊 Reportes del día</h2>
 
-<!-- =====================================================
-     CONSOLIDADO
-===================================================== -->
-
-<div id="consolidadoPanel" class="panel hidden">
-
-    <h2>📋 Consolidado NER Nueva Alianza</h2>
-
-    <div class="info">
-        Fecha consultada:
-        <strong id="fechaConsolidado"></strong>
-    </div>
-
-    <div id="resumenConsolidado"></div>
-
-    <div class="table-container">
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Centro educativo</th>
-                    <th>Código</th>
-                    <th>Matrícula</th>
-                    <th>Asistencia</th>
-                    <th>%</th>
-                    <th>Docentes</th>
-                    <th>Justificados</th>
-                    <th>Injustificados</th>
-                    <th>Estado</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="tablaConsolidado"></tbody>
-
-        </table>
-
-    </div>
-
-
-    <div class="actions">
-
-        <button class="btn-print"
-                onclick="imprimirConsolidado()">
-            🖨️ Imprimir consolidado
-        </button>
-
-        <button class="btn-secondary"
-                onclick="volverInicio()">
-            ↩ Regresar
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     HISTORIAL
-===================================================== -->
-
-<div id="historialPanel" class="panel hidden">
-
-    <h2>📅 Historial de reportes</h2>
-
-    <div class="form-grid">
-
-        <div class="field">
-
-            <label>
-                Seleccione fecha
-            </label>
-
-            <input type="date"
-                   id="fechaHistorial">
-
-        </div>
-
-        <div class="field">
-
-            <label>&nbsp;</label>
-
-            <button class="btn-primary"
-                    onclick="consultarHistorial()">
-                🔎 Consultar
-            </button>
-
+        <div id="tablaReportes">
+            No hay reportes registrados.
         </div>
 
     </div>
 
-    <div id="historialResultado"></div>
-
-    <div class="actions">
-
-        <button class="btn-secondary"
-                onclick="volverInicio()">
-            ↩ Regresar
-        </button>
-
-    </div>
-
 </div>
 
-</div>
-
-
-<div class="footer">
-    Sistema de Asistencia NER Nueva Alianza — V2.0
-    <br>
-    Control diario de asistencia
-</div>
-
+<footer>
+    Sistema de Asistencia NER Nueva Alianza · V2.0
+</footer>
 
 <script>
 
@@ -990,98 +528,67 @@ tr:nth-child(even){
    CONFIGURACIÓN
 ===================================================== */
 
-const ESCUELAS = [
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyAE1uTKOK-YGzNYCZsVsOGKf-x5tWaTcKomupf4IrqCUXjjgV1ZqC6u1qeAPyDM9wf/exec";
+
+
+const escuelas = [
 
     {
-        nombre:"Nueva Alianza",
-        codigo:"17683"
+        codigo:"17683",
+        nombre:"Nueva Alianza"
     },
 
     {
-        nombre:"Hugo Chávez Frías",
-        codigo:"39183"
+        codigo:"39183",
+        nombre:"Hugo Chávez Frías"
     },
 
     {
-        nombre:"Rosa Sarmiento",
-        codigo:"29271"
+        codigo:"29271",
+        nombre:"Rosa Sarmiento"
     },
 
     {
-        nombre:"La Esperanza",
-        codigo:"17751"
+        codigo:"17751",
+        nombre:"La Esperanza"
     },
 
     {
-        nombre:"La Unión N.º 3",
-        codigo:"17858"
+        codigo:"17858",
+        nombre:"La Unión N.º 3"
     },
 
     {
-        nombre:"Santa Lucía",
-        codigo:"17880"
+        codigo:"17880",
+        nombre:"Santa Lucía"
     },
 
     {
-        nombre:"Sector del Limón",
-        codigo:"37038"
+        codigo:"37038",
+        nombre:"Sector del Limón"
     },
 
     {
-        nombre:"Nueva Jerusalén",
-        codigo:"30870"
+        codigo:"30870",
+        nombre:"Nueva Jerusalén"
     }
 
 ];
 
-const STORAGE_KEY =
-    "ner_nueva_alianza_reportes";
 
-const API_URL =
-    "https://script.google.com/macros/s/AKfycbyAE1uTKOK-YGzNYCZsVsOGKf-x5tWaTcKomupf4IrqCUXjjgV1ZqC6u1qeAPyDM9wf/exec";
+let reportes = [];
 
-let servidorDisponible = false;
-
-let escuelaActual = null;
-
-let historial = {};
-
-
-/* =====================================================
-   INICIO
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        cargarDatos();
-
-        const hoy =
-            obtenerFechaLocal();
-
-        document.getElementById("fecha")
-            .value = hoy;
-
-        document.getElementById("fechaHistorial")
-            .value = hoy;
-
-        actualizarDashboard();
-
-        mostrarEscuelas();
-
-    }
-);
+let escuelaSeleccionada = null;
 
 
 /* =====================================================
    FECHA
 ===================================================== */
 
-function obtenerFechaLocal(){
+function fechaHoy(){
 
-    const ahora =
-        new Date();
+    const ahora = new Date();
 
     const año =
         ahora.getFullYear();
@@ -1101,331 +608,76 @@ function obtenerFechaLocal(){
 }
 
 
-function fechaBonita(fecha){
-
-    if(!fecha){
-
-        return "";
-
-    }
-
-    const partes =
-        fecha.split("-");
-
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
-
-}
+document.getElementById("fecha").value =
+    fechaHoy();
 
 
-/* =====================================================
-   LOCALSTORAGE
-===================================================== */
+document.getElementById("fecha")
+.addEventListener("change",function(){
 
-function cargarDatos(){
+    actualizarDia();
 
-    const datos =
-        localStorage.getItem(
-            STORAGE_KEY
+    actualizarDashboard();
+
+    mostrarEscuelas();
+
+    if(escuelaSeleccionada){
+
+        cargarEscuela(
+            escuelaSeleccionada.codigo
         );
 
-    if(!datos){
-
-        historial = {};
-
-        return;
-
     }
 
-    try{
+});
 
-        const objeto =
-            JSON.parse(datos);
 
-        if(
-            objeto &&
-            objeto.fecha &&
-            objeto.reportes &&
-            !objeto[objeto.fecha]
-        ){
-
-            historial = {};
-
-            historial[objeto.fecha] = {
-                reportes: objeto.reportes
-            };
-
-            localStorage.setItem(
-                STORAGE_KEY,
-                JSON.stringify(historial)
-            );
-
-        }else{
-
-            historial =
-                objeto || {};
-
-        }
-
-    }catch(error){
-
-        console.error(error);
-
-        historial = {};
-
-    }
-
-}
-
-
-function guardarDatos(){
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(historial)
-    );
-
-}
-
-
-/* =====================================================
-   REPORTES
-===================================================== */
-
-function crearReporte(escuela){
-
-    return {
-
-        codigo: escuela.codigo,
-
-        nombre: escuela.nombre,
-
-        fecha:
-            obtenerFechaLocal(),
-
-        modalidad:
-            obtenerModalidadActual(),
-
-        turno:
-            obtenerTurnoActual(),
-
-        matM:0,
-        matF:0,
-        matTotal:0,
-
-        asiM:0,
-        asiF:0,
-        asiTotal:0,
-
-        docM:0,
-        docF:0,
-        docTotal:0,
-
-        jusM:0,
-        jusF:0,
-        jusTotal:0,
-
-        injM:0,
-        injF:0,
-        injTotal:0,
-
-        porcentaje:0,
-
-        guardado:false
-
-    };
-
-}
-
-
-function obtenerReportesFecha(fecha){
-
-    if(!historial[fecha]){
-
-        historial[fecha] = {
-
-            reportes:
-                ESCUELAS.map(
-                    e => crearReporte(e)
-                )
-
-        };
-
-    }
-
-    if(!historial[fecha].reportes){
-
-        historial[fecha].reportes =
-            ESCUELAS.map(
-                e => crearReporte(e)
-            );
-
-    }
-
-
-    ESCUELAS.forEach(
-        escuela => {
-
-            const existe =
-                historial[fecha]
-                .reportes
-                .find(
-                    r =>
-                    r.codigo ===
-                    escuela.codigo
-                );
-
-            if(!existe){
-
-                const nuevo =
-                    crearReporte(
-                        escuela
-                    );
-
-                nuevo.fecha =
-                    fecha;
-
-                historial[fecha]
-                    .reportes
-                    .push(nuevo);
-
-            }
-
-        }
-    );
-
-
-    return historial[fecha].reportes;
-
-}
-
-
-/* =====================================================
-   CALENDARIO
-===================================================== */
-
-function esDomingo(fecha){
-
-    const d =
-        new Date(
-            fecha + "T12:00:00"
-        );
-
-    return d.getDay() === 0;
-
-}
-
-
-function esSabado(fecha){
-
-    const d =
-        new Date(
-            fecha + "T12:00:00"
-        );
-
-    return d.getDay() === 6;
-
-}
-
-
-function obtenerModalidadActual(){
-
-    const fecha =
-        document.getElementById("fecha")?.value ||
-        obtenerFechaLocal();
-
-    if(esSabado(fecha)){
-
-        return "Secundaria a Distancia";
-
-    }
-
-    return "Educación Primaria";
-
-}
-
-
-function obtenerTurnoActual(){
-
-    const fecha =
-        document.getElementById("fecha")?.value ||
-        obtenerFechaLocal();
-
-    if(esSabado(fecha)){
-
-        return "Sabatino";
-
-    }
-
-    return "Diurno";
-
-}
-
-
-function aplicarReglasCalendario(){
+function actualizarDia(){
 
     const fecha =
         document.getElementById("fecha").value;
 
-    const modalidad =
-        document.getElementById("modalidad");
+    if(!fecha){
+        return;
+    }
 
-    const turno =
-        document.getElementById("turno");
-
-
-    if(esDomingo(fecha)){
-
-        modalidad.value =
-            "Educación Primaria";
-
-        turno.value =
-            "Diurno";
-
-        modalidad.disabled = true;
-
-        turno.disabled = true;
-
-        mostrarMensaje(
-            "formMessage",
-            "⚠ El domingo no hay clases registradas.",
-            "warning"
+    const d =
+        new Date(
+            fecha + "T12:00:00"
         );
 
-        return;
+    const dia =
+        d.getDay();
+
+    const contenedor =
+        document.getElementById(
+            "diaMensaje"
+        );
+
+    if(dia === 0){
+
+        contenedor.innerHTML =
+            `<div class="warning">
+                🚫 DOMINGO — NO HAY CLASES
+            </div>`;
 
     }
 
+    else if(dia === 6){
 
-    if(esSabado(fecha)){
+        contenedor.innerHTML =
+            `<div class="info">
+                📘 SÁBADO — JORNADA DE SECUNDARIA A DISTANCIA
+            </div>`;
 
-        modalidad.value =
-            "Secundaria a Distancia";
+    }
 
-        turno.value =
-            "Sabatino";
+    else{
 
-        modalidad.disabled = true;
-
-        turno.disabled = true;
-
-    }else{
-
-        modalidad.disabled = false;
-
-        turno.disabled = false;
-
-        if(
-            modalidad.value ===
-            "Secundaria a Distancia"
-        ){
-
-            modalidad.value =
-                "Educación Primaria";
-
-        }
-
-        turno.value =
-            "Diurno";
+        contenedor.innerHTML =
+            `<div class="success">
+                ✅ DÍA LECTIVO
+            </div>`;
 
     }
 
@@ -1440,93 +692,69 @@ function mostrarEscuelas(){
 
     const contenedor =
         document.getElementById(
-            "schoolGrid"
+            "schools"
         );
 
     contenedor.innerHTML = "";
 
+    escuelas.forEach(
+        escuela => {
 
-    const fecha =
-        document.getElementById("fecha")
-        ?.value ||
-        obtenerFechaLocal();
+            const fecha =
+                document.getElementById(
+                    "fecha"
+                ).value;
 
-
-    const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
-
-
-    ESCUELAS.forEach(
-        (escuela,index)=>{
-
-            const reporte =
-                reportes.find(
+            const existe =
+                reportes.some(
                     r =>
-                    r.codigo ===
-                    escuela.codigo
+                    String(r["Fecha"])
+                    .substring(0,10)
+                    === fecha
+                    &&
+                    String(r["Código"])
+                    === escuela.codigo
                 );
-
-
-            let clase =
-                "pendiente";
-
-            let texto =
-                "PENDIENTE";
-
-
-            if(
-                reporte &&
-                reporte.guardado
-            ){
-
-                clase =
-                    "recibido";
-
-                texto =
-                    "RECIBIDO";
-
-            }else if(
-                reporte &&
-                tieneDatos(reporte)
-            ){
-
-                clase =
-                    "incompleto";
-
-                texto =
-                    "INCOMPLETO";
-
-            }
-
 
             const boton =
                 document.createElement(
                     "button"
                 );
 
-
             boton.className =
-                `school-btn ${clase}`;
+                "school";
 
+            if(
+                escuelaSeleccionada &&
+                escuelaSeleccionada.codigo
+                === escuela.codigo
+            ){
+                boton.classList.add(
+                    "active"
+                );
+            }
 
             boton.innerHTML = `
-                ${index+1}. ${escuela.nombre}
-                <small>Código: ${escuela.codigo}</small>
-                <small>${texto}</small>
+                <div class="name">
+                    ${escuela.nombre}
+                </div>
+
+                <div class="code">
+                    Código: ${escuela.codigo}
+                </div>
+
+                <div class="status">
+                    ${existe
+                        ? "🟢 REPORTE RECIBIDO"
+                        : "🟡 PENDIENTE"}
+                </div>
             `;
 
-
             boton.onclick =
-                function(){
-
-                    abrirEscuela(
-                        escuela.codigo
-                    );
-
-                };
-
+                () =>
+                cargarEscuela(
+                    escuela.codigo
+                );
 
             contenedor.appendChild(
                 boton
@@ -1539,521 +767,265 @@ function mostrarEscuelas(){
 
 
 /* =====================================================
-   ABRIR ESCUELA
+   CARGAR ESCUELA
 ===================================================== */
 
-function abrirEscuela(codigo){
+function cargarEscuela(codigo){
 
-    const fecha =
-        document.getElementById("fecha")
-        .value ||
-        obtenerFechaLocal();
-
-
-    if(esDomingo(fecha)){
-
-        alert(
-            "El domingo no hay clases."
+    escuelaSeleccionada =
+        escuelas.find(
+            e => e.codigo === codigo
         );
 
+    if(!escuelaSeleccionada){
         return;
-
     }
-
-
-    escuelaActual =
-        ESCUELAS.find(
-            e =>
-            e.codigo === codigo
-        );
-
-
-    if(!escuelaActual){
-
-        return;
-
-    }
-
-
-    const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
-
-
-    let reporte =
-        reportes.find(
-            r =>
-            r.codigo === codigo
-        );
-
-
-    if(!reporte){
-
-        reporte =
-            crearReporte(
-                escuelaActual
-            );
-
-        reporte.fecha =
-            fecha;
-
-        reportes.push(
-            reporte
-        );
-
-    }
-
-
-    ocultarPaneles();
-
 
     document.getElementById(
-        "formPanel"
+        "formulario"
     ).classList.remove(
         "hidden"
     );
 
-
-    cargarFormulario(
-        reporte
-    );
-
-}
-
-
-/* =====================================================
-   OCULTAR PANELES
-===================================================== */
-
-function ocultarPaneles(){
-
     document.getElementById(
-        "inicioPanel"
-    ).classList.add(
-        "hidden"
-    );
-
-    document.getElementById(
-        "dashboardPanel"
-    ).classList.add(
-        "hidden"
-    );
-
-    document.getElementById(
-        "formPanel"
-    ).classList.add(
-        "hidden"
-    );
-
-    document.getElementById(
-        "consolidadoPanel"
-    ).classList.add(
-        "hidden"
-    );
-
-    document.getElementById(
-        "historialPanel"
-    ).classList.add(
-        "hidden"
-    );
-
-}
-
-
-/* =====================================================
-   FORMULARIO
-===================================================== */
-
-function cargarFormulario(reporte){
-
-    document.getElementById(
-        "fecha"
-    ).value =
-        reporte.fecha;
-
+        "tituloCentro"
+    ).textContent =
+        "Reporte: " +
+        escuelaSeleccionada.nombre;
 
     document.getElementById(
         "codigo"
     ).value =
-        reporte.codigo;
-
+        escuelaSeleccionada.codigo;
 
     document.getElementById(
-        "nombreCentro"
+        "centro"
     ).value =
-        reporte.nombre;
+        escuelaSeleccionada.nombre;
 
+    limpiarValores();
 
-    document.getElementById(
-        "modalidad"
-    ).value =
-        reporte.modalidad;
+    const fecha =
+        document.getElementById(
+            "fecha"
+        ).value;
 
+    const existente =
+        reportes.find(
+            r =>
+            String(r["Fecha"])
+            .substring(0,10)
+            === fecha
+            &&
+            String(r["Código"])
+            ===
+            escuelaSeleccionada.codigo
+        );
 
-    document.getElementById(
-        "turno"
-    ).value =
-        reporte.turno;
+    if(existente){
 
+        document.getElementById("matM").value =
+            existente["Matrícula M"] || 0;
 
-    document.getElementById(
-        "matM"
-    ).value =
-        reporte.matM || 0;
+        document.getElementById("matF").value =
+            existente["Matrícula F"] || 0;
 
+        document.getElementById("asiM").value =
+            existente["Asistencia M"] || 0;
 
-    document.getElementById(
-        "matF"
-    ).value =
-        reporte.matF || 0;
+        document.getElementById("asiF").value =
+            existente["Asistencia F"] || 0;
 
+        document.getElementById("docM").value =
+            existente["Docentes M"] || 0;
 
-    document.getElementById(
-        "asiM"
-    ).value =
-        reporte.asiM || 0;
+        document.getElementById("docF").value =
+            existente["Docentes F"] || 0;
 
+        document.getElementById("jusM").value =
+            existente["Justificados M"] || 0;
 
-    document.getElementById(
-        "asiF"
-    ).value =
-        reporte.asiF || 0;
+        document.getElementById("jusF").value =
+            existente["Justificados F"] || 0;
 
+        document.getElementById("injM").value =
+            existente["Injustificados M"] || 0;
 
-    document.getElementById(
-        "docM"
-    ).value =
-        reporte.docM || 0;
+        document.getElementById("injF").value =
+            existente["Injustificados F"] || 0;
 
+    }
 
-    document.getElementById(
-        "docF"
-    ).value =
-        reporte.docF || 0;
+    calcular();
 
-
-    document.getElementById(
-        "jusM"
-    ).value =
-        reporte.jusM || 0;
-
-
-    document.getElementById(
-        "jusF"
-    ).value =
-        reporte.jusF || 0;
-
-
-    document.getElementById(
-        "injM"
-    ).value =
-        reporte.injM || 0;
-
-
-    document.getElementById(
-        "injF"
-    ).value =
-        reporte.injF || 0;
-
-
-    aplicarReglasCalendario();
-
-    calcularTotales();
-
-
-    document.getElementById(
-        "formInfo"
-    ).innerHTML = `
-
-        <strong>
-            ${reporte.nombre}
-        </strong>
-        <br>
-
-        Código:
-        ${reporte.codigo}
-
-        <br>
-
-        Fecha:
-        ${fechaBonita(reporte.fecha)}
-
-    `;
-
-
-    limpiarMensaje();
+    mostrarEscuelas();
 
 }
 
 
 /* =====================================================
-   NÚMEROS
+   CÁLCULOS
 ===================================================== */
 
 function numero(id){
 
-    const valor =
-        Number(
-            document.getElementById(
-                id
-            ).value
-        );
-
-
-    if(
-        isNaN(valor) ||
-        valor < 0
-    ){
-
-        return 0;
-
-    }
-
-
-    return Math.floor(valor);
+    return Number(
+        document.getElementById(id).value
+    ) || 0;
 
 }
 
 
-/* =====================================================
-   ASISTENCIA
-===================================================== */
-
-function controlarAsistencia(sexo){
-
-    if(sexo === "M"){
-
-        const matricula =
-            numero("matM");
-
-        let asistencia =
-            numero("asiM");
-
-
-        if(asistencia > matricula){
-
-            document.getElementById(
-                "asiM"
-            ).value =
-                matricula;
-
-
-            mostrarMensaje(
-                "formMessage",
-                `⚠ La asistencia masculina no puede superar la matrícula masculina. Se ajustó a ${matricula}.`,
-                "warning"
-            );
-
-        }
-
-    }
-
-
-    if(sexo === "F"){
-
-        const matricula =
-            numero("matF");
-
-        let asistencia =
-            numero("asiF");
-
-
-        if(asistencia > matricula){
-
-            document.getElementById(
-                "asiF"
-            ).value =
-                matricula;
-
-
-            mostrarMensaje(
-                "formMessage",
-                `⚠ La asistencia femenina no puede superar la matrícula femenina. Se ajustó a ${matricula}.`,
-                "warning"
-            );
-
-        }
-
-    }
-
-
-    calcularTotales();
-
-}
-
-
-/* =====================================================
-   TOTALES
-===================================================== */
-
-function calcularTotales(){
+function calcular(){
 
     const matM =
-        numero("matM");
+        Math.max(
+            0,
+            numero("matM")
+        );
 
     const matF =
-        numero("matF");
+        Math.max(
+            0,
+            numero("matF")
+        );
+
+    const matTotal =
+        matM + matF;
+
+    document.getElementById(
+        "matTotal"
+    ).value =
+        matTotal;
 
 
     let asiM =
-        numero("asiM");
+        Math.max(
+            0,
+            numero("asiM")
+        );
 
     let asiF =
-        numero("asiF");
-
-
-    const docM =
-        numero("docM");
-
-    const docF =
-        numero("docF");
-
-
-    let jusM =
-        numero("jusM");
-
-    let jusF =
-        numero("jusF");
-
-
-    let injM =
-        numero("injM");
-
-    let injF =
-        numero("injF");
+        Math.max(
+            0,
+            numero("asiF")
+        );
 
 
     if(asiM > matM){
-
-        asiM =
-            matM;
-
+        asiM = matM;
         document.getElementById(
             "asiM"
-        ).value =
-            matM;
-
+        ).value = asiM;
     }
-
 
     if(asiF > matF){
-
-        asiF =
-            matF;
-
+        asiF = matF;
         document.getElementById(
             "asiF"
-        ).value =
-            matF;
-
+        ).value = asiF;
     }
 
 
-    const totalDocentes =
-        docM + docF;
+    const asiTotal =
+        asiM + asiF;
+
+    document.getElementById(
+        "asiTotal"
+    ).value =
+        asiTotal;
 
 
-    if(
-        jusM + jusF >
-        totalDocentes
-    ){
+    const porcentaje =
+        matTotal > 0
+        ? Math.round(
+            asiTotal /
+            matTotal *
+            100
+        )
+        : 0;
 
-        const disponible =
-            Math.max(
-                0,
-                totalDocentes
-            );
-
-
-        let nuevoJusM =
-            Math.min(
-                jusM,
-                disponible
-            );
+    document.getElementById(
+        "porcentaje"
+    ).value =
+        porcentaje;
 
 
-        let restante =
-            disponible -
-            nuevoJusM;
-
-
-        let nuevoJusF =
-            Math.min(
-                jusF,
-                restante
-            );
-
-
-        jusM =
-            nuevoJusM;
-
-        jusF =
-            nuevoJusF;
-
-
-        document.getElementById(
-            "jusM"
-        ).value =
-            jusM;
-
-
-        document.getElementById(
-            "jusF"
-        ).value =
-            jusF;
-
-    }
-
-
-    const totalJustificados =
-        jusM + jusF;
-
-
-    const maxInjustificados =
+    const docM =
         Math.max(
             0,
-            totalDocentes -
-            totalJustificados
+            numero("docM")
+        );
+
+    const docF =
+        Math.max(
+            0,
+            numero("docF")
+        );
+
+    const docTotal =
+        docM + docF;
+
+    document.getElementById(
+        "docTotal"
+    ).value =
+        docTotal;
+
+
+    let jusM =
+        Math.max(
+            0,
+            numero("jusM")
+        );
+
+    let jusF =
+        Math.max(
+            0,
+            numero("jusF")
+        );
+
+    let injM =
+        Math.max(
+            0,
+            numero("injM")
+        );
+
+    let injF =
+        Math.max(
+            0,
+            numero("injF")
         );
 
 
     if(
-        injM + injF >
-        maxInjustificados
+        jusM + injM >
+        docM
     ){
 
-        let nuevoInjM =
-            Math.min(
-                injM,
-                maxInjustificados
-            );
-
-
-        let restante =
-            maxInjustificados -
-            nuevoInjM;
-
-
-        let nuevoInjF =
-            Math.min(
-                injF,
-                restante
-            );
-
-
         injM =
-            nuevoInjM;
-
-        injF =
-            nuevoInjF;
-
+            Math.max(
+                0,
+                docM - jusM
+            );
 
         document.getElementById(
             "injM"
         ).value =
             injM;
 
+    }
+
+
+    if(
+        jusF + injF >
+        docF
+    ){
+
+        injF =
+            Math.max(
+                0,
+                docF - jusF
+            );
 
         document.getElementById(
             "injF"
@@ -2063,71 +1035,46 @@ function calcularTotales(){
     }
 
 
-    const matTotal =
-        matM + matF;
-
-    const asiTotal =
-        asiM + asiF;
-
-    const docTotal =
-        docM + docF;
-
-    const jusTotal =
-        jusM + jusF;
-
-    const injTotal =
-        injM + injF;
-
-
-    document.getElementById(
-        "matTotal"
-    ).value =
-        matTotal;
-
-
-    document.getElementById(
-        "asiTotal"
-    ).value =
-        asiTotal;
-
-
-    document.getElementById(
-        "docTotal"
-    ).value =
-        docTotal;
-
-
     document.getElementById(
         "jusTotal"
     ).value =
-        jusTotal;
-
+        jusM + jusF;
 
     document.getElementById(
         "injTotal"
     ).value =
-        injTotal;
-
-
-    let porcentaje = 0;
-
-
-    if(matTotal > 0){
-
-        porcentaje =
-            (asiTotal /
-            matTotal) * 100;
-
-    }
-
-
-    document.getElementById(
-        "porcentaje"
-    ).value =
-        porcentaje.toFixed(1) +
-        "%";
+        injM + injF;
 
 }
+
+
+/* =====================================================
+   EVENTOS DE CÁLCULO
+===================================================== */
+
+[
+    "matM",
+    "matF",
+    "asiM",
+    "asiF",
+    "docM",
+    "docF",
+    "jusM",
+    "jusF",
+    "injM",
+    "injF"
+].forEach(
+    id => {
+
+        document.getElementById(
+            id
+        ).addEventListener(
+            "input",
+            calcular
+        );
+
+    }
+);
 
 
 /* =====================================================
@@ -2136,316 +1083,167 @@ function calcularTotales(){
 
 async function guardarReporte(){
 
-    limpiarMensaje();
-
-
-    if(!escuelaActual){
-
-        return;
-
-    }
-
+    calcular();
 
     const fecha =
         document.getElementById(
             "fecha"
         ).value;
 
-
     if(!fecha){
 
         mostrarMensaje(
-            "formMessage",
-            "Debe seleccionar una fecha.",
-            "error"
+            "formMensaje",
+            "⚠️ Selecciona una fecha.",
+            "warning"
         );
 
         return;
-
     }
 
 
-    if(esDomingo(fecha)){
+    if(!escuelaSeleccionada){
 
         mostrarMensaje(
-            "formMessage",
-            "No se puede guardar un reporte para domingo.",
-            "error"
+            "formMensaje",
+            "⚠️ Selecciona un centro educativo.",
+            "warning"
         );
 
         return;
-
     }
 
 
-    controlarAsistencia("M");
+    const payload = {
 
-    controlarAsistencia("F");
+        fecha:fecha,
 
-    calcularTotales();
+        codigo:
+            document.getElementById(
+                "codigo"
+            ).value,
 
+        centro:
+            document.getElementById(
+                "centro"
+            ).value,
 
-    const matM =
-        numero("matM");
+        modalidad:
+            document.getElementById(
+                "modalidad"
+            ).value,
 
-    const matF =
-        numero("matF");
+        turno:
+            document.getElementById(
+                "turno"
+            ).value,
 
-    const matTotal =
-        matM + matF;
+        matM:
+            numero("matM"),
 
+        matF:
+            numero("matF"),
 
-    const asiM =
-        Math.min(
+        matTotal:
+            numero("matTotal"),
+
+        asiM:
             numero("asiM"),
-            matM
-        );
 
-
-    const asiF =
-        Math.min(
+        asiF:
             numero("asiF"),
-            matF
-        );
 
+        asiTotal:
+            numero("asiTotal"),
 
-    const asiTotal =
-        asiM + asiF;
+        porcentaje:
+            numero("porcentaje"),
 
+        docM:
+            numero("docM"),
 
-    const docM =
-        numero("docM");
+        docF:
+            numero("docF"),
 
-    const docF =
-        numero("docF");
+        docTotal:
+            numero("docTotal"),
 
-    const docTotal =
-        docM + docF;
+        jusM:
+            numero("jusM"),
 
+        jusF:
+            numero("jusF"),
 
-    const jusM =
-        numero("jusM");
+        jusTotal:
+            numero("jusTotal"),
 
-    const jusF =
-        numero("jusF");
+        injM:
+            numero("injM"),
 
-    const jusTotal =
-        jusM + jusF;
+        injF:
+            numero("injF"),
 
+        injTotal:
+            numero("injTotal"),
 
-    const injM =
-        numero("injM");
+        estado:
+            "RECIBIDO"
 
-    const injF =
-        numero("injF");
-
-    const injTotal =
-        injM + injF;
-
-
-    if(
-        asiM > matM ||
-        asiF > matF ||
-        asiTotal > matTotal
-    ){
-
-        mostrarMensaje(
-            "formMessage",
-            "La asistencia no puede superar la matrícula.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(jusTotal > docTotal){
-
-        mostrarMensaje(
-            "formMessage",
-            "Los docentes justificados no pueden superar el total de docentes.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(injTotal > docTotal){
-
-        mostrarMensaje(
-            "formMessage",
-            "Los docentes injustificados no pueden superar el total de docentes.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(
-        jusTotal + injTotal >
-        docTotal
-    ){
-
-        mostrarMensaje(
-            "formMessage",
-            "Justificados + injustificados no pueden superar el total de docentes.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
-
-
-    let reporte =
-        reportes.find(
-            r =>
-            r.codigo ===
-            escuelaActual.codigo
-        );
-
-
-    if(!reporte){
-
-        reporte =
-            crearReporte(
-                escuelaActual
-            );
-
-        reportes.push(
-            reporte
-        );
-
-    }
-
-
-    reporte.fecha =
-        fecha;
-
-    reporte.codigo =
-        escuelaActual.codigo;
-
-    reporte.nombre =
-        escuelaActual.nombre;
-
-    reporte.modalidad =
-        document.getElementById(
-            "modalidad"
-        ).value;
-
-    reporte.turno =
-        document.getElementById(
-            "turno"
-        ).value;
-
-
-    reporte.matM =
-        matM;
-
-    reporte.matF =
-        matF;
-
-    reporte.matTotal =
-        matTotal;
-
-
-    reporte.asiM =
-        asiM;
-
-    reporte.asiF =
-        asiF;
-
-    reporte.asiTotal =
-        asiTotal;
-
-
-    reporte.docM =
-        docM;
-
-    reporte.docF =
-        docF;
-
-    reporte.docTotal =
-        docTotal;
-
-
-    reporte.jusM =
-        jusM;
-
-    reporte.jusF =
-        jusF;
-
-    reporte.jusTotal =
-        jusTotal;
-
-
-    reporte.injM =
-        injM;
-
-    reporte.injF =
-        injF;
-
-    reporte.injTotal =
-        injTotal;
-
-
-    reporte.porcentaje =
-        matTotal > 0
-        ? (
-            asiTotal /
-            matTotal
-          ) * 100
-        : 0;
-
-
-    reporte.guardado =
-        true;
-
-
-    guardarDatos();
-
-
-    mostrarMensaje(
-        "formMessage",
-        "⏳ Reporte guardado localmente. Enviando a datos compartidos...",
-        "warning"
-    );
+    };
 
 
     try{
 
-        await enviarReporteCompartido(
-            reporte
+        mostrarMensaje(
+            "formMensaje",
+            "⏳ Guardando reporte...",
+            "info"
         );
 
-        guardarDatos();
+
+        await fetch(
+            API_URL,
+            {
+                method:"POST",
+                mode:"no-cors",
+                headers:{
+                    "Content-Type":
+                    "text/plain;charset=UTF-8"
+                },
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+            }
+        );
+
 
         mostrarMensaje(
-            "formMessage",
-            "✅ Reporte guardado correctamente y compartido con el NER.",
+            "formMensaje",
+            "✅ Reporte enviado correctamente.",
             "success"
         );
 
+
+        setTimeout(
+            async () => {
+
+                await cargarDatosCompartidos();
+
+                cargarEscuela(
+                    escuelaSeleccionada.codigo
+                );
+
+            },
+            800
+        );
+
+
     }catch(error){
 
-        reporte.compartido = false;
-
-        guardarDatos();
-
         mostrarMensaje(
-            "formMessage",
-            "⚠ Reporte guardado localmente, pero no se pudo sincronizar con el servidor. Puede intentarlo nuevamente.",
+            "formMensaje",
+            "❌ No se pudo enviar el reporte.",
             "warning"
         );
 
@@ -2453,387 +1251,11 @@ async function guardarReporte(){
 
     }
 
-
-    actualizarDashboard();
-
-    mostrarEscuelas();
-
 }
 
 
 /* =====================================================
-   TIENE DATOS
-===================================================== */
-
-function tieneDatos(reporte){
-
-    if(!reporte){
-
-        return false;
-
-    }
-
-
-    return (
-
-        Number(
-            reporte.matM || 0
-        ) > 0 ||
-
-        Number(
-            reporte.matF || 0
-        ) > 0 ||
-
-        Number(
-            reporte.asiM || 0
-        ) > 0 ||
-
-        Number(
-            reporte.asiF || 0
-        ) > 0 ||
-
-        Number(
-            reporte.docM || 0
-        ) > 0 ||
-
-        Number(
-            reporte.docF || 0
-        ) > 0 ||
-
-        Number(
-            reporte.jusM || 0
-        ) > 0 ||
-
-        Number(
-            reporte.jusF || 0
-        ) > 0 ||
-
-        Number(
-            reporte.injM || 0
-        ) > 0 ||
-
-        Number(
-            reporte.injF || 0
-        ) > 0
-
-    );
-
-}
-
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
-function obtenerEstado(reporte){
-
-    if(!reporte){
-
-        return "PENDIENTE";
-
-    }
-
-
-    if(reporte.guardado){
-
-        return "RECIBIDO";
-
-    }
-
-
-    if(tieneDatos(reporte)){
-
-        return "INCOMPLETO";
-
-    }
-
-
-    return "PENDIENTE";
-
-}
-
-
-function claseEstado(estado){
-
-    if(
-        estado ===
-        "RECIBIDO"
-    ){
-
-        return "recibido";
-
-    }
-
-
-    if(
-        estado ===
-        "INCOMPLETO"
-    ){
-
-        return "incompleto";
-
-    }
-
-
-    return "pendiente";
-
-}
-
-
-/* =====================================================
-   DASHBOARD
-===================================================== */
-
-function actualizarDashboard(){
-
-    const fecha =
-        document.getElementById(
-            "fecha"
-        )?.value ||
-        obtenerFechaLocal();
-
-
-    document.getElementById(
-        "fechaDashboard"
-    ).textContent =
-        fechaBonita(
-            fecha
-        );
-
-
-    const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
-
-
-    let matricula = 0;
-
-    let asistencia = 0;
-
-    let docentes = 0;
-
-    let justificados = 0;
-
-    let injustificados = 0;
-
-    let recibidos = 0;
-
-    let pendientes = [];
-
-
-    reportes.forEach(
-        reporte => {
-
-            matricula +=
-                Number(
-                    reporte.matTotal ||
-                    0
-                );
-
-
-            asistencia +=
-                Number(
-                    reporte.asiTotal ||
-                    0
-                );
-
-
-            docentes +=
-                Number(
-                    reporte.docTotal ||
-                    0
-                );
-
-
-            justificados +=
-                Number(
-                    reporte.jusTotal ||
-                    0
-                );
-
-
-            injustificados +=
-                Number(
-                    reporte.injTotal ||
-                    0
-                );
-
-
-            if(
-                reporte.guardado
-            ){
-
-                recibidos++;
-
-            }else{
-
-                pendientes.push(
-                    reporte.nombre
-                );
-
-            }
-
-        }
-    );
-
-
-    const porcentaje =
-        matricula > 0
-        ? (
-            asistencia /
-            matricula
-          ) * 100
-        : 0;
-
-
-    document.getElementById(
-        "dashMatricula"
-    ).textContent =
-        matricula;
-
-
-    document.getElementById(
-        "dashAsistencia"
-    ).textContent =
-        asistencia;
-
-
-    document.getElementById(
-        "dashDocentes"
-    ).textContent =
-        docentes;
-
-
-    document.getElementById(
-        "dashRecibidos"
-    ).textContent =
-        `${recibidos}/8`;
-
-
-    document.getElementById(
-        "dashJustificados"
-    ).textContent =
-        justificados;
-
-
-    document.getElementById(
-        "dashInjustificados"
-    ).textContent =
-        injustificados;
-
-
-    document.getElementById(
-        "dashPorcentaje"
-    ).textContent =
-        porcentaje.toFixed(1) +
-        "%";
-
-
-    document.getElementById(
-        "dashPendientes"
-    ).textContent =
-        8 - recibidos;
-
-
-    const jornada =
-        document.getElementById(
-            "estadoJornada"
-        );
-
-
-    if(esDomingo(fecha)){
-
-        jornada.className =
-            "jornada domingo";
-
-        jornada.innerHTML =
-            "🚫 DOMINGO — NO HAY CLASES";
-
-    }else if(
-        recibidos === 8
-    ){
-
-        jornada.className =
-            "jornada completa";
-
-        jornada.innerHTML =
-            "✅ JORNADA COMPLETA — 8/8 REPORTES RECIBIDOS";
-
-    }else{
-
-        jornada.className =
-            "jornada pendiente";
-
-        jornada.innerHTML =
-            `⚠ FALTAN ${8-recibidos} REPORTES — ${recibidos}/8 RECIBIDOS`;
-
-    }
-
-
-    const lista =
-        document.getElementById(
-            "listaPendientes"
-        );
-
-
-    if(
-        recibidos === 8
-    ){
-
-        lista.innerHTML = `
-
-            <div class="complete-box">
-
-                ✅ Todas las escuelas
-                han enviado su reporte diario.
-
-                <br>
-
-                El NER Nueva Alianza
-                tiene la jornada completa.
-
-            </div>
-
-        `;
-
-    }else{
-
-        let html =
-            `<h3>Escuelas pendientes</h3>
-             <div class="pending-list">`;
-
-
-        pendientes.forEach(
-            nombre => {
-
-                html += `
-
-                    <div class="pending-item">
-                        ⏳ ${nombre}
-                    </div>
-
-                `;
-
-            }
-        );
-
-
-        html +=
-            "</div>";
-
-
-        lista.innerHTML =
-            html;
-
-    }
-
-}
-
-
-
-/* =====================================================
-   DATOS COMPARTIDOS — V2.0
+   CARGAR DATOS COMPARTIDOS
 ===================================================== */
 
 async function cargarDatosCompartidos(){
@@ -2850,38 +1272,58 @@ async function cargarDatosCompartidos(){
             );
 
         if(!respuesta.ok){
+
             throw new Error(
                 "No se pudo consultar el servidor."
             );
+
         }
 
         const datos =
             await respuesta.json();
 
         if(!datos.ok){
+
             throw new Error(
                 datos.error ||
                 "Error del servidor."
             );
+
         }
 
-        integrarReportesCompartidos(
-            datos.reportes || []
-        );
+        reportes =
+            datos.reportes || [];
 
-        servidorDisponible = true;
+        document.getElementById(
+            "serverStatus"
+        ).className =
+            "server ok";
+
+        document.getElementById(
+            "serverStatus"
+        ).textContent =
+            "☁️ Datos compartidos activos";
+
 
         actualizarDashboard();
+
         mostrarEscuelas();
-        actualizarEstadoServidor();
+
+        mostrarTabla();
 
         return true;
 
     }catch(error){
 
-        servidorDisponible = false;
+        document.getElementById(
+            "serverStatus"
+        ).className =
+            "server error";
 
-        actualizarEstadoServidor();
+        document.getElementById(
+            "serverStatus"
+        ).textContent =
+            "📱 Modo local / servidor pendiente";
 
         console.warn(
             "Datos compartidos no disponibles:",
@@ -2895,959 +1337,195 @@ async function cargarDatosCompartidos(){
 }
 
 
-function integrarReportesCompartidos(lista){
-
-    lista.forEach(
-        fila => {
-
-            const fecha =
-                convertirFechaServidor(
-                    fila["Fecha"]
-                );
-
-            const codigo =
-                String(
-                    fila["Código"] || ""
-                );
-
-            if(!fecha || !codigo){
-                return;
-            }
-
-            if(!historial[fecha]){
-                historial[fecha] = {
-                    reportes:[]
-                };
-            }
-
-            let reporte =
-                historial[fecha].reportes.find(
-                    r =>
-                    String(r.codigo) ===
-                    codigo
-                );
-
-            if(!reporte){
-
-                const escuela =
-                    ESCUELAS.find(
-                        e =>
-                        e.codigo ===
-                        codigo
-                    );
-
-                if(!escuela){
-                    return;
-                }
-
-                reporte =
-                    crearReporte(
-                        escuela
-                    );
-
-                reporte.fecha =
-                    fecha;
-
-                historial[fecha].reportes.push(
-                    reporte
-                );
-
-            }
-
-            reporte.nombre =
-                fila["Centro Educativo"] ||
-                reporte.nombre;
-
-            reporte.codigo =
-                codigo;
-
-            reporte.fecha =
-                fecha;
-
-            reporte.modalidad =
-                fila["Modalidad"] ||
-                reporte.modalidad;
-
-            reporte.turno =
-                fila["Turno"] ||
-                reporte.turno;
-
-            reporte.matM =
-                Number(
-                    fila["Matrícula M"]
-                ) || 0;
-
-            reporte.matF =
-                Number(
-                    fila["Matrícula F"]
-                ) || 0;
-
-            reporte.matTotal =
-                Number(
-                    fila["Matrícula Total"]
-                ) ||
-                (
-                    reporte.matM +
-                    reporte.matF
-                );
-
-            reporte.asiM =
-                Number(
-                    fila["Asistencia M"]
-                ) || 0;
-
-            reporte.asiF =
-                Number(
-                    fila["Asistencia F"]
-                ) || 0;
-
-            reporte.asiTotal =
-                Number(
-                    fila["Asistencia Total"]
-                ) ||
-                (
-                    reporte.asiM +
-                    reporte.asiF
-                );
-
-            reporte.porcentaje =
-                Number(
-                    fila["Porcentaje"]
-                ) || 0;
-
-            reporte.docM =
-                Number(
-                    fila["Docentes M"]
-                ) || 0;
-
-            reporte.docF =
-                Number(
-                    fila["Docentes F"]
-                ) || 0;
-
-            reporte.docTotal =
-                Number(
-                    fila["Docentes Total"]
-                ) ||
-                (
-                    reporte.docM +
-                    reporte.docF
-                );
-
-            reporte.jusM =
-                Number(
-                    fila["Justificados M"]
-                ) || 0;
-
-            reporte.jusF =
-                Number(
-                    fila["Justificados F"]
-                ) || 0;
-
-            reporte.jusTotal =
-                Number(
-                    fila["Justificados Total"]
-                ) ||
-                (
-                    reporte.jusM +
-                    reporte.jusF
-                );
-
-            reporte.injM =
-                Number(
-                    fila["Injustificados M"]
-                ) || 0;
-
-            reporte.injF =
-                Number(
-                    fila["Injustificados F"]
-                ) || 0;
-
-            reporte.injTotal =
-                Number(
-                    fila["Injustificados Total"]
-                ) ||
-                (
-                    reporte.injM +
-                    reporte.injF
-                );
-
-            reporte.guardado = true;
-            reporte.compartido = true;
-
-        }
-    );
-
-    guardarDatos();
-
-}
-
-
-function convertirFechaServidor(fecha){
-
-    if(!fecha){
-        return "";
-    }
-
-    if(
-        typeof fecha ===
-        "string"
-    ){
-
-        if(
-            /^\\d{4}-\\d{2}-\\d{2}$/.test(
-                fecha
-            )
-        ){
-            return fecha;
-        }
-
-        const encontrado =
-            fecha.match(
-                /^(\\d{4}-\\d{2}-\\d{2})/
-            );
-
-        if(encontrado){
-            return encontrado[1];
-        }
-
-    }
-
-    const fechaObjeto =
-        new Date(fecha);
-
-    if(isNaN(fechaObjeto)){
-        return "";
-    }
-
-    return fechaObjeto
-        .toISOString()
-        .slice(0,10);
-
-}
-
-
-async function enviarReporteCompartido(reporte){
-
-    const payload = {
-
-        fecha: reporte.fecha,
-        codigo: reporte.codigo,
-        centro: reporte.nombre,
-        modalidad: reporte.modalidad,
-        turno: reporte.turno,
-
-        matM: reporte.matM,
-        matF: reporte.matF,
-        matTotal: reporte.matTotal,
-
-        asiM: reporte.asiM,
-        asiF: reporte.asiF,
-        asiTotal: reporte.asiTotal,
-
-        porcentaje: reporte.porcentaje,
-
-        docM: reporte.docM,
-        docF: reporte.docF,
-        docTotal: reporte.docTotal,
-
-        jusM: reporte.jusM,
-        jusF: reporte.jusF,
-        jusTotal: reporte.jusTotal,
-
-        injM: reporte.injM,
-        injF: reporte.injF,
-        injTotal: reporte.injTotal,
-
-        estado:"RECIBIDO"
-
-    };
-
-    /*
-       Se usa text/plain + no-cors para evitar
-       una solicitud CORS previa. Apps Script
-       recibe el cuerpo como JSON normal.
-    */
-
-    await fetch(
-        API_URL,
-        {
-            method:"POST",
-            mode:"no-cors",
-            headers:{
-                "Content-Type":
-                    "text/plain;charset=UTF-8"
-            },
-            body:
-                JSON.stringify(payload)
-        }
-    );
-
-    servidorDisponible = true;
-
-    reporte.compartido = true;
-
-    return true;
-
-}
-
-
 /* =====================================================
-   CONSOLIDADO
+   DASHBOARD
 ===================================================== */
 
-function mostrarConsolidado(){
+function actualizarDashboard(){
 
     const fecha =
         document.getElementById(
             "fecha"
-        )?.value ||
-        obtenerFechaLocal();
+        ).value;
 
-
-    ocultarPaneles();
-
-
-    document.getElementById(
-        "consolidadoPanel"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "fechaConsolidado"
-    ).textContent =
-        fechaBonita(
-            fecha
-        );
-
-
-    construirTablaConsolidado(
-        fecha
-    );
-
-}
-
-
-function construirTablaConsolidado(fecha){
-
-    const reportes =
-        obtenerReportesFecha(
-            fecha
+    const diarios =
+        reportes.filter(
+            r =>
+            String(r["Fecha"])
+            .substring(0,10)
+            === fecha
         );
 
 
     let mat = 0;
-
     let asi = 0;
-
     let doc = 0;
-
     let jus = 0;
-
     let inj = 0;
 
-    let recibidos = 0;
 
-
-    const tbody =
-        document.getElementById(
-            "tablaConsolidado"
-        );
-
-
-    tbody.innerHTML = "";
-
-
-    reportes.forEach(
-        reporte => {
-
-            const estado =
-                obtenerEstado(
-                    reporte
-                );
-
-
-            const clase =
-                claseEstado(
-                    estado
-                );
-
-
-            const porcentaje =
-                Number(
-                    reporte.matTotal ||
-                    0
-                ) > 0
-
-                ?
-
-                (
-                    Number(
-                        reporte.asiTotal ||
-                        0
-                    ) /
-
-                    Number(
-                        reporte.matTotal ||
-                        0
-                    )
-                ) * 100
-
-                : 0;
-
+    diarios.forEach(
+        r => {
 
             mat +=
                 Number(
-                    reporte.matTotal ||
-                    0
-                );
-
+                    r["Matrícula Total"]
+                ) || 0;
 
             asi +=
                 Number(
-                    reporte.asiTotal ||
-                    0
-                );
-
+                    r["Asistencia Total"]
+                ) || 0;
 
             doc +=
                 Number(
-                    reporte.docTotal ||
-                    0
-                );
-
+                    r["Docentes Total"]
+                ) || 0;
 
             jus +=
                 Number(
-                    reporte.jusTotal ||
-                    0
-                );
-
+                    r["Justificados Total"]
+                ) || 0;
 
             inj +=
                 Number(
-                    reporte.injTotal ||
-                    0
-                );
-
-
-            if(
-                reporte.guardado
-            ){
-
-                recibidos++;
-
-            }
-
-
-            const tr =
-                document.createElement(
-                    "tr"
-                );
-
-
-            tr.innerHTML = `
-
-                <td>
-                    ${reporte.nombre}
-                </td>
-
-                <td>
-                    ${reporte.codigo}
-                </td>
-
-                <td>
-                    ${reporte.matTotal || 0}
-                </td>
-
-                <td>
-                    ${reporte.asiTotal || 0}
-                </td>
-
-                <td>
-                    ${porcentaje.toFixed(1)}%
-                </td>
-
-                <td>
-                    ${reporte.docTotal || 0}
-                </td>
-
-                <td>
-                    ${reporte.jusTotal || 0}
-                </td>
-
-                <td>
-                    ${reporte.injTotal || 0}
-                </td>
-
-                <td>
-
-                    <span class="status ${clase}">
-                        ${estado}
-                    </span>
-
-                </td>
-
-            `;
-
-
-            tbody.appendChild(
-                tr
-            );
+                    r["Injustificados Total"]
+                ) || 0;
 
         }
     );
 
 
-    const porcentajeGeneral =
-        mat > 0
-        ? (
-            asi / mat
-          ) * 100
-        : 0;
+    document.getElementById(
+        "dashMat"
+    ).textContent =
+        mat;
 
+    document.getElementById(
+        "dashAsi"
+    ).textContent =
+        asi;
 
-    const total =
-        document.createElement(
-            "tr"
-        );
+    document.getElementById(
+        "dashDoc"
+    ).textContent =
+        doc;
 
+    document.getElementById(
+        "dashJus"
+    ).textContent =
+        jus;
 
-    total.className =
-        "total-row";
+    document.getElementById(
+        "dashInj"
+    ).textContent =
+        inj;
 
-
-    total.innerHTML = `
-
-        <td colspan="2">
-            TOTAL NER NUEVA ALIANZA
-        </td>
-
-        <td>${mat}</td>
-
-        <td>${asi}</td>
-
-        <td>
-            ${porcentajeGeneral.toFixed(1)}%
-        </td>
-
-        <td>${doc}</td>
-
-        <td>${jus}</td>
-
-        <td>${inj}</td>
-
-        <td>${recibidos}/8</td>
-
-    `;
-
-
-    tbody.appendChild(
-        total
-    );
-
-
-    const resumen =
-        document.getElementById(
-            "resumenConsolidado"
-        );
-
-
-    if(
-        recibidos === 8
-    ){
-
-        resumen.innerHTML = `
-
-            <div class="complete-box">
-
-                ✅ JORNADA COMPLETA —
-                8/8 REPORTES RECIBIDOS
-
-                <br>
-
-                Asistencia general:
-                ${porcentajeGeneral.toFixed(1)}%
-
-            </div>
-
-        `;
-
-    }else{
-
-        resumen.innerHTML = `
-
-            <div class="jornada pendiente">
-
-                ⚠ Reportes recibidos:
-                ${recibidos}/8
-
-                <br>
-
-                Faltan
-                ${8-recibidos}
-                centros educativos.
-
-            </div>
-
-        `;
-
-    }
+    document.getElementById(
+        "dashReportes"
+    ).textContent =
+        diarios.length +
+        "/8";
 
 }
 
 
 /* =====================================================
-   IMPRESIÓN DEL CONSOLIDADO
+   TABLA
 ===================================================== */
 
-function imprimirConsolidado(){
+function mostrarTabla(){
 
     const fecha =
-        document.getElementById(
-            "fechaConsolidado"
-        ).textContent;
-
-
-    document.title =
-        `Reporte NER Nueva Alianza - ${fecha}`;
-
-
-    window.print();
-
-
-    setTimeout(
-        function(){
-
-            document.title =
-                "Asistencia NER Nueva Alianza - V2.0";
-
-        },
-        1000
-    );
-
-}
-
-
-/* =====================================================
-   HISTORIAL
-===================================================== */
-
-function mostrarHistorial(){
-
-    ocultarPaneles();
-
-
-    document.getElementById(
-        "historialPanel"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "fechaHistorial"
-    ).value =
         document.getElementById(
             "fecha"
-        ).value ||
-        obtenerFechaLocal();
-
-}
-
-
-function consultarHistorial(){
-
-    const fecha =
-        document.getElementById(
-            "fechaHistorial"
         ).value;
 
+    const diarios =
+        reportes.filter(
+            r =>
+            String(r["Fecha"])
+            .substring(0,10)
+            === fecha
+        );
 
-    if(!fecha){
+
+    const contenedor =
+        document.getElementById(
+            "tablaReportes"
+        );
+
+
+    if(!diarios.length){
+
+        contenedor.innerHTML =
+            "No hay reportes registrados para esta fecha.";
 
         return;
 
     }
 
 
-    const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
-
-
-    let mat = 0;
-
-    let asi = 0;
-
-    let doc = 0;
-
-    let jus = 0;
-
-    let inj = 0;
-
-    let recibidos = 0;
-
-
-    reportes.forEach(
-        reporte => {
-
-            mat +=
-                Number(
-                    reporte.matTotal ||
-                    0
-                );
-
-            asi +=
-                Number(
-                    reporte.asiTotal ||
-                    0
-                );
-
-            doc +=
-                Number(
-                    reporte.docTotal ||
-                    0
-                );
-
-            jus +=
-                Number(
-                    reporte.jusTotal ||
-                    0
-                );
-
-            inj +=
-                Number(
-                    reporte.injTotal ||
-                    0
-                );
-
-
-            if(
-                reporte.guardado
-            ){
-
-                recibidos++;
-
-            }
-
-        }
-    );
-
-
-    const porcentaje =
-        mat > 0
-        ? (
-            asi / mat
-          ) * 100
-        : 0;
-
-
     let html = `
-
-        <div class="panel">
-
-            <h3>
-                Resumen del
-                ${fechaBonita(fecha)}
-            </h3>
-
-            <div class="dashboard">
-
-                <div class="card">
-                    <div class="number">
-                        ${mat}
-                    </div>
-                    <div class="label">
-                        Matrícula
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="number">
-                        ${asi}
-                    </div>
-                    <div class="label">
-                        Asistencia
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="number">
-                        ${porcentaje.toFixed(1)}%
-                    </div>
-                    <div class="label">
-                        Porcentaje
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="number">
-                        ${doc}
-                    </div>
-                    <div class="label">
-                        Docentes
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="number">
-                        ${jus}
-                    </div>
-                    <div class="label">
-                        Justificados
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="number">
-                        ${inj}
-                    </div>
-                    <div class="label">
-                        Injustificados
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="number">
-                        ${recibidos}/8
-                    </div>
-                    <div class="label">
-                        Reportes recibidos
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Centro</th>
+                    <th>Matrícula</th>
+                    <th>Asistencia</th>
+                    <th>%</th>
+                    <th>Docentes</th>
+                    <th>Justificados</th>
+                    <th>Injustificados</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
     `;
 
 
-    html += `
-
-        <div class="panel">
-
-            <h3>
-                Estado de los centros
-            </h3>
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Centro
-                            </th>
-
-                            <th>
-                                Código
-                            </th>
-
-                            <th>
-                                Matrícula
-                            </th>
-
-                            <th>
-                                Asistencia
-                            </th>
-
-                            <th>
-                                %
-                            </th>
-
-                            <th>
-                                Estado
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-    `;
-
-
-    reportes.forEach(
-        reporte => {
-
-            const estado =
-                obtenerEstado(
-                    reporte
-                );
-
-
-            const clase =
-                claseEstado(
-                    estado
-                );
-
-
-            const porcentajeCentro =
-                Number(
-                    reporte.matTotal ||
-                    0
-                ) > 0
-
-                ?
-
-                (
-                    Number(
-                        reporte.asiTotal ||
-                        0
-                    ) /
-
-                    Number(
-                        reporte.matTotal ||
-                        0
-                    )
-                ) * 100
-
-                : 0;
-
+    diarios.forEach(
+        r => {
 
             html += `
-
                 <tr>
-
                     <td>
-                        ${reporte.nombre}
+                        ${r["Código"] || ""}
                     </td>
 
                     <td>
-                        ${reporte.codigo}
+                        ${r["Centro Educativo"] || ""}
                     </td>
 
                     <td>
-                        ${reporte.matTotal || 0}
+                        ${r["Matrícula Total"] || 0}
                     </td>
 
                     <td>
-                        ${reporte.asiTotal || 0}
+                        ${r["Asistencia Total"] || 0}
                     </td>
 
                     <td>
-                        ${porcentajeCentro.toFixed(1)}%
+                        ${r["Porcentaje"] || 0}%
                     </td>
 
                     <td>
-
-                        <span class="status ${clase}">
-                            ${estado}
-                        </span>
-
+                        ${r["Docentes Total"] || 0}
                     </td>
 
+                    <td>
+                        ${r["Justificados Total"] || 0}
+                    </td>
+
+                    <td>
+                        ${r["Injustificados Total"] || 0}
+                    </td>
+
+                    <td>
+                        ${r["Estado"] || ""}
+                    </td>
                 </tr>
-
             `;
 
         }
@@ -3855,68 +1533,58 @@ function consultarHistorial(){
 
 
     html += `
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
+            </tbody>
+        </table>
     `;
 
 
-    document.getElementById(
-        "historialResultado"
-    ).innerHTML =
+    contenedor.innerHTML =
         html;
 
 }
 
 
 /* =====================================================
-   VOLVER
+   LIMPIAR
 ===================================================== */
 
-function volverInicio(){
+function limpiarValores(){
 
-    document.getElementById(
-        "formPanel"
-    ).classList.add(
-        "hidden"
+    [
+        "matM",
+        "matF",
+        "asiM",
+        "asiF",
+        "docM",
+        "docF",
+        "jusM",
+        "jusF",
+        "injM",
+        "injF"
+    ].forEach(
+        id => {
+
+            document.getElementById(
+                id
+            ).value = 0;
+
+        }
     );
 
-    document.getElementById(
-        "consolidadoPanel"
-    ).classList.add(
-        "hidden"
+    calcular();
+
+}
+
+
+function limpiarFormulario(){
+
+    limpiarValores();
+
+    mostrarMensaje(
+        "formMensaje",
+        "",
+        ""
     );
-
-    document.getElementById(
-        "historialPanel"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "inicioPanel"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "dashboardPanel"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    actualizarDashboard();
-
-    mostrarEscuelas();
 
 }
 
@@ -3928,193 +1596,35 @@ function volverInicio(){
 function mostrarMensaje(
     id,
     texto,
-    tipo
+    clase
 ){
 
     const elemento =
-        document.getElementById(
-            id
-        );
+        document.getElementById(id);
 
+    if(!texto){
 
-    elemento.textContent =
-        texto;
+        elemento.innerHTML = "";
 
-
-    elemento.className =
-        `message ${tipo}`;
-
-}
-
-
-function limpiarMensaje(){
-
-    const elemento =
-        document.getElementById(
-            "formMessage"
-        );
-
-
-    elemento.textContent =
-        "";
-
-
-    elemento.className =
-        "message";
-
-}
-
-
-/* =====================================================
-   CAMBIO DE FECHA
-===================================================== */
-
-document.getElementById(
-    "fecha"
-).addEventListener(
-    "change",
-    function(){
-
-        const fecha =
-            this.value;
-
-
-        document.getElementById(
-            "fechaDashboard"
-        ).textContent =
-            fechaBonita(
-                fecha
-            );
-
-
-        aplicarReglasCalendario();
-
-        actualizarDashboard();
-
-        mostrarEscuelas();
-
-    }
-);
-
-
-/* =====================================================
-   MODALIDAD
-===================================================== */
-
-document.getElementById(
-    "modalidad"
-).addEventListener(
-    "change",
-    function(){
-
-        const fecha =
-            document.getElementById(
-                "fecha"
-            ).value;
-
-
-        if(esSabado(fecha)){
-
-            this.value =
-                "Secundaria a Distancia";
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   TURNO
-===================================================== */
-
-document.getElementById(
-    "turno"
-).addEventListener(
-    "change",
-    function(){
-
-        const fecha =
-            document.getElementById(
-                "fecha"
-            ).value;
-
-
-        if(esSabado(fecha)){
-
-            this.value =
-                "Sabatino";
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   SEGURIDAD PARA NÚMEROS
-===================================================== */
-
-document.addEventListener(
-    "input",
-    function(event){
-
-        if(
-            event.target.type ===
-            "number"
-        ){
-
-            if(
-                event.target.value < 0
-            ){
-
-                event.target.value =
-                    0;
-
-            }
-
-        }
-
-    }
-);
-
-
-
-function actualizarEstadoServidor(){
-
-    const elemento =
-        document.getElementById(
-            "estadoServidor"
-        );
-
-    if(!elemento){
         return;
+
     }
 
-    elemento.textContent =
-        servidorDisponible
-        ? "☁️ Datos compartidos activos"
-        : "📱 Modo local / servidor pendiente";
+    elemento.innerHTML =
+        `<div class="${clase}">
+            ${texto}
+        </div>`;
 
 }
 
 
 /* =====================================================
-   INICIALIZACIÓN
+   INICIO
 ===================================================== */
 
-actualizarDashboard();
+actualizarDia();
 
-mostrarEscuelas();
-
-actualizarEstadoServidor();
-
-cargarDatosCompartidos()
-    .then(
-        () => {
-            actualizarEstadoServidor();
-        }
-    );
+cargarDatosCompartidos();
 
 </script>
 
