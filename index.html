@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asistencia NER Nueva Alianza V1.7</title>
+<title>Asistencia NER Nueva Alianza - V1.8</title>
 
 <style>
 *{
@@ -18,7 +18,7 @@ body{
 }
 
 header{
-    background:linear-gradient(135deg,#075985,#0ea5e9);
+    background:linear-gradient(135deg,#0f4c81,#1769aa);
     color:white;
     padding:22px 15px;
     text-align:center;
@@ -32,16 +32,17 @@ header h1{
 
 header p{
     margin:6px 0 0;
-    font-size:15px;
+    font-size:14px;
+    opacity:.95;
 }
 
 .container{
     max-width:1200px;
-    margin:20px auto;
-    padding:0 15px;
+    margin:auto;
+    padding:20px;
 }
 
-.card{
+.panel{
     background:white;
     border-radius:14px;
     padding:20px;
@@ -49,115 +50,137 @@ header p{
     box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.card h2{
+.panel h2{
     margin-top:0;
-    color:#075985;
+    color:#0f4c81;
 }
 
 .dashboard{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
     gap:12px;
+    margin-bottom:20px;
 }
 
-.stat{
-    background:#f8fafc;
+.card{
+    background:white;
     border-radius:12px;
-    padding:15px;
+    padding:16px;
     text-align:center;
-    border:1px solid #e2e8f0;
+    box-shadow:0 3px 10px rgba(0,0,0,.07);
+    border-top:4px solid #1769aa;
 }
 
-.stat .number{
-    font-size:26px;
+.card .number{
+    font-size:27px;
     font-weight:bold;
-    color:#075985;
+    color:#0f4c81;
 }
 
-.stat .label{
+.card .label{
     font-size:13px;
-    color:#64748b;
     margin-top:5px;
+    color:#64748b;
+}
+
+.jornada{
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.jornada.completa{
+    background:#dcfce7;
+    color:#166534;
+    border:1px solid #86efac;
+}
+
+.jornada.pendiente{
+    background:#fef3c7;
+    color:#92400e;
+    border:1px solid #fcd34d;
+}
+
+.jornada.domingo{
+    background:#fee2e2;
+    color:#991b1b;
+    border:1px solid #fca5a5;
 }
 
 .school-grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
 }
 
 .school-btn{
-    border:none;
+    border:0;
     border-radius:12px;
-    padding:16px 10px;
-    background:#e0f2fe;
-    color:#075985;
-    font-weight:bold;
+    padding:18px 12px;
+    background:#1769aa;
+    color:white;
     cursor:pointer;
-    min-height:80px;
+    font-size:16px;
+    font-weight:bold;
     transition:.2s;
 }
 
 .school-btn:hover{
     transform:translateY(-2px);
-    background:#bae6fd;
+    background:#0f4c81;
+}
+
+.school-btn.recibido{
+    background:#15803d;
+}
+
+.school-btn.incompleto{
+    background:#ca8a04;
+}
+
+.school-btn.pendiente{
+    background:#64748b;
 }
 
 .school-btn small{
     display:block;
-    margin-top:5px;
+    margin-top:6px;
     font-weight:normal;
-}
-
-.status-box{
-    margin-top:7px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.status-recibido{
-    color:#15803d;
-}
-
-.status-pendiente{
-    color:#b91c1c;
-}
-
-.status-incompleto{
-    color:#b45309;
 }
 
 .form-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
     gap:15px;
 }
 
-.form-group{
+.field{
     display:flex;
     flex-direction:column;
 }
 
-.form-group label{
+.field label{
     font-weight:bold;
     margin-bottom:6px;
-    font-size:14px;
+    color:#334155;
 }
 
-input,
-select{
+input,select{
     width:100%;
     padding:11px;
     border:1px solid #cbd5e1;
     border-radius:8px;
     font-size:15px;
+    background:white;
 }
 
-input:focus,
-select:focus{
+input:focus,select:focus{
     outline:none;
-    border-color:#0ea5e9;
-    box-shadow:0 0 0 2px rgba(14,165,233,.15);
+    border-color:#1769aa;
+    box-shadow:0 0 0 2px rgba(23,105,170,.12);
 }
 
 input[readonly]{
@@ -168,83 +191,34 @@ input[readonly]{
 .section-title{
     margin-top:25px;
     margin-bottom:12px;
-    padding:10px;
-    background:#e0f2fe;
-    border-left:5px solid #0284c7;
-    font-weight:bold;
-    color:#075985;
+    color:#0f4c81;
+    border-bottom:2px solid #e2e8f0;
+    padding-bottom:7px;
 }
 
-.warning{
-    display:none;
-    background:#fef3c7;
-    color:#92400e;
-    padding:10px;
-    border-radius:8px;
-    margin:10px 0;
-    font-weight:bold;
-}
-
-.error{
-    display:none;
-    background:#fee2e2;
-    color:#991b1b;
-    padding:10px;
-    border-radius:8px;
-    margin:10px 0;
-    font-weight:bold;
-}
-
-.success{
-    display:none;
-    background:#dcfce7;
-    color:#166534;
-    padding:10px;
-    border-radius:8px;
-    margin:10px 0;
-    font-weight:bold;
-}
-
-.hidden{
-    display:none!important;
-}
-
-.buttons{
+.actions{
     display:flex;
-    gap:10px;
     flex-wrap:wrap;
-    margin-top:20px;
+    gap:10px;
+    margin-top:22px;
 }
 
-.btn{
-    border:none;
+button{
+    border:0;
+    border-radius:8px;
     padding:12px 18px;
-    border-radius:9px;
+    cursor:pointer;
+    font-size:15px;
     font-weight:bold;
-    font-size:14px;
 }
 
 .btn-primary{
-    background:#0284c7;
-    color:white;
-}
-
-.btn-primary:hover{
-    background:#0369a1;
-}
-
-.btn-secondary{
-    background:#64748b;
+    background:#1769aa;
     color:white;
 }
 
 .btn-success{
-    background:#16a34a;
-    color:white;
-}
-
-.btn-danger{
-    background:#dc2626;
+    background:#15803d;
     color:white;
 }
 
@@ -253,9 +227,44 @@ input[readonly]{
     color:white;
 }
 
-.btn:disabled{
-    opacity:.5;
-    cursor:not-allowed;
+.btn-secondary{
+    background:#64748b;
+    color:white;
+}
+
+.btn-danger{
+    background:#b91c1c;
+    color:white;
+}
+
+button:hover{
+    opacity:.92;
+}
+
+.message{
+    padding:12px;
+    border-radius:8px;
+    margin-top:15px;
+    display:none;
+    font-weight:bold;
+}
+
+.message.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+}
+
+.message.warning{
+    display:block;
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.message.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
 }
 
 .table-container{
@@ -265,11 +274,10 @@ input[readonly]{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:900px;
+    min-width:950px;
 }
 
-th,
-td{
+th,td{
     border:1px solid #cbd5e1;
     padding:9px;
     text-align:center;
@@ -277,75 +285,105 @@ td{
 }
 
 th{
-    background:#075985;
+    background:#0f4c81;
     color:white;
 }
 
-tbody tr:nth-child(even){
+tr:nth-child(even){
     background:#f8fafc;
 }
 
 .total-row{
-    background:#e0f2fe!important;
+    background:#dbeafe !important;
     font-weight:bold;
 }
 
-.badge{
+.status{
     display:inline-block;
-    padding:5px 8px;
+    padding:5px 9px;
     border-radius:20px;
     font-size:11px;
     font-weight:bold;
 }
 
-.badge-green{
+.status.recibido{
     background:#dcfce7;
     color:#166534;
 }
 
-.badge-red{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-.badge-yellow{
+.status.incompleto{
     background:#fef3c7;
     color:#92400e;
 }
 
-.percent{
+.status.pendiente{
+    background:#e2e8f0;
+    color:#475569;
+}
+
+.pending-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:10px;
+    margin-top:15px;
+}
+
+.pending-item{
+    padding:12px;
+    border-radius:8px;
+    background:#fef3c7;
+    color:#92400e;
     font-weight:bold;
 }
 
-@media(max-width:900px){
+.complete-box{
+    background:#dcfce7;
+    color:#166534;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    font-weight:bold;
+}
 
-    .dashboard{
-        grid-template-columns:repeat(2,1fr);
-    }
+.hidden{
+    display:none !important;
+}
 
-    .school-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
+.info{
+    background:#eff6ff;
+    color:#1e40af;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:15px;
+    font-size:14px;
+}
 
-    .form-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
+.footer{
+    text-align:center;
+    color:#64748b;
+    font-size:13px;
+    padding:25px;
 }
 
 @media(max-width:600px){
-
     header h1{
         font-size:22px;
     }
 
-    .dashboard,
-    .school-grid,
-    .form-grid{
+    .container{
+        padding:10px;
+    }
+
+    .panel{
+        padding:14px;
+    }
+
+    .school-grid{
         grid-template-columns:1fr;
     }
 
-    .card{
-        padding:15px;
+    .dashboard{
+        grid-template-columns:repeat(2,1fr);
     }
 }
 </style>
@@ -355,746 +393,573 @@ tbody tr:nth-child(even){
 
 <header>
     <h1>ASISTENCIA NER NUEVA ALIANZA</h1>
-    <p>Sistema de reporte diario de asistencia — V1.7</p>
+    <p>Sistema de Control Diario de Asistencia — V1.8</p>
 </header>
 
 <div class="container">
 
-<!-- ================= DASHBOARD ================= -->
+    <!-- DASHBOARD -->
+    <div id="dashboardPanel" class="panel">
 
-<div id="dashboard" class="card">
+        <h2>📊 Resumen del día</h2>
 
-    <h2>📊 Panel diario</h2>
-
-    <div class="dashboard">
-
-        <div class="stat">
-            <div class="number" id="dashMatricula">0</div>
-            <div class="label">Matrícula total</div>
+        <div class="info">
+            Fecha de trabajo:
+            <strong id="fechaDashboard"></strong>
         </div>
 
-        <div class="stat">
-            <div class="number" id="dashAsistencia">0</div>
-            <div class="label">Asistencia total</div>
+        <div id="estadoJornada" class="jornada pendiente">
+            Cargando estado de la jornada...
         </div>
 
-        <div class="stat">
-            <div class="number" id="dashDocentes">0</div>
-            <div class="label">Docentes</div>
+        <div class="dashboard">
+
+            <div class="card">
+                <div class="number" id="dashMatricula">0</div>
+                <div class="label">Matrícula total</div>
+            </div>
+
+            <div class="card">
+                <div class="number" id="dashAsistencia">0</div>
+                <div class="label">Asistencia total</div>
+            </div>
+
+            <div class="card">
+                <div class="number" id="dashDocentes">0</div>
+                <div class="label">Docentes</div>
+            </div>
+
+            <div class="card">
+                <div class="number" id="dashRecibidos">0/8</div>
+                <div class="label">Reportes recibidos</div>
+            </div>
+
+            <div class="card">
+                <div class="number" id="dashJustificados">0</div>
+                <div class="label">Justificados</div>
+            </div>
+
+            <div class="card">
+                <div class="number" id="dashInjustificados">0</div>
+                <div class="label">Injustificados</div>
+            </div>
+
+            <div class="card">
+                <div class="number" id="dashPorcentaje">0%</div>
+                <div class="label">Asistencia general</div>
+            </div>
+
+            <div class="card">
+                <div class="number" id="dashPendientes">8</div>
+                <div class="label">Pendientes</div>
+            </div>
+
         </div>
 
-        <div class="stat">
-            <div class="number" id="dashRecibidos">0/8</div>
-            <div class="label">Reportes recibidos</div>
+        <div id="listaPendientes"></div>
+
+    </div>
+
+    <!-- MENU PRINCIPAL -->
+    <div id="inicioPanel" class="panel">
+
+        <h2>🏫 Seleccione el centro educativo</h2>
+
+        <div class="info">
+            Seleccione una escuela para ingresar o modificar el reporte diario.
+            Cada centro debe registrar solamente los números correspondientes a su jornada.
         </div>
 
-        <div class="stat">
-            <div class="number" id="dashJustificados">0</div>
-            <div class="label">Docentes justificados</div>
+        <div id="schoolGrid" class="school-grid"></div>
+
+        <div class="actions">
+            <button class="btn-primary" onclick="mostrarConsolidado()">
+                📋 Consolidado del NER
+            </button>
+
+            <button class="btn-secondary" onclick="mostrarHistorial()">
+                📅 Historial
+            </button>
         </div>
 
-        <div class="stat">
-            <div class="number" id="dashInjustificados">0</div>
-            <div class="label">Docentes injustificados</div>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div id="formPanel" class="panel hidden">
+
+        <h2>📝 Reporte diario</h2>
+
+        <div id="formInfo" class="info"></div>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Fecha</label>
+                <input type="date" id="fecha">
+            </div>
+
+            <div class="field">
+                <label>Código de centro</label>
+                <input type="text" id="codigo" readonly>
+            </div>
+
+            <div class="field">
+                <label>Centro educativo</label>
+                <input type="text" id="nombreCentro" readonly>
+            </div>
+
+            <div class="field">
+                <label>Modalidad</label>
+                <select id="modalidad">
+                    <option value="Educación Inicial">Educación Inicial</option>
+                    <option value="Educación Primaria">Educación Primaria</option>
+                    <option value="Secundaria a Distancia">Secundaria a Distancia</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Turno</label>
+                <select id="turno">
+                    <option value="Diurno">Diurno</option>
+                    <option value="Sabatino">Sabatino</option>
+                </select>
+            </div>
+
         </div>
 
-        <div class="stat">
-            <div class="number" id="dashPorcentaje">0%</div>
-            <div class="label">Asistencia general</div>
+        <h3 class="section-title">👥 Matrícula del día</h3>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="matM" min="0" value="0"
+                       oninput="calcularTotales(); controlarAsistencia('M')">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="matF" min="0" value="0"
+                       oninput="calcularTotales(); controlarAsistencia('F')">
+            </div>
+
+            <div class="field">
+                <label>Total matrícula</label>
+                <input type="number" id="matTotal" readonly>
+            </div>
+
         </div>
 
-        <div class="stat">
-            <div class="number" id="dashPendientes">8</div>
-            <div class="label">Pendientes</div>
+        <h3 class="section-title">✅ Asistencia de hoy</h3>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="asiM" min="0" value="0"
+                       oninput="controlarAsistencia('M'); calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="asiF" min="0" value="0"
+                       oninput="controlarAsistencia('F'); calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Total asistencia</label>
+                <input type="number" id="asiTotal" readonly>
+            </div>
+
+            <div class="field">
+                <label>Porcentaje</label>
+                <input type="text" id="porcentaje" readonly>
+            </div>
+
+        </div>
+
+        <h3 class="section-title">👨‍🏫 Docentes</h3>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Docentes masculino</label>
+                <input type="number" id="docM" min="0" value="0"
+                       oninput="calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Docentes femenino</label>
+                <input type="number" id="docF" min="0" value="0"
+                       oninput="calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Total docentes</label>
+                <input type="number" id="docTotal" readonly>
+            </div>
+
+        </div>
+
+        <h3 class="section-title">🟡 Docentes justificados</h3>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="jusM" min="0" value="0"
+                       oninput="calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="jusF" min="0" value="0"
+                       oninput="calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Total justificados</label>
+                <input type="number" id="jusTotal" readonly>
+            </div>
+
+        </div>
+
+        <h3 class="section-title">🔴 Docentes injustificados</h3>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Masculino</label>
+                <input type="number" id="injM" min="0" value="0"
+                       oninput="calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Femenino</label>
+                <input type="number" id="injF" min="0" value="0"
+                       oninput="calcularTotales()">
+            </div>
+
+            <div class="field">
+                <label>Total injustificados</label>
+                <input type="number" id="injTotal" readonly>
+            </div>
+
+        </div>
+
+        <div id="formMessage" class="message"></div>
+
+        <div class="actions">
+
+            <button class="btn-success" onclick="guardarReporte()">
+                💾 Guardar reporte
+            </button>
+
+            <button class="btn-secondary" onclick="volverInicio()">
+                ↩ Regresar
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- CONSOLIDADO -->
+    <div id="consolidadoPanel" class="panel hidden">
+
+        <h2>📋 Consolidado NER Nueva Alianza</h2>
+
+        <div class="info">
+            Fecha consultada:
+            <strong id="fechaConsolidado"></strong>
+        </div>
+
+        <div id="resumenConsolidado"></div>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Centro educativo</th>
+                        <th>Código</th>
+                        <th>Matrícula</th>
+                        <th>Asistencia</th>
+                        <th>%</th>
+                        <th>Docentes</th>
+                        <th>Justificados</th>
+                        <th>Injustificados</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaConsolidado"></tbody>
+
+            </table>
+
+        </div>
+
+        <div class="actions">
+
+            <button class="btn-secondary" onclick="volverInicio()">
+                ↩ Regresar
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- HISTORIAL -->
+    <div id="historialPanel" class="panel hidden">
+
+        <h2>📅 Historial de reportes</h2>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Seleccione fecha</label>
+                <input type="date" id="fechaHistorial">
+            </div>
+
+            <div class="field">
+                <label>&nbsp;</label>
+                <button class="btn-primary" onclick="consultarHistorial()">
+                    🔎 Consultar
+                </button>
+            </div>
+
+        </div>
+
+        <div id="historialResultado"></div>
+
+        <div class="actions">
+
+            <button class="btn-secondary" onclick="volverInicio()">
+                ↩ Regresar
+            </button>
+
         </div>
 
     </div>
 
 </div>
 
-
-<!-- ================= ESCUELAS ================= -->
-
-<div id="inicio" class="card">
-
-    <h2>🏫 Seleccione el centro educativo</h2>
-
-    <p>
-        Seleccione una de las 8 escuelas del NER Nueva Alianza
-        para ingresar el reporte diario.
-    </p>
-
-    <div id="schoolGrid" class="school-grid"></div>
-
+<div class="footer">
+    Sistema de Asistencia NER Nueva Alianza — V1.8<br>
+    Control diario de asistencia
 </div>
-
-
-<!-- ================= FORMULARIO ================= -->
-
-<div id="formulario" class="card hidden">
-
-    <h2 id="tituloFormulario">Reporte diario</h2>
-
-    <div id="mensajeError" class="error"></div>
-
-    <div id="mensajeWarning" class="warning"></div>
-
-    <div id="mensajeSuccess" class="success"></div>
-
-
-    <div class="form-grid">
-
-        <div class="form-group">
-            <label>Fecha</label>
-            <input type="date" id="fecha">
-        </div>
-
-        <div class="form-group">
-            <label>Código de centro</label>
-            <input type="text" id="codigo" readonly>
-        </div>
-
-        <div class="form-group">
-            <label>Centro educativo</label>
-            <input type="text" id="nombreCentro" readonly>
-        </div>
-
-        <div class="form-group">
-            <label>Modalidad</label>
-
-            <select id="modalidad">
-
-                <option value="Educación Inicial">
-                    Educación Inicial
-                </option>
-
-                <option value="Educación Primaria">
-                    Educación Primaria
-                </option>
-
-                <option value="Secundaria a Distancia">
-                    Secundaria a Distancia
-                </option>
-
-            </select>
-        </div>
-
-        <div class="form-group">
-
-            <label>Turno</label>
-
-            <select id="turno">
-
-                <option value="Diurno">
-                    Diurno
-                </option>
-
-                <option value="Sabatino">
-                    Sabatino
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-
-    <!-- MATRÍCULA -->
-
-    <div class="section-title">
-        👨‍🎓 MATRÍCULA DEL DÍA
-    </div>
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>Masculino</label>
-
-            <input
-                type="number"
-                id="matM"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Femenino</label>
-
-            <input
-                type="number"
-                id="matF"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Total matrícula</label>
-
-            <input
-                type="number"
-                id="matTotal"
-                readonly
-            >
-
-        </div>
-
-    </div>
-
-
-    <!-- ASISTENCIA -->
-
-    <div class="section-title">
-        ✅ ASISTENCIA DE HOY
-    </div>
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>Masculino</label>
-
-            <input
-                type="number"
-                id="asiM"
-                min="0"
-                step="1"
-                oninput="controlarAsistencia('M')"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Femenino</label>
-
-            <input
-                type="number"
-                id="asiF"
-                min="0"
-                step="1"
-                oninput="controlarAsistencia('F')"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Total asistencia</label>
-
-            <input
-                type="number"
-                id="asiTotal"
-                readonly
-            >
-
-        </div>
-
-    </div>
-
-
-    <!-- DOCENTES -->
-
-    <div class="section-title">
-        👨‍🏫 DOCENTES
-    </div>
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>Masculino</label>
-
-            <input
-                type="number"
-                id="docM"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Femenino</label>
-
-            <input
-                type="number"
-                id="docF"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Total docentes</label>
-
-            <input
-                type="number"
-                id="docTotal"
-                readonly
-            >
-
-        </div>
-
-    </div>
-
-
-    <!-- JUSTIFICADOS -->
-
-    <div class="section-title">
-        🟢 DOCENTES JUSTIFICADOS
-    </div>
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>Masculino</label>
-
-            <input
-                type="number"
-                id="jusM"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Femenino</label>
-
-            <input
-                type="number"
-                id="jusF"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Total justificados</label>
-
-            <input
-                type="number"
-                id="jusTotal"
-                readonly
-            >
-
-        </div>
-
-    </div>
-
-
-    <!-- INJUSTIFICADOS -->
-
-    <div class="section-title">
-        🔴 DOCENTES INJUSTIFICADOS
-    </div>
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>Masculino</label>
-
-            <input
-                type="number"
-                id="injM"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Femenino</label>
-
-            <input
-                type="number"
-                id="injF"
-                min="0"
-                step="1"
-                oninput="calcularTotales()"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>Total injustificados</label>
-
-            <input
-                type="number"
-                id="injTotal"
-                readonly
-            >
-
-        </div>
-
-    </div>
-
-
-    <!-- PORCENTAJE -->
-
-    <div class="section-title">
-        📈 PORCENTAJE DE ASISTENCIA
-    </div>
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>Porcentaje del centro</label>
-
-            <input
-                type="text"
-                id="porcentajeCentro"
-                readonly
-                value="0%"
-            >
-
-        </div>
-
-    </div>
-
-
-    <!-- BOTONES -->
-
-    <div class="buttons">
-
-        <button
-            class="btn btn-success"
-            id="btnGuardar"
-            onclick="guardarReporte()"
-        >
-            💾 Guardar reporte
-        </button>
-
-        <button
-            class="btn btn-secondary"
-            onclick="regresarInicio()"
-        >
-            ↩ Regresar
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- ================= HISTORIAL ================= -->
-
-<div id="historial" class="card">
-
-    <h2>📅 Consulta por fecha</h2>
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>Seleccione fecha</label>
-
-            <input
-                type="date"
-                id="fechaHistorial"
-            >
-
-        </div>
-
-    </div>
-
-    <div class="buttons">
-
-        <button
-            class="btn btn-primary"
-            onclick="consultarHistorial()"
-        >
-            🔎 Consultar
-        </button>
-
-    </div>
-
-    <div
-        id="resultadoHistorial"
-        style="margin-top:20px;"
-    ></div>
-
-</div>
-
-
-<!-- ================= CONSOLIDADO ================= -->
-
-<div id="consolidado" class="card">
-
-    <h2>📋 Consolidado NER Nueva Alianza</h2>
-
-    <div class="table-container">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>Centro educativo</th>
-
-                    <th>Código</th>
-
-                    <th>Matrícula</th>
-
-                    <th>Asistencia</th>
-
-                    <th>% Asistencia</th>
-
-                    <th>Docentes</th>
-
-                    <th>Justificados</th>
-
-                    <th>Injustificados</th>
-
-                    <th>Estado</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="tablaConsolidado"></tbody>
-
-        </table>
-
-    </div>
-
-</div>
-
-</div>
-
 
 <script>
 
-/* =====================================================
-   CONFIGURACIÓN DE LAS 8 ESCUELAS
-===================================================== */
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
 
-const escuelas = [
-
+const ESCUELAS = [
     {
         nombre:"Nueva Alianza",
         codigo:"17683"
     },
-
     {
         nombre:"Hugo Chávez Frías",
         codigo:"39183"
     },
-
     {
         nombre:"Rosa Sarmiento",
         codigo:"29271"
     },
-
     {
         nombre:"La Esperanza",
         codigo:"17751"
     },
-
     {
         nombre:"La Unión N.º 3",
         codigo:"17858"
     },
-
     {
         nombre:"Santa Lucía",
         codigo:"17880"
     },
-
     {
         nombre:"Sector del Limón",
         codigo:"37038"
     },
-
     {
         nombre:"Nueva Jerusalén",
         codigo:"30870"
     }
-
 ];
 
+const STORAGE_KEY = "ner_nueva_alianza_reportes";
 
-const STORAGE_KEY =
-    "ner_nueva_alianza_reportes";
-
-
-let escuelaSeleccionada = null;
+let escuelaActual = null;
+let historial = {};
 
 
-/* =====================================================
-   FUNCIÓN NÚMERO
-===================================================== */
+/* =========================================================
+   INICIO
+========================================================= */
 
-function numero(id){
+document.addEventListener("DOMContentLoaded", function(){
 
-    const elemento =
-        document.getElementById(id);
+    cargarDatos();
 
-    const valor =
-        Number(elemento.value);
+    const hoy = obtenerFechaLocal();
 
-    if(
-        !Number.isFinite(valor) ||
-        valor < 0
-    ){
+    document.getElementById("fecha").value = hoy;
+    document.getElementById("fechaHistorial").value = hoy;
 
-        return 0;
+    actualizarDashboard();
+    mostrarEscuelas();
 
+});
+
+
+/* =========================================================
+   FECHA LOCAL
+========================================================= */
+
+function obtenerFechaLocal(){
+
+    const ahora = new Date();
+
+    const año = ahora.getFullYear();
+
+    const mes = String(ahora.getMonth()+1).padStart(2,"0");
+
+    const dia = String(ahora.getDate()).padStart(2,"0");
+
+    return `${año}-${mes}-${dia}`;
+}
+
+
+function fechaBonita(fecha){
+
+    if(!fecha) return "";
+
+    const partes = fecha.split("-");
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
+
+/* =========================================================
+   CARGAR / GUARDAR LOCALSTORAGE
+========================================================= */
+
+function cargarDatos(){
+
+    const datos = localStorage.getItem(STORAGE_KEY);
+
+    if(!datos){
+
+        historial = {};
+
+        return;
     }
-
-    return Math.floor(valor);
-
-}
-
-
-/* =====================================================
-   FECHA ACTUAL
-===================================================== */
-
-function fechaHoy(){
-
-    const ahora =
-        new Date();
-
-    const y =
-        ahora.getFullYear();
-
-    const m =
-        String(
-            ahora.getMonth()+1
-        ).padStart(2,"0");
-
-    const d =
-        String(
-            ahora.getDate()
-        ).padStart(2,"0");
-
-    return `${y}-${m}-${d}`;
-
-}
-
-
-/* =====================================================
-   OBTENER DATOS
-===================================================== */
-
-function obtenerDatos(){
 
     try{
 
-        const datos =
-            localStorage.getItem(
-                STORAGE_KEY
+        const objeto = JSON.parse(datos);
+
+        /*
+          Compatibilidad con versiones anteriores.
+        */
+
+        if(
+            objeto &&
+            objeto.fecha &&
+            objeto.reportes &&
+            !objeto[objeto.fecha]
+        ){
+
+            historial = {};
+
+            historial[objeto.fecha] = {
+                reportes: objeto.reportes
+            };
+
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(historial)
             );
 
-        if(!datos){
+        }else{
 
-            return {};
+            historial = objeto || {};
 
         }
 
-        return JSON.parse(datos);
-
-    }
-    catch(error){
+    }catch(error){
 
         console.error(error);
 
-        return {};
+        historial = {};
 
     }
 
 }
 
 
-/* =====================================================
-   GUARDAR DATOS
-===================================================== */
-
-function guardarDatos(datos){
+function guardarDatos(){
 
     localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify(datos)
+        JSON.stringify(historial)
     );
 
 }
 
 
-/* =====================================================
-   REPORTE VACÍO
-===================================================== */
+/* =========================================================
+   ESTRUCTURA DE REPORTES
+========================================================= */
 
-function crearReporteVacio(escuela){
+function crearReporte(escuela){
 
     return {
 
-        codigo:escuela.codigo,
+        codigo: escuela.codigo,
 
-        nombre:escuela.nombre,
+        nombre: escuela.nombre,
 
-        fecha:fechaHoy(),
+        fecha: obtenerFechaLocal(),
 
-        modalidad:"Educación Inicial",
+        modalidad: obtenerModalidadActual(),
 
-        turno:"Diurno",
+        turno: obtenerTurnoActual(),
 
         matM:0,
 
         matF:0,
 
+        matTotal:0,
+
         asiM:0,
 
         asiF:0,
+
+        asiTotal:0,
 
         docM:0,
 
         docF:0,
 
+        docTotal:0,
+
         jusM:0,
 
         jusF:0,
 
+        jusTotal:0,
+
         injM:0,
 
         injF:0,
+
+        injTotal:0,
+
+        porcentaje:0,
 
         guardado:false
 
@@ -1103,590 +968,153 @@ function crearReporteVacio(escuela){
 }
 
 
-/* =====================================================
-   CREAR REPORTES DE UNA FECHA
-===================================================== */
-
-function crearReportesFecha(fecha){
-
-    const datos =
-        obtenerDatos();
-
-
-    if(!datos[fecha]){
-
-        datos[fecha] = {
-
-            reportes:
-                escuelas.map(
-                    escuela => {
-
-                        const reporte =
-                            crearReporteVacio(
-                                escuela
-                            );
-
-                        reporte.fecha =
-                            fecha;
-
-                        return reporte;
-
-                    }
-                )
-
-        };
-
-
-        guardarDatos(datos);
-
-    }
-
-
-    return datos[fecha].reportes;
-
-}
-
-
-/* =====================================================
-   OBTENER REPORTES
-===================================================== */
-
 function obtenerReportesFecha(fecha){
 
-    const datos =
-        obtenerDatos();
+    if(!historial[fecha]){
 
-
-    if(!datos[fecha]){
-
-        return crearReportesFecha(
-            fecha
-        );
+        historial[fecha] = {
+            reportes: ESCUELAS.map(e => crearReporte(e))
+        };
 
     }
 
+    if(!historial[fecha].reportes){
 
-    return datos[fecha].reportes;
-
-}
-
-
-/* =====================================================
-   MIGRAR DATOS ANTIGUOS
-===================================================== */
-
-function migrarDatosAntiguos(){
-
-    const datos =
-        localStorage.getItem(
-            STORAGE_KEY
-        );
-
-
-    if(!datos){
-
-        return;
+        historial[fecha].reportes =
+            ESCUELAS.map(e => crearReporte(e));
 
     }
 
+    /*
+      Garantiza que existan los 8 centros.
+    */
 
-    try{
+    ESCUELAS.forEach(escuela => {
 
-        const objeto =
-            JSON.parse(datos);
-
-
-        if(
-            objeto &&
-            objeto.fecha &&
-            Array.isArray(
-                objeto.reportes
-            )
-        ){
-
-            const nuevo = {};
-
-
-            nuevo[objeto.fecha] = {
-
-                reportes:
-                    objeto.reportes
-
-            };
-
-
-            localStorage.setItem(
-                STORAGE_KEY,
-                JSON.stringify(nuevo)
+        const existe =
+            historial[fecha].reportes.find(
+                r => r.codigo === escuela.codigo
             );
+
+        if(!existe){
+
+            const nuevo = crearReporte(escuela);
+
+            nuevo.fecha = fecha;
+
+            historial[fecha].reportes.push(nuevo);
 
         }
 
-    }
-    catch(error){
+    });
 
-        console.error(
-            "Error de migración:",
-            error
-        );
-
-    }
+    return historial[fecha].reportes;
 
 }
 
 
-/* =====================================================
-   CONSTRUIR BOTONES DE ESCUELAS
-===================================================== */
+/* =========================================================
+   REGLAS DE CALENDARIO
+========================================================= */
 
-function construirEscuelas(){
+function esDomingo(fecha){
 
-    const contenedor =
-        document.getElementById(
-            "schoolGrid"
-        );
+    const d = new Date(fecha + "T12:00:00");
 
-
-    contenedor.innerHTML = "";
-
-
-    const reportes =
-        obtenerReportesFecha(
-            fechaHoy()
-        );
-
-
-    escuelas.forEach(
-        (escuela,index)=>{
-
-            const reporte =
-                reportes[index];
-
-
-            const boton =
-                document.createElement(
-                    "button"
-                );
-
-
-            boton.className =
-                "school-btn";
-
-
-            boton.innerHTML = `
-
-                🏫 ${escuela.nombre}
-
-                <small>
-                    Código: ${escuela.codigo}
-                </small>
-
-                <div
-                    class="status-box ${obtenerClaseEstado(reporte)}"
-                >
-                    ${obtenerTextoEstado(reporte)}
-                </div>
-
-            `;
-
-
-            boton.onclick =
-                function(){
-
-                    abrirEscuela(
-                        index
-                    );
-
-                };
-
-
-            contenedor.appendChild(
-                boton
-            );
-
-        }
-    );
+    return d.getDay() === 0;
 
 }
 
 
-/* =====================================================
-   ESTADO DEL REPORTE
-===================================================== */
+function esSabado(fecha){
 
-function obtenerEstado(reporte){
+    const d = new Date(fecha + "T12:00:00");
 
-    if(!reporte){
-
-        return "pendiente";
-
-    }
-
-
-    if(reporte.guardado){
-
-        return "recibido";
-
-    }
-
-
-    const tieneDatos =
-
-        Number(reporte.matM || 0) > 0 ||
-
-        Number(reporte.matF || 0) > 0 ||
-
-        Number(reporte.asiM || 0) > 0 ||
-
-        Number(reporte.asiF || 0) > 0 ||
-
-        Number(reporte.docM || 0) > 0 ||
-
-        Number(reporte.docF || 0) > 0;
-
-
-    if(tieneDatos){
-
-        return "incompleto";
-
-    }
-
-
-    return "pendiente";
+    return d.getDay() === 6;
 
 }
 
 
-/* =====================================================
-   TEXTO DEL ESTADO
-===================================================== */
+function obtenerModalidadActual(){
 
-function obtenerTextoEstado(reporte){
+    const fecha = document.getElementById("fecha")?.value ||
+                  obtenerFechaLocal();
 
-    const estado =
-        obtenerEstado(reporte);
+    if(esSabado(fecha)){
 
-
-    if(estado === "recibido"){
-
-        return "● RECIBIDO";
+        return "Secundaria a Distancia";
 
     }
 
-
-    if(estado === "incompleto"){
-
-        return "● INCOMPLETO";
-
-    }
-
-
-    return "● PENDIENTE";
+    return "Educación Primaria";
 
 }
 
 
-/* =====================================================
-   CLASE DEL ESTADO
-===================================================== */
+function obtenerTurnoActual(){
 
-function obtenerClaseEstado(reporte){
+    const fecha = document.getElementById("fecha")?.value ||
+                  obtenerFechaLocal();
 
-    const estado =
-        obtenerEstado(reporte);
+    if(esSabado(fecha)){
 
-
-    if(estado === "recibido"){
-
-        return "status-recibido";
+        return "Sabatino";
 
     }
 
-
-    if(estado === "incompleto"){
-
-        return "status-incompleto";
-
-    }
-
-
-    return "status-pendiente";
+    return "Diurno";
 
 }
 
-
-/* =====================================================
-   ABRIR ESCUELA
-===================================================== */
-
-function abrirEscuela(index){
-
-    const fecha =
-        document.getElementById(
-            "fecha"
-        ).value ||
-        fechaHoy();
-
-
-    const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
-
-
-    escuelaSeleccionada =
-        index;
-
-
-    const reporte =
-        reportes[index];
-
-
-    document.getElementById(
-        "inicio"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "historial"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "consolidado"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "formulario"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    cargarReporteFormulario(
-        reporte
-    );
-
-}
-
-
-/* =====================================================
-   CARGAR FORMULARIO
-===================================================== */
-
-function cargarReporteFormulario(
-    reporte
-){
-
-    document.getElementById(
-        "tituloFormulario"
-    ).textContent =
-        "Reporte diario — " +
-        reporte.nombre;
-
-
-    document.getElementById(
-        "fecha"
-    ).value =
-        reporte.fecha;
-
-
-    document.getElementById(
-        "codigo"
-    ).value =
-        reporte.codigo;
-
-
-    document.getElementById(
-        "nombreCentro"
-    ).value =
-        reporte.nombre;
-
-
-    document.getElementById(
-        "modalidad"
-    ).value =
-        reporte.modalidad;
-
-
-    document.getElementById(
-        "turno"
-    ).value =
-        reporte.turno;
-
-
-    document.getElementById(
-        "matM"
-    ).value =
-        reporte.matM;
-
-
-    document.getElementById(
-        "matF"
-    ).value =
-        reporte.matF;
-
-
-    document.getElementById(
-        "asiM"
-    ).value =
-        reporte.asiM;
-
-
-    document.getElementById(
-        "asiF"
-    ).value =
-        reporte.asiF;
-
-
-    document.getElementById(
-        "docM"
-    ).value =
-        reporte.docM;
-
-
-    document.getElementById(
-        "docF"
-    ).value =
-        reporte.docF;
-
-
-    document.getElementById(
-        "jusM"
-    ).value =
-        reporte.jusM;
-
-
-    document.getElementById(
-        "jusF"
-    ).value =
-        reporte.jusF;
-
-
-    document.getElementById(
-        "injM"
-    ).value =
-        reporte.injM;
-
-
-    document.getElementById(
-        "injF"
-    ).value =
-        reporte.injF;
-
-
-    limpiarMensajes();
-
-
-    calcularTotales();
-
-
-    aplicarReglasCalendario();
-
-}
-
-
-/* =====================================================
-   REGLAS DEL CALENDARIO
-===================================================== */
 
 function aplicarReglasCalendario(){
 
     const fecha =
-        document.getElementById(
-            "fecha"
-        ).value;
-
-
-    if(!fecha){
-
-        return;
-
-    }
-
-
-    const fechaObj =
-        new Date(
-            fecha + "T00:00:00"
-        );
-
-
-    const dia =
-        fechaObj.getDay();
-
+        document.getElementById("fecha").value;
 
     const modalidad =
-        document.getElementById(
-            "modalidad"
-        );
-
+        document.getElementById("modalidad");
 
     const turno =
-        document.getElementById(
-            "turno"
+        document.getElementById("turno");
+
+    if(esDomingo(fecha)){
+
+        modalidad.value = "Educación Primaria";
+
+        turno.value = "Diurno";
+
+        modalidad.disabled = true;
+
+        turno.disabled = true;
+
+        mostrarMensaje(
+            "formMessage",
+            "⚠ El domingo no hay clases registradas.",
+            "warning"
         );
-
-
-    const botonGuardar =
-        document.getElementById(
-            "btnGuardar"
-        );
-
-
-    if(dia === 0){
-
-        mostrarError(
-            "El domingo no hay clases. No se puede registrar asistencia."
-        );
-
-
-        botonGuardar.disabled =
-            true;
-
 
         return;
 
     }
 
-
-    botonGuardar.disabled =
-        false;
-
-
-    if(dia === 6){
+    if(esSabado(fecha)){
 
         modalidad.value =
             "Secundaria a Distancia";
 
-
         turno.value =
             "Sabatino";
 
+        modalidad.disabled = true;
 
-        modalidad.disabled =
-            true;
+        turno.disabled = true;
 
+    }else{
 
-        turno.disabled =
-            true;
+        modalidad.disabled = false;
 
-    }
-    else{
-
-        modalidad.disabled =
-            false;
-
-
-        turno.disabled =
-            false;
-
+        turno.disabled = false;
 
         if(
             modalidad.value ===
@@ -1698,998 +1126,820 @@ function aplicarReglasCalendario(){
 
         }
 
+        turno.value = "Diurno";
 
-        if(
-            turno.value ===
-            "Sabatino"
+    }
+
+}
+
+
+/* =========================================================
+   MOSTRAR ESCUELAS
+========================================================= */
+
+function mostrarEscuelas(){
+
+    const contenedor =
+        document.getElementById("schoolGrid");
+
+    contenedor.innerHTML = "";
+
+    const fecha =
+        document.getElementById("fechaDashboard")
+        .textContent;
+
+    const fechaActual =
+        document.getElementById("fecha")
+        .value || obtenerFechaLocal();
+
+    const reportes =
+        obtenerReportesFecha(fechaActual);
+
+    ESCUELAS.forEach((escuela,index)=>{
+
+        const reporte =
+            reportes.find(
+                r => r.codigo === escuela.codigo
+            );
+
+        const boton =
+            document.createElement("button");
+
+        let clase = "pendiente";
+
+        let texto = "PENDIENTE";
+
+        if(reporte && reporte.guardado){
+
+            clase = "recibido";
+
+            texto = "RECIBIDO";
+
+        }else if(
+            reporte &&
+            tieneDatos(reporte)
         ){
 
-            turno.value =
-                "Diurno";
+            clase = "incompleto";
+
+            texto = "INCOMPLETO";
 
         }
 
-    }
+        boton.className =
+            `school-btn ${clase}`;
+
+        boton.innerHTML = `
+            ${index+1}. ${escuela.nombre}
+            <small>Código: ${escuela.codigo}</small>
+            <small>${texto}</small>
+        `;
+
+        boton.onclick = function(){
+
+            abrirEscuela(escuela.codigo);
+
+        };
+
+        contenedor.appendChild(boton);
+
+    });
 
 }
 
 
-/* =====================================================
-   CALCULAR TOTALES
-===================================================== */
+/* =========================================================
+   ABRIR ESCUELA
+========================================================= */
 
-function calcularTotales(){
+function abrirEscuela(codigo){
 
-    const matM =
-        numero("matM");
+    const fecha =
+        document.getElementById("fecha")
+        .value || obtenerFechaLocal();
 
+    if(esDomingo(fecha)){
 
-    const matF =
-        numero("matF");
+        alert(
+            "El domingo no hay clases. " +
+            "Seleccione otro día."
+        );
 
-
-    let asiM =
-        numero("asiM");
-
-
-    let asiF =
-        numero("asiF");
-
-
-    const docM =
-        numero("docM");
-
-
-    const docF =
-        numero("docF");
-
-
-    const jusM =
-        numero("jusM");
-
-
-    const jusF =
-        numero("jusF");
-
-
-    const injM =
-        numero("injM");
-
-
-    const injF =
-        numero("injF");
-
-
-    /*
-       REGLA FUNDAMENTAL:
-       ASISTENCIA NUNCA PUEDE SUPERAR MATRÍCULA
-    */
-
-    if(asiM > matM){
-
-        asiM =
-            matM;
-
-
-        document.getElementById(
-            "asiM"
-        ).value =
-            matM;
+        return;
 
     }
 
+    escuelaActual =
+        ESCUELAS.find(e => e.codigo === codigo);
 
-    if(asiF > matF){
+    if(!escuelaActual) return;
 
-        asiF =
-            matF;
+    const reportes =
+        obtenerReportesFecha(fecha);
 
+    let reporte =
+        reportes.find(
+            r => r.codigo === codigo
+        );
 
-        document.getElementById(
-            "asiF"
-        ).value =
-            matF;
+    if(!reporte){
 
-    }
+        reporte =
+            crearReporte(escuelaActual);
 
+        reporte.fecha = fecha;
 
-    document.getElementById(
-        "matTotal"
-    ).value =
-        matM + matF;
-
-
-    document.getElementById(
-        "asiTotal"
-    ).value =
-        asiM + asiF;
-
-
-    document.getElementById(
-        "docTotal"
-    ).value =
-        docM + docF;
-
-
-    document.getElementById(
-        "jusTotal"
-    ).value =
-        jusM + jusF;
-
-
-    document.getElementById(
-        "injTotal"
-    ).value =
-        injM + injF;
-
-
-    const matricula =
-        matM + matF;
-
-
-    const asistencia =
-        asiM + asiF;
-
-
-    let porcentaje =
-        0;
-
-
-    if(matricula > 0){
-
-        porcentaje =
-            (
-                asistencia /
-                matricula
-            ) * 100;
+        reportes.push(reporte);
 
     }
 
+    document.getElementById("inicioPanel")
+        .classList.add("hidden");
 
-    document.getElementById(
-        "porcentajeCentro"
-    ).value =
-        porcentaje.toFixed(2) +
-        "%";
+    document.getElementById("dashboardPanel")
+        .classList.add("hidden");
+
+    document.getElementById("consolidadoPanel")
+        .classList.add("hidden");
+
+    document.getElementById("historialPanel")
+        .classList.add("hidden");
+
+    document.getElementById("formPanel")
+        .classList.remove("hidden");
+
+    cargarFormulario(reporte);
 
 }
 
 
-/* =====================================================
-   CONTROLAR ASISTENCIA
-===================================================== */
+/* =========================================================
+   CARGAR FORMULARIO
+========================================================= */
+
+function cargarFormulario(reporte){
+
+    document.getElementById("fecha").value =
+        reporte.fecha;
+
+    document.getElementById("codigo").value =
+        reporte.codigo;
+
+    document.getElementById("nombreCentro").value =
+        reporte.nombre;
+
+    document.getElementById("modalidad").value =
+        reporte.modalidad ||
+        obtenerModalidadActual();
+
+    document.getElementById("turno").value =
+        reporte.turno ||
+        obtenerTurnoActual();
+
+    document.getElementById("matM").value =
+        reporte.matM || 0;
+
+    document.getElementById("matF").value =
+        reporte.matF || 0;
+
+    document.getElementById("asiM").value =
+        reporte.asiM || 0;
+
+    document.getElementById("asiF").value =
+        reporte.asiF || 0;
+
+    document.getElementById("docM").value =
+        reporte.docM || 0;
+
+    document.getElementById("docF").value =
+        reporte.docF || 0;
+
+    document.getElementById("jusM").value =
+        reporte.jusM || 0;
+
+    document.getElementById("jusF").value =
+        reporte.jusF || 0;
+
+    document.getElementById("injM").value =
+        reporte.injM || 0;
+
+    document.getElementById("injF").value =
+        reporte.injF || 0;
+
+    aplicarReglasCalendario();
+
+    calcularTotales();
+
+    document.getElementById("formInfo").innerHTML =
+        `
+        <strong>${reporte.nombre}</strong><br>
+        Código: ${reporte.codigo}<br>
+        Fecha: ${fechaBonita(reporte.fecha)}
+        `;
+
+    limpiarMensaje();
+
+}
+
+
+/* =========================================================
+   NÚMEROS
+========================================================= */
+
+function numero(id){
+
+    const valor =
+        Number(document.getElementById(id).value);
+
+    if(isNaN(valor) || valor < 0){
+
+        return 0;
+
+    }
+
+    return Math.floor(valor);
+
+}
+
+
+/* =========================================================
+   CONTROL DE ASISTENCIA
+========================================================= */
 
 function controlarAsistencia(sexo){
-
-    let ajustado =
-        false;
-
 
     if(sexo === "M"){
 
         const matricula =
             numero("matM");
 
-
-        const asistencia =
+        let asistencia =
             numero("asiM");
 
+        if(asistencia > matricula){
 
-        if(
-            asistencia >
-            matricula
-        ){
-
-            document.getElementById(
-                "asiM"
-            ).value =
+            document.getElementById("asiM").value =
                 matricula;
 
-
-            ajustado =
-                true;
+            mostrarMensaje(
+                "formMessage",
+                `⚠ La asistencia masculina no puede superar la matrícula masculina. Se ajustó a ${matricula}.`,
+                "warning"
+            );
 
         }
 
     }
-
 
     if(sexo === "F"){
 
         const matricula =
             numero("matF");
 
-
-        const asistencia =
+        let asistencia =
             numero("asiF");
 
+        if(asistencia > matricula){
 
-        if(
-            asistencia >
-            matricula
-        ){
-
-            document.getElementById(
-                "asiF"
-            ).value =
+            document.getElementById("asiF").value =
                 matricula;
 
-
-            ajustado =
-                true;
-
-        }
-
-    }
-
-
-    calcularTotales();
-
-
-    if(ajustado){
-
-        mostrarWarning(
-            "La asistencia no puede ser mayor que la matrícula. El valor fue ajustado a la matrícula."
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   VALIDAR REPORTE
-===================================================== */
-
-function validarReporte(){
-
-    const matM =
-        numero("matM");
-
-
-    const matF =
-        numero("matF");
-
-
-    const asiM =
-        numero("asiM");
-
-
-    const asiF =
-        numero("asiF");
-
-
-    const docM =
-        numero("docM");
-
-
-    const docF =
-        numero("docF");
-
-
-    const jusM =
-        numero("jusM");
-
-
-    const jusF =
-        numero("jusF");
-
-
-    const injM =
-        numero("injM");
-
-
-    const injF =
-        numero("injF");
-
-
-    if(asiM > matM){
-
-        return
-            "La asistencia masculina no puede superar la matrícula masculina.";
-
-    }
-
-
-    if(asiF > matF){
-
-        return
-            "La asistencia femenina no puede superar la matrícula femenina.";
-
-    }
-
-
-    if(
-        (asiM + asiF) >
-        (matM + matF)
-    ){
-
-        return
-            "La asistencia total no puede superar la matrícula total.";
-
-    }
-
-
-    const docentes =
-        docM + docF;
-
-
-    const justificados =
-        jusM + jusF;
-
-
-    const injustificados =
-        injM + injF;
-
-
-    if(
-        justificados >
-        docentes
-    ){
-
-        return
-            "Los docentes justificados no pueden superar el total de docentes.";
-
-    }
-
-
-    if(
-        injustificados >
-        docentes
-    ){
-
-        return
-            "Los docentes injustificados no pueden superar el total de docentes.";
-
-    }
-
-
-    if(
-        (
-            justificados +
-            injustificados
-        ) > docentes
-    ){
-
-        return
-            "Justificados + injustificados no puede superar el total de docentes.";
-
-    }
-
-
-    return "";
-
-}
-
-
-/* =====================================================
-   GUARDAR REPORTE
-===================================================== */
-
-function guardarReporte(){
-
-    limpiarMensajes();
-
-
-    aplicarReglasCalendario();
-
-
-    const botonGuardar =
-        document.getElementById(
-            "btnGuardar"
-        );
-
-
-    if(
-        botonGuardar.disabled
-    ){
-
-        return;
-
-    }
-
-
-    const fecha =
-        document.getElementById(
-            "fecha"
-        ).value;
-
-
-    if(!fecha){
-
-        mostrarError(
-            "Debe seleccionar una fecha."
-        );
-
-        return;
-
-    }
-
-
-    const fechaObj =
-        new Date(
-            fecha + "T00:00:00"
-        );
-
-
-    if(
-        fechaObj.getDay() === 0
-    ){
-
-        mostrarError(
-            "No se puede guardar un reporte del domingo."
-        );
-
-        return;
-
-    }
-
-
-    /*
-       PRIMERO AJUSTAMOS LOS VALORES.
-       NO MOSTRAMOS ERROR POR EL AJUSTE.
-    */
-
-    const matM =
-        numero("matM");
-
-
-    const matF =
-        numero("matF");
-
-
-    let asiM =
-        numero("asiM");
-
-
-    let asiF =
-        numero("asiF");
-
-
-    if(asiM > matM){
-
-        asiM =
-            matM;
-
-
-        document.getElementById(
-            "asiM"
-        ).value =
-            matM;
-
-    }
-
-
-    if(asiF > matF){
-
-        asiF =
-            matF;
-
-
-        document.getElementById(
-            "asiF"
-        ).value =
-            matF;
-
-    }
-
-
-    calcularTotales();
-
-
-    /*
-       AHORA VALIDAMOS.
-    */
-
-    const error =
-        validarReporte();
-
-
-    if(error){
-
-        mostrarError(
-            error
-        );
-
-        return;
-
-    }
-
-
-    if(
-        escuelaSeleccionada === null
-    ){
-
-        mostrarError(
-            "No se ha seleccionado una escuela."
-        );
-
-        return;
-
-    }
-
-
-    const datos =
-        obtenerDatos();
-
-
-    if(!datos[fecha]){
-
-        datos[fecha] = {
-
-            reportes:
-                escuelas.map(
-                    escuela =>
-                        crearReporteVacio(
-                            escuela
-                        )
-                )
-
-        };
-
-    }
-
-
-    const reportes =
-        datos[fecha].reportes;
-
-
-    const anterior =
-        reportes[
-            escuelaSeleccionada
-        ] ||
-        crearReporteVacio(
-            escuelas[
-                escuelaSeleccionada
-            ]
-        );
-
-
-    anterior.fecha =
-        fecha;
-
-
-    anterior.codigo =
-        document.getElementById(
-            "codigo"
-        ).value;
-
-
-    anterior.nombre =
-        document.getElementById(
-            "nombreCentro"
-        ).value;
-
-
-    anterior.modalidad =
-        document.getElementById(
-            "modalidad"
-        ).value;
-
-
-    anterior.turno =
-        document.getElementById(
-            "turno"
-        ).value;
-
-
-    anterior.matM =
-        numero("matM");
-
-
-    anterior.matF =
-        numero("matF");
-
-
-    anterior.asiM =
-        Math.min(
-            numero("asiM"),
-            anterior.matM
-        );
-
-
-    anterior.asiF =
-        Math.min(
-            numero("asiF"),
-            anterior.matF
-        );
-
-
-    anterior.docM =
-        numero("docM");
-
-
-    anterior.docF =
-        numero("docF");
-
-
-    anterior.jusM =
-        numero("jusM");
-
-
-    anterior.jusF =
-        numero("jusF");
-
-
-    anterior.injM =
-        numero("injM");
-
-
-    anterior.injF =
-        numero("injF");
-
-
-    anterior.guardado =
-        true;
-
-
-    reportes[
-        escuelaSeleccionada
-    ] =
-        anterior;
-
-
-    datos[fecha].reportes =
-        reportes;
-
-
-    guardarDatos(
-        datos
-    );
-
-
-    calcularTotales();
-
-
-    mostrarSuccess(
-        "✓ Reporte guardado correctamente."
-    );
-
-
-    actualizarTodo();
-
-}
-
-
-/* =====================================================
-   REGRESAR
-===================================================== */
-
-function regresarInicio(){
-
-    document.getElementById(
-        "formulario"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "inicio"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "historial"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "consolidado"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    escuelaSeleccionada =
-        null;
-
-
-    limpiarMensajes();
-
-
-    actualizarTodo();
-
-}
-
-
-/* =====================================================
-   CONSOLIDADO
-===================================================== */
-
-function construirConsolidado(
-    fecha
-){
-
-    const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
-
-
-    const tbody =
-        document.getElementById(
-            "tablaConsolidado"
-        );
-
-
-    tbody.innerHTML = "";
-
-
-    let totalMatricula = 0;
-
-    let totalAsistencia = 0;
-
-    let totalDocentes = 0;
-
-    let totalJustificados = 0;
-
-    let totalInjustificados = 0;
-
-
-    reportes.forEach(
-        reporte=>{
-
-            const matricula =
-                Number(
-                    reporte.matM || 0
-                ) +
-                Number(
-                    reporte.matF || 0
-                );
-
-
-            const asistencia =
-                Number(
-                    reporte.asiM || 0
-                ) +
-                Number(
-                    reporte.asiF || 0
-                );
-
-
-            const docentes =
-                Number(
-                    reporte.docM || 0
-                ) +
-                Number(
-                    reporte.docF || 0
-                );
-
-
-            const justificados =
-                Number(
-                    reporte.jusM || 0
-                ) +
-                Number(
-                    reporte.jusF || 0
-                );
-
-
-            const injustificados =
-                Number(
-                    reporte.injM || 0
-                ) +
-                Number(
-                    reporte.injF || 0
-                );
-
-
-            let porcentaje =
-                0;
-
-
-            if(matricula > 0){
-
-                porcentaje =
-                    (
-                        asistencia /
-                        matricula
-                    ) * 100;
-
-            }
-
-
-            totalMatricula +=
-                matricula;
-
-
-            totalAsistencia +=
-                asistencia;
-
-
-            totalDocentes +=
-                docentes;
-
-
-            totalJustificados +=
-                justificados;
-
-
-            totalInjustificados +=
-                injustificados;
-
-
-            let estadoHTML =
-                "";
-
-
-            const estado =
-                obtenerEstado(
-                    reporte
-                );
-
-
-            if(
-                estado ===
-                "recibido"
-            ){
-
-                estadoHTML =
-                    `<span class="badge badge-green">
-                        RECIBIDO
-                    </span>`;
-
-            }
-            else if(
-                estado ===
-                "incompleto"
-            ){
-
-                estadoHTML =
-                    `<span class="badge badge-yellow">
-                        INCOMPLETO
-                    </span>`;
-
-            }
-            else{
-
-                estadoHTML =
-                    `<span class="badge badge-red">
-                        PENDIENTE
-                    </span>`;
-
-            }
-
-
-            const fila =
-                document.createElement(
-                    "tr"
-                );
-
-
-            fila.innerHTML = `
-
-                <td>
-                    ${reporte.nombre}
-                </td>
-
-                <td>
-                    ${reporte.codigo}
-                </td>
-
-                <td>
-                    ${matricula}
-                </td>
-
-                <td>
-                    ${asistencia}
-                </td>
-
-                <td class="percent">
-                    ${porcentaje.toFixed(2)}%
-                </td>
-
-                <td>
-                    ${docentes}
-                </td>
-
-                <td>
-                    ${justificados}
-                </td>
-
-                <td>
-                    ${injustificados}
-                </td>
-
-                <td>
-                    ${estadoHTML}
-                </td>
-
-            `;
-
-
-            tbody.appendChild(
-                fila
+            mostrarMensaje(
+                "formMessage",
+                `⚠ La asistencia femenina no puede superar la matrícula femenina. Se ajustó a ${matricula}.`,
+                "warning"
             );
 
         }
+
+    }
+
+    calcularTotales();
+
+}
+
+
+/* =========================================================
+   TOTALES
+========================================================= */
+
+function calcularTotales(){
+
+    const matM = numero("matM");
+
+    const matF = numero("matF");
+
+    let asiM = numero("asiM");
+
+    let asiF = numero("asiF");
+
+    const docM = numero("docM");
+
+    const docF = numero("docF");
+
+    let jusM = numero("jusM");
+
+    let jusF = numero("jusF");
+
+    let injM = numero("injM");
+
+    let injF = numero("injF");
+
+
+    /*
+      Seguridad adicional:
+      asistencia nunca supera matrícula.
+    */
+
+    if(asiM > matM){
+
+        asiM = matM;
+
+        document.getElementById("asiM").value =
+            matM;
+
+    }
+
+    if(asiF > matF){
+
+        asiF = matF;
+
+        document.getElementById("asiF").value =
+            matF;
+
+    }
+
+
+    /*
+      Justificados + injustificados
+      nunca deben superar docentes.
+    */
+
+    const totalDocentes =
+        docM + docF;
+
+    if(jusM + jusF > totalDocentes){
+
+        const disponible =
+            Math.max(
+                0,
+                totalDocentes
+            );
+
+        let nuevoJusM =
+            Math.min(jusM,disponible);
+
+        let restante =
+            disponible - nuevoJusM;
+
+        let nuevoJusF =
+            Math.min(jusF,restante);
+
+        jusM = nuevoJusM;
+
+        jusF = nuevoJusF;
+
+        document.getElementById("jusM").value =
+            jusM;
+
+        document.getElementById("jusF").value =
+            jusF;
+
+    }
+
+
+    const totalJustificados =
+        jusM + jusF;
+
+    const maxInjustificados =
+        Math.max(
+            0,
+            totalDocentes - totalJustificados
+        );
+
+    if(injM + injF > maxInjustificados){
+
+        let nuevoInjM =
+            Math.min(
+                injM,
+                maxInjustificados
+            );
+
+        let restante =
+            maxInjustificados - nuevoInjM;
+
+        let nuevoInjF =
+            Math.min(
+                injF,
+                restante
+            );
+
+        injM = nuevoInjM;
+
+        injF = nuevoInjF;
+
+        document.getElementById("injM").value =
+            injM;
+
+        document.getElementById("injF").value =
+            injF;
+
+    }
+
+
+    const matTotal =
+        matM + matF;
+
+    const asiTotal =
+        asiM + asiF;
+
+    const docTotal =
+        docM + docF;
+
+    const jusTotal =
+        jusM + jusF;
+
+    const injTotal =
+        injM + injF;
+
+
+    document.getElementById("matTotal").value =
+        matTotal;
+
+    document.getElementById("asiTotal").value =
+        asiTotal;
+
+    document.getElementById("docTotal").value =
+        docTotal;
+
+    document.getElementById("jusTotal").value =
+        jusTotal;
+
+    document.getElementById("injTotal").value =
+        injTotal;
+
+
+    let porcentaje = 0;
+
+    if(matTotal > 0){
+
+        porcentaje =
+            (asiTotal / matTotal) * 100;
+
+    }
+
+    document.getElementById("porcentaje").value =
+        porcentaje.toFixed(1) + "%";
+
+}
+
+
+/* =========================================================
+   GUARDAR REPORTE
+========================================================= */
+
+function guardarReporte(){
+
+    limpiarMensaje();
+
+    if(!escuelaActual){
+
+        return;
+
+    }
+
+    const fecha =
+        document.getElementById("fecha").value;
+
+    if(!fecha){
+
+        mostrarMensaje(
+            "formMessage",
+            "Debe seleccionar una fecha.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(esDomingo(fecha)){
+
+        mostrarMensaje(
+            "formMessage",
+            "No se puede guardar un reporte para domingo.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+      Ajuste final de asistencia.
+    */
+
+    controlarAsistencia("M");
+
+    controlarAsistencia("F");
+
+    calcularTotales();
+
+
+    const matM = numero("matM");
+
+    const matF = numero("matF");
+
+    const matTotal =
+        matM + matF;
+
+    const asiM = Math.min(
+        numero("asiM"),
+        matM
+    );
+
+    const asiF = Math.min(
+        numero("asiF"),
+        matF
+    );
+
+    const asiTotal =
+        asiM + asiF;
+
+    const docM = numero("docM");
+
+    const docF = numero("docF");
+
+    const docTotal =
+        docM + docF;
+
+    const jusM = numero("jusM");
+
+    const jusF = numero("jusF");
+
+    const jusTotal =
+        jusM + jusF;
+
+    const injM = numero("injM");
+
+    const injF = numero("injF");
+
+    const injTotal =
+        injM + injF;
+
+
+    /*
+      Validaciones finales.
+    */
+
+    if(asiM > matM){
+
+        mostrarMensaje(
+            "formMessage",
+            "La asistencia masculina no puede superar la matrícula.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(asiF > matF){
+
+        mostrarMensaje(
+            "formMessage",
+            "La asistencia femenina no puede superar la matrícula.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(asiTotal > matTotal){
+
+        mostrarMensaje(
+            "formMessage",
+            "La asistencia total no puede superar la matrícula total.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(jusTotal > docTotal){
+
+        mostrarMensaje(
+            "formMessage",
+            "Los docentes justificados no pueden superar el total de docentes.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(injTotal > docTotal){
+
+        mostrarMensaje(
+            "formMessage",
+            "Los docentes injustificados no pueden superar el total de docentes.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(jusTotal + injTotal > docTotal){
+
+        mostrarMensaje(
+            "formMessage",
+            "Justificados + injustificados no pueden superar el total de docentes.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const reportes =
+        obtenerReportesFecha(fecha);
+
+    let reporte =
+        reportes.find(
+            r => r.codigo === escuelaActual.codigo
+        );
+
+    if(!reporte){
+
+        reporte =
+            crearReporte(escuelaActual);
+
+        reportes.push(reporte);
+
+    }
+
+
+    reporte.fecha = fecha;
+
+    reporte.codigo =
+        escuelaActual.codigo;
+
+    reporte.nombre =
+        escuelaActual.nombre;
+
+    reporte.modalidad =
+        document.getElementById("modalidad").value;
+
+    reporte.turno =
+        document.getElementById("turno").value;
+
+    reporte.matM = matM;
+
+    reporte.matF = matF;
+
+    reporte.matTotal = matTotal;
+
+    reporte.asiM = asiM;
+
+    reporte.asiF = asiF;
+
+    reporte.asiTotal = asiTotal;
+
+    reporte.docM = docM;
+
+    reporte.docF = docF;
+
+    reporte.docTotal = docTotal;
+
+    reporte.jusM = jusM;
+
+    reporte.jusF = jusF;
+
+    reporte.jusTotal = jusTotal;
+
+    reporte.injM = injM;
+
+    reporte.injF = injF;
+
+    reporte.injTotal = injTotal;
+
+    reporte.porcentaje =
+        matTotal > 0
+        ? (asiTotal / matTotal) * 100
+        : 0;
+
+    reporte.guardado = true;
+
+
+    guardarDatos();
+
+    mostrarMensaje(
+        "formMessage",
+        "✓ Reporte guardado correctamente.",
+        "success"
     );
 
 
-    const porcentajeGeneral =
-        totalMatricula > 0
-        ?
-        (
-            totalAsistencia /
-            totalMatricula
-        ) * 100
-        :
-        0;
+    actualizarDashboard();
+
+    mostrarEscuelas();
+
+}
 
 
-    const filaTotal =
-        document.createElement(
-            "tr"
-        );
+/* =========================================================
+   DETECTAR SI TIENE DATOS
+========================================================= */
 
+function tieneDatos(reporte){
 
-    filaTotal.className =
-        "total-row";
+    if(!reporte) return false;
 
-
-    filaTotal.innerHTML = `
-
-        <td colspan="2">
-            TOTAL NER NUEVA ALIANZA
-        </td>
-
-        <td>
-            ${totalMatricula}
-        </td>
-
-        <td>
-            ${totalAsistencia}
-        </td>
-
-        <td>
-            ${porcentajeGeneral.toFixed(2)}%
-        </td>
-
-        <td>
-            ${totalDocentes}
-        </td>
-
-        <td>
-            ${totalJustificados}
-        </td>
-
-        <td>
-            ${totalInjustificados}
-        </td>
-
-        <td>
-            GENERAL
-        </td>
-
-    `;
-
-
-    tbody.appendChild(
-        filaTotal
+    return (
+        Number(reporte.matM || 0) > 0 ||
+        Number(reporte.matF || 0) > 0 ||
+        Number(reporte.asiM || 0) > 0 ||
+        Number(reporte.asiF || 0) > 0 ||
+        Number(reporte.docM || 0) > 0 ||
+        Number(reporte.docF || 0) > 0 ||
+        Number(reporte.jusM || 0) > 0 ||
+        Number(reporte.jusF || 0) > 0 ||
+        Number(reporte.injM || 0) > 0 ||
+        Number(reporte.injF || 0) > 0
     );
 
 }
 
 
-/* =====================================================
-   DASHBOARD
-===================================================== */
+/* =========================================================
+   ESTADO
+========================================================= */
 
-function actualizarPanel(){
+function obtenerEstado(reporte){
+
+    if(!reporte){
+
+        return "PENDIENTE";
+
+    }
+
+    if(reporte.guardado){
+
+        return "RECIBIDO";
+
+    }
+
+    if(tieneDatos(reporte)){
+
+        return "INCOMPLETO";
+
+    }
+
+    return "PENDIENTE";
+
+}
+
+
+function claseEstado(estado){
+
+    if(estado === "RECIBIDO"){
+
+        return "recibido";
+
+    }
+
+    if(estado === "INCOMPLETO"){
+
+        return "incompleto";
+
+    }
+
+    return "pendiente";
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function actualizarDashboard(){
 
     const fecha =
-        fechaHoy();
+        document.getElementById("fecha")?.value ||
+        obtenerFechaLocal();
+
+    document.getElementById("fechaDashboard")
+        .textContent = fechaBonita(fecha);
 
 
     const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
+        obtenerReportesFecha(fecha);
 
 
     let matricula = 0;
@@ -2704,155 +1954,355 @@ function actualizarPanel(){
 
     let recibidos = 0;
 
-
-    reportes.forEach(
-        reporte=>{
-
-            matricula +=
-                Number(
-                    reporte.matM || 0
-                ) +
-                Number(
-                    reporte.matF || 0
-                );
+    let pendientes = [];
 
 
-            asistencia +=
-                Number(
-                    reporte.asiM || 0
-                ) +
-                Number(
-                    reporte.asiF || 0
-                );
+    reportes.forEach(reporte => {
 
+        matricula += Number(reporte.matTotal || 0);
 
-            docentes +=
-                Number(
-                    reporte.docM || 0
-                ) +
-                Number(
-                    reporte.docF || 0
-                );
+        asistencia += Number(reporte.asiTotal || 0);
 
+        docentes += Number(reporte.docTotal || 0);
 
-            justificados +=
-                Number(
-                    reporte.jusM || 0
-                ) +
-                Number(
-                    reporte.jusF || 0
-                );
+        justificados += Number(reporte.jusTotal || 0);
 
+        injustificados += Number(reporte.injTotal || 0);
 
-            injustificados +=
-                Number(
-                    reporte.injM || 0
-                ) +
-                Number(
-                    reporte.injF || 0
-                );
+        if(reporte.guardado){
 
+            recibidos++;
 
-            if(
-                obtenerEstado(
-                    reporte
-                ) === "recibido"
-            ){
+        }else{
 
-                recibidos++;
-
-            }
+            pendientes.push(reporte.nombre);
 
         }
-    );
+
+    });
 
 
     const porcentaje =
         matricula > 0
-        ?
-        (
-            asistencia /
-            matricula
-        ) * 100
-        :
-        0;
+        ? (asistencia / matricula) * 100
+        : 0;
 
 
-    const pendientes =
-        escuelas.length -
-        recibidos;
+    document.getElementById("dashMatricula")
+        .textContent = matricula;
+
+    document.getElementById("dashAsistencia")
+        .textContent = asistencia;
+
+    document.getElementById("dashDocentes")
+        .textContent = docentes;
+
+    document.getElementById("dashRecibidos")
+        .textContent = `${recibidos}/8`;
+
+    document.getElementById("dashJustificados")
+        .textContent = justificados;
+
+    document.getElementById("dashInjustificados")
+        .textContent = injustificados;
+
+    document.getElementById("dashPorcentaje")
+        .textContent =
+        porcentaje.toFixed(1) + "%";
+
+    document.getElementById("dashPendientes")
+        .textContent = 8 - recibidos;
 
 
-    document.getElementById(
-        "dashMatricula"
-    ).textContent =
-        matricula;
+    const jornada =
+        document.getElementById("estadoJornada");
+
+    if(esDomingo(fecha)){
+
+        jornada.className =
+            "jornada domingo";
+
+        jornada.innerHTML =
+            "🚫 DOMINGO — NO HAY CLASES";
+
+    }else if(recibidos === 8){
+
+        jornada.className =
+            "jornada completa";
+
+        jornada.innerHTML =
+            "✅ JORNADA COMPLETA — 8/8 REPORTES RECIBIDOS";
+
+    }else{
+
+        jornada.className =
+            "jornada pendiente";
+
+        jornada.innerHTML =
+            `⚠ FALTAN ${8-recibidos} REPORTES — ${recibidos}/8 RECIBIDOS`;
+
+    }
 
 
-    document.getElementById(
-        "dashAsistencia"
-    ).textContent =
-        asistencia;
+    const lista =
+        document.getElementById("listaPendientes");
 
 
-    document.getElementById(
-        "dashDocentes"
-    ).textContent =
-        docentes;
+    if(recibidos === 8){
 
+        lista.innerHTML = `
+            <div class="complete-box">
+                ✅ Todas las escuelas han enviado su reporte diario.
+                <br>
+                El NER Nueva Alianza tiene la jornada completa.
+            </div>
+        `;
 
-    document.getElementById(
-        "dashRecibidos"
-    ).textContent =
-        recibidos +
-        "/" +
-        escuelas.length;
+    }else{
 
+        let html =
+            `<h3>Escuelas pendientes</h3>
+             <div class="pending-list">`;
 
-    document.getElementById(
-        "dashJustificados"
-    ).textContent =
-        justificados;
+        pendientes.forEach(nombre => {
 
+            html += `
+                <div class="pending-item">
+                    ⏳ ${nombre}
+                </div>
+            `;
 
-    document.getElementById(
-        "dashInjustificados"
-    ).textContent =
-        injustificados;
+        });
 
+        html += "</div>";
 
-    document.getElementById(
-        "dashPorcentaje"
-    ).textContent =
-        porcentaje.toFixed(2) +
-        "%";
+        lista.innerHTML = html;
 
-
-    document.getElementById(
-        "dashPendientes"
-    ).textContent =
-        pendientes;
+    }
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   CONSOLIDADO
+========================================================= */
+
+function mostrarConsolidado(){
+
+    const fecha =
+        document.getElementById("fecha")?.value ||
+        obtenerFechaLocal();
+
+    document.getElementById("inicioPanel")
+        .classList.add("hidden");
+
+    document.getElementById("dashboardPanel")
+        .classList.add("hidden");
+
+    document.getElementById("formPanel")
+        .classList.add("hidden");
+
+    document.getElementById("historialPanel")
+        .classList.add("hidden");
+
+    document.getElementById("consolidadoPanel")
+        .classList.remove("hidden");
+
+
+    document.getElementById("fechaConsolidado")
+        .textContent =
+        fechaBonita(fecha);
+
+
+    construirTablaConsolidado(fecha);
+
+}
+
+
+function construirTablaConsolidado(fecha){
+
+    const reportes =
+        obtenerReportesFecha(fecha);
+
+
+    let mat = 0;
+
+    let asi = 0;
+
+    let doc = 0;
+
+    let jus = 0;
+
+    let inj = 0;
+
+    let recibidos = 0;
+
+
+    const tbody =
+        document.getElementById("tablaConsolidado");
+
+    tbody.innerHTML = "";
+
+
+    reportes.forEach(reporte => {
+
+        const estado =
+            obtenerEstado(reporte);
+
+        const clase =
+            claseEstado(estado);
+
+        const porcentaje =
+            Number(reporte.matTotal || 0) > 0
+            ? (
+                Number(reporte.asiTotal || 0) /
+                Number(reporte.matTotal || 0)
+              ) * 100
+            : 0;
+
+
+        mat += Number(reporte.matTotal || 0);
+
+        asi += Number(reporte.asiTotal || 0);
+
+        doc += Number(reporte.docTotal || 0);
+
+        jus += Number(reporte.jusTotal || 0);
+
+        inj += Number(reporte.injTotal || 0);
+
+
+        if(reporte.guardado){
+
+            recibidos++;
+
+        }
+
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+            <td>${reporte.nombre}</td>
+            <td>${reporte.codigo}</td>
+            <td>${reporte.matTotal || 0}</td>
+            <td>${reporte.asiTotal || 0}</td>
+            <td>${porcentaje.toFixed(1)}%</td>
+            <td>${reporte.docTotal || 0}</td>
+            <td>${reporte.jusTotal || 0}</td>
+            <td>${reporte.injTotal || 0}</td>
+            <td>
+                <span class="status ${clase}">
+                    ${estado}
+                </span>
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
+
+    const porcentajeGeneral =
+        mat > 0
+        ? (asi / mat) * 100
+        : 0;
+
+
+    const total =
+        document.createElement("tr");
+
+    total.className = "total-row";
+
+    total.innerHTML = `
+        <td colspan="2">
+            TOTAL NER NUEVA ALIANZA
+        </td>
+
+        <td>${mat}</td>
+
+        <td>${asi}</td>
+
+        <td>${porcentajeGeneral.toFixed(1)}%</td>
+
+        <td>${doc}</td>
+
+        <td>${jus}</td>
+
+        <td>${inj}</td>
+
+        <td>${recibidos}/8</td>
+    `;
+
+    tbody.appendChild(total);
+
+
+    const resumen =
+        document.getElementById("resumenConsolidado");
+
+
+    if(recibidos === 8){
+
+        resumen.innerHTML = `
+            <div class="complete-box">
+                ✅ JORNADA COMPLETA — 8/8 REPORTES RECIBIDOS
+                <br>
+                Asistencia general: ${porcentajeGeneral.toFixed(1)}%
+            </div>
+        `;
+
+    }else{
+
+        resumen.innerHTML = `
+            <div class="jornada pendiente">
+                ⚠ Reportes recibidos: ${recibidos}/8
+                <br>
+                Faltan ${8-recibidos} centros educativos.
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
    HISTORIAL
-===================================================== */
+========================================================= */
+
+function mostrarHistorial(){
+
+    document.getElementById("inicioPanel")
+        .classList.add("hidden");
+
+    document.getElementById("dashboardPanel")
+        .classList.add("hidden");
+
+    document.getElementById("formPanel")
+        .classList.add("hidden");
+
+    document.getElementById("consolidadoPanel")
+        .classList.add("hidden");
+
+    document.getElementById("historialPanel")
+        .classList.remove("hidden");
+
+
+    document.getElementById("fechaHistorial").value =
+        document.getElementById("fecha").value ||
+        obtenerFechaLocal();
+
+}
+
 
 function consultarHistorial(){
 
     const fecha =
-        document.getElementById(
-            "fechaHistorial"
-        ).value;
+        document.getElementById("fechaHistorial").value;
 
 
     if(!fecha){
-
-        alert(
-            "Seleccione una fecha."
-        );
 
         return;
 
@@ -2860,257 +2310,323 @@ function consultarHistorial(){
 
 
     const reportes =
-        obtenerReportesFecha(
-            fecha
-        );
+        obtenerReportesFecha(fecha);
 
 
-    let matricula = 0;
+    let mat = 0;
 
-    let asistencia = 0;
+    let asi = 0;
+
+    let doc = 0;
+
+    let jus = 0;
+
+    let inj = 0;
 
     let recibidos = 0;
 
 
-    reportes.forEach(
-        reporte=>{
+    reportes.forEach(reporte => {
 
-            matricula +=
-                Number(
-                    reporte.matM || 0
-                ) +
-                Number(
-                    reporte.matF || 0
-                );
+        mat += Number(reporte.matTotal || 0);
 
+        asi += Number(reporte.asiTotal || 0);
 
-            asistencia +=
-                Number(
-                    reporte.asiM || 0
-                ) +
-                Number(
-                    reporte.asiF || 0
-                );
+        doc += Number(reporte.docTotal || 0);
 
+        jus += Number(reporte.jusTotal || 0);
 
-            if(
-                obtenerEstado(
-                    reporte
-                ) === "recibido"
-            ){
+        inj += Number(reporte.injTotal || 0);
 
-                recibidos++;
+        if(reporte.guardado){
 
-            }
+            recibidos++;
 
         }
-    );
+
+    });
 
 
     const porcentaje =
-        matricula > 0
-        ?
-        (
-            asistencia /
-            matricula
-        ) * 100
-        :
-        0;
+        mat > 0
+        ? (asi / mat) * 100
+        : 0;
 
 
-    document.getElementById(
-        "resultadoHistorial"
-    ).innerHTML = `
+    let html = `
 
-        <div
-            class="card"
-            style="margin:0;background:#f8fafc;"
-        >
+        <div class="panel">
 
             <h3>
-                Resumen del ${fecha}
+                Resumen del ${fechaBonita(fecha)}
             </h3>
 
-            <p>
-                <strong>
-                    Reportes recibidos:
-                </strong>
+            <div class="dashboard">
 
-                ${recibidos}/8
-            </p>
+                <div class="card">
+                    <div class="number">${mat}</div>
+                    <div class="label">Matrícula</div>
+                </div>
 
-            <p>
-                <strong>
-                    Matrícula:
-                </strong>
+                <div class="card">
+                    <div class="number">${asi}</div>
+                    <div class="label">Asistencia</div>
+                </div>
 
-                ${matricula}
-            </p>
+                <div class="card">
+                    <div class="number">${porcentaje.toFixed(1)}%</div>
+                    <div class="label">Porcentaje</div>
+                </div>
 
-            <p>
-                <strong>
-                    Asistencia:
-                </strong>
+                <div class="card">
+                    <div class="number">${doc}</div>
+                    <div class="label">Docentes</div>
+                </div>
 
-                ${asistencia}
-            </p>
+                <div class="card">
+                    <div class="number">${jus}</div>
+                    <div class="label">Justificados</div>
+                </div>
 
-            <p>
-                <strong>
-                    Asistencia general:
-                </strong>
+                <div class="card">
+                    <div class="number">${inj}</div>
+                    <div class="label">Injustificados</div>
+                </div>
 
-                ${porcentaje.toFixed(2)}%
-            </p>
+                <div class="card">
+                    <div class="number">${recibidos}/8</div>
+                    <div class="label">Reportes recibidos</div>
+                </div>
+
+            </div>
 
         </div>
 
     `;
 
 
-    construirConsolidado(
-        fecha
-    );
+    html += `
+        <div class="panel">
+            <h3>Estado de los centros</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Centro</th>
+                            <th>Código</th>
+                            <th>Matrícula</th>
+                            <th>Asistencia</th>
+                            <th>%</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+
+    reportes.forEach(reporte => {
+
+        const estado =
+            obtenerEstado(reporte);
+
+        const clase =
+            claseEstado(estado);
+
+        const porcentajeCentro =
+            Number(reporte.matTotal || 0) > 0
+            ? (
+                Number(reporte.asiTotal || 0) /
+                Number(reporte.matTotal || 0)
+              ) * 100
+            : 0;
+
+
+        html += `
+            <tr>
+
+                <td>${reporte.nombre}</td>
+
+                <td>${reporte.codigo}</td>
+
+                <td>${reporte.matTotal || 0}</td>
+
+                <td>${reporte.asiTotal || 0}</td>
+
+                <td>${porcentajeCentro.toFixed(1)}%</td>
+
+                <td>
+                    <span class="status ${clase}">
+                        ${estado}
+                    </span>
+                </td>
+
+            </tr>
+        `;
+
+    });
+
+
+    html += `
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+
+    document.getElementById("historialResultado")
+        .innerHTML = html;
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   VOLVER AL INICIO
+========================================================= */
+
+function volverInicio(){
+
+    document.getElementById("formPanel")
+        .classList.add("hidden");
+
+    document.getElementById("consolidadoPanel")
+        .classList.add("hidden");
+
+    document.getElementById("historialPanel")
+        .classList.add("hidden");
+
+    document.getElementById("inicioPanel")
+        .classList.remove("hidden");
+
+    document.getElementById("dashboardPanel")
+        .classList.remove("hidden");
+
+
+    actualizarDashboard();
+
+    mostrarEscuelas();
+
+}
+
+
+/* =========================================================
    MENSAJES
-===================================================== */
+========================================================= */
 
-function limpiarMensajes(){
-
-    document.getElementById(
-        "mensajeError"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "mensajeWarning"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "mensajeSuccess"
-    ).style.display =
-        "none";
-
-}
-
-
-function mostrarError(texto){
+function mostrarMensaje(id,texto,tipo){
 
     const elemento =
-        document.getElementById(
-            "mensajeError"
-        );
+        document.getElementById(id);
 
+    elemento.textContent = texto;
 
-    elemento.textContent =
-        "⚠ " + texto;
-
-
-    elemento.style.display =
-        "block";
+    elemento.className =
+        `message ${tipo}`;
 
 }
 
 
-function mostrarWarning(texto){
+function limpiarMensaje(){
 
     const elemento =
-        document.getElementById(
-            "mensajeWarning"
-        );
+        document.getElementById("formMessage");
 
+    elemento.textContent = "";
 
-    elemento.textContent =
-        "⚠ " + texto;
-
-
-    elemento.style.display =
-        "block";
+    elemento.className =
+        "message";
 
 }
 
 
-function mostrarSuccess(texto){
+/* =========================================================
+   CAMBIO DE FECHA
+========================================================= */
 
-    const elemento =
-        document.getElementById(
-            "mensajeSuccess"
-        );
+document.getElementById("fecha")
+.addEventListener("change", function(){
 
+    const fecha = this.value;
 
-    elemento.textContent =
-        texto;
+    document.getElementById("fechaDashboard")
+        .textContent =
+        fechaBonita(fecha);
 
+    aplicarReglasCalendario();
 
-    elemento.style.display =
-        "block";
+    actualizarDashboard();
 
-}
+    mostrarEscuelas();
 
-
-/* =====================================================
-   ACTUALIZAR TODO
-===================================================== */
-
-function actualizarTodo(){
-
-    construirEscuelas();
-
-    construirConsolidado(
-        fechaHoy()
-    );
-
-    actualizarPanel();
-
-}
+});
 
 
-/* =====================================================
-   INICIO
-===================================================== */
+/* =========================================================
+   CAMBIO DE MODALIDAD / TURNO
+========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
+document.getElementById("modalidad")
+.addEventListener("change", function(){
 
-        migrarDatosAntiguos();
+    const fecha =
+        document.getElementById("fecha").value;
 
+    if(esSabado(fecha)){
 
-        document.getElementById(
-            "fecha"
-        ).value =
-            fechaHoy();
+        this.value =
+            "Secundaria a Distancia";
 
-
-        document.getElementById(
-            "fechaHistorial"
-        ).value =
-            fechaHoy();
-
-
-        document.getElementById(
-            "fecha"
-        ).addEventListener(
-            "change",
-            function(){
-
-                aplicarReglasCalendario();
-
-            }
-        );
-
-
-        actualizarTodo();
+        return;
 
     }
-);
+
+});
+
+
+document.getElementById("turno")
+.addEventListener("change", function(){
+
+    const fecha =
+        document.getElementById("fecha").value;
+
+    if(esSabado(fecha)){
+
+        this.value =
+            "Sabatino";
+
+        return;
+
+    }
+
+});
+
+
+/* =========================================================
+   SEGURIDAD EXTRA PARA INPUTS
+========================================================= */
+
+document.addEventListener("input", function(event){
+
+    if(event.target.type === "number"){
+
+        if(event.target.value < 0){
+
+            event.target.value = 0;
+
+        }
+
+    }
+
+});
+
+
+/* =========================================================
+   INICIALIZACIÓN FINAL
+========================================================= */
+
+actualizarDashboard();
+
+mostrarEscuelas();
 
 </script>
 
