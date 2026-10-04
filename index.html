@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Asistencia NER Nueva Alianza</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -15,940 +13,948 @@
 body{
     margin:0;
     font-family:Arial,Helvetica,sans-serif;
-    background:#eef3f8;
-    color:#1f2937;
+    background:#f1f5f9;
+    color:#1e293b;
 }
 
 header{
-    background:#075bbb;
+    background:linear-gradient(135deg,#075985,#0284c7);
     color:white;
-    text-align:center;
     padding:25px 15px;
+    text-align:center;
 }
 
 header h1{
-    margin:0;
+    margin:0 0 8px;
     font-size:28px;
 }
 
 header p{
-    margin:8px 0 0;
+    margin:0;
+    font-size:15px;
 }
 
-.contenedor{
+.container{
     max-width:1100px;
     margin:25px auto;
     padding:0 15px;
 }
 
-.titulo{
-    text-align:center;
-    margin-bottom:25px;
+.card{
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
-.escuelas{
+.card h2{
+    margin-top:0;
+    color:#075985;
+}
+
+.school-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:15px;
 }
 
-.escuela{
-    background:white;
-    border:0;
+.school-button{
+    border:none;
     border-radius:12px;
-    padding:22px;
+    padding:18px;
+    background:#0284c7;
+    color:white;
     cursor:pointer;
-    font-size:17px;
+    font-size:16px;
     font-weight:bold;
-    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    transition:.2s;
 }
 
-.escuela:hover{
-    background:#e5f0ff;
+.school-button:hover{
+    background:#0369a1;
+    transform:translateY(-2px);
 }
 
-.panel{
+.school-button small{
+    display:block;
+    margin-top:7px;
+    font-weight:normal;
+    opacity:.9;
+}
+
+.hidden{
     display:none;
-    background:white;
-    border-radius:15px;
-    padding:25px;
-    box-shadow:0 4px 15px rgba(0,0,0,.12);
 }
 
-.encabezado{
-    text-align:center;
-    margin-bottom:25px;
-}
-
-.encabezado h2{
-    color:#075bbb;
-    margin-bottom:8px;
-}
-
-.datos{
+.info{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:15px;
-    margin-bottom:25px;
+    gap:12px;
+    margin-bottom:20px;
 }
 
-.dato{
-    background:#f3f6f9;
-    padding:14px;
-    border-radius:8px;
+.info-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    padding:12px;
 }
 
-.dato strong{
+.info-box strong{
     display:block;
-    margin-bottom:6px;
+    color:#475569;
+    font-size:13px;
+    margin-bottom:5px;
 }
 
-.seccion{
+.info-box span{
+    font-weight:bold;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.form-section{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:15px;
+}
+
+.form-section h3{
+    margin-top:0;
+    color:#075985;
+    font-size:17px;
+}
+
+label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:5px;
+    color:#475569;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:16px;
+    margin-bottom:10px;
+}
+
+input:focus,select:focus{
+    outline:none;
+    border-color:#0284c7;
+}
+
+.total{
+    background:#e0f2fe;
+    border:1px solid #7dd3fc;
+    border-radius:8px;
+    padding:10px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.btn{
+    border:none;
+    border-radius:9px;
+    padding:12px 20px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.btn-primary{
+    background:#0284c7;
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#0369a1;
+}
+
+.btn-secondary{
+    background:#64748b;
+    color:white;
+}
+
+.btn-success{
+    background:#16a34a;
+    color:white;
+}
+
+.message{
+    margin-top:15px;
+    padding:12px;
+    border-radius:8px;
+    background:#dcfce7;
+    color:#166534;
+    display:none;
+    font-weight:bold;
+}
+
+.summary{
+    background:#0f172a;
+    color:white;
+    border-radius:14px;
+    padding:20px;
     margin-top:25px;
 }
 
-.seccion h3{
-    background:#075bbb;
+.summary h2{
     color:white;
-    padding:12px;
-    border-radius:8px;
+    margin-top:0;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.summary-box{
+    background:#1e293b;
+    border-radius:10px;
+    padding:15px;
+}
+
+.summary-box strong{
+    display:block;
+    font-size:13px;
+    color:#cbd5e1;
+    margin-bottom:6px;
+}
+
+.summary-box span{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.consolidado{
+    margin-top:25px;
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.consolidado h2{
+    color:#075985;
+    margin-top:0;
+}
+
+.table-container{
+    overflow-x:auto;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
+    min-width:800px;
 }
 
 th,td{
-    border:1px solid #d1d5db;
-    padding:11px;
+    border:1px solid #cbd5e1;
+    padding:10px;
     text-align:center;
 }
 
 th{
-    background:#eaf2ff;
-}
-
-.entrada{
-    width:90px;
-    padding:9px;
-    text-align:center;
-    border:2px solid #cbd5e1;
-    border-radius:6px;
-    font-size:16px;
-}
-
-.entrada:focus{
-    outline:none;
-    border-color:#075bbb;
-}
-
-.total{
-    font-weight:bold;
-    background:#eaf8ee;
-}
-
-.botones{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    margin-top:30px;
-    flex-wrap:wrap;
-}
-
-.btn{
-    border:0;
-    border-radius:8px;
-    padding:13px 22px;
-    cursor:pointer;
-    font-weight:bold;
-    font-size:15px;
-}
-
-.guardar{
-    background:#198754;
+    background:#075985;
     color:white;
 }
 
-.regresar{
-    background:#6c757d;
-    color:white;
+td:first-child{
+    text-align:left;
+    font-weight:bold;
 }
 
-.mensaje{
-    display:none;
-    margin-top:15px;
-    padding:12px;
-    background:#d1e7dd;
-    color:#0f5132;
-    border-radius:8px;
-    text-align:center;
+.total-row{
+    background:#e0f2fe;
+    font-weight:bold;
 }
 
-footer{
-    text-align:center;
-    padding:25px;
-    color:#6b7280;
-    font-size:14px;
+.note{
+    margin-top:12px;
+    font-size:13px;
+    color:#64748b;
 }
 
-@media(max-width:600px){
+@media(max-width:800px){
+    .form-grid{
+        grid-template-columns:1fr;
+    }
 
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:500px){
     header h1{
         font-size:22px;
     }
 
-    .panel{
-        padding:15px;
-    }
-
-    table{
-        font-size:13px;
-    }
-
-    .entrada{
-        width:65px;
+    .summary-grid{
+        grid-template-columns:1fr;
     }
 }
-
 </style>
 </head>
 
 <body>
 
 <header>
-
-<h1>ASISTENCIA NER NUEVA ALIANZA</h1>
-
-<p>Reporte diario de asistencia</p>
-
+    <h1>ASISTENCIA NER NUEVA ALIANZA</h1>
+    <p>Reporte diario de asistencia de los centros educativos</p>
 </header>
 
-<div class="contenedor">
+<div class="container">
 
-<div id="inicio">
+    <!-- SELECCIÓN DE CENTRO -->
+    <div id="inicio" class="card">
+        <h2>Seleccione el centro educativo</h2>
 
-<div class="titulo">
+        <div class="school-grid">
 
-<h2>Seleccione el Centro Educativo</h2>
+            <button class="school-button" onclick="abrirCentro(0)">
+                Nueva Alianza
+                <small>Código: 17683</small>
+            </button>
 
-<p>NER Nueva Alianza — 8 Centros Educativos</p>
+            <button class="school-button" onclick="abrirCentro(1)">
+                Hugo Chávez Frías
+                <small>Código: 39183</small>
+            </button>
+
+            <button class="school-button" onclick="abrirCentro(2)">
+                Rosa Sarmiento
+                <small>Código: 29271</small>
+            </button>
+
+            <button class="school-button" onclick="abrirCentro(3)">
+                La Esperanza
+                <small>Código: 17751</small>
+            </button>
+
+            <button class="school-button" onclick="abrirCentro(4)">
+                La Unión N.º 3
+                <small>Código: 17858</small>
+            </button>
+
+            <button class="school-button" onclick="abrirCentro(5)">
+                Santa Lucía
+                <small>Código: 17880</small>
+            </button>
+
+            <button class="school-button" onclick="abrirCentro(6)">
+                Sector del Limón
+                <small>Código: 37038</small>
+            </button>
+
+            <button class="school-button" onclick="abrirCentro(7)">
+                Nueva Jerusalén
+                <small>Código: 30870</small>
+            </button>
+
+        </div>
+    </div>
+
+
+    <!-- FORMULARIO -->
+    <div id="formulario" class="card hidden">
+
+        <h2 id="tituloCentro"></h2>
+
+        <div class="info">
+
+            <div class="info-box">
+                <strong>Código de centro</strong>
+                <span id="codigoCentro"></span>
+            </div>
+
+            <div class="info-box">
+                <strong>Fecha</strong>
+                <span id="fecha"></span>
+            </div>
+
+            <div class="info-box">
+                <strong>Centro educativo</strong>
+                <span id="nombreCentro"></span>
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <!-- DATOS GENERALES -->
+            <div class="form-section">
+
+                <h3>Datos generales</h3>
+
+                <label>Modalidad</label>
+
+                <select id="modalidad">
+                    <option>Educación Inicial</option>
+                    <option>Educación Primaria</option>
+                    <option>Secundaria a Distancia</option>
+                </select>
+
+                <label>Turno</label>
+
+                <select id="turno">
+                    <option>Diurno</option>
+                    <option>Sabatino</option>
+                </select>
+
+            </div>
+
+
+            <!-- MATRÍCULA -->
+            <div class="form-section">
+
+                <h3>Matrícula</h3>
+
+                <label>Masculino</label>
+                <input type="number" id="matM" min="0" value="0"
+                       oninput="calcular()">
+
+                <label>Femenino</label>
+                <input type="number" id="matF" min="0" value="0"
+                       oninput="calcular()">
+
+                <div class="total">
+                    Total matrícula:
+                    <span id="matT">0</span>
+                </div>
+
+            </div>
+
+
+            <!-- ASISTENCIA -->
+            <div class="form-section">
+
+                <h3>Asistencia de hoy</h3>
+
+                <label>Masculino</label>
+                <input type="number" id="asiM" min="0" value="0"
+                       oninput="calcular()">
+
+                <label>Femenino</label>
+                <input type="number" id="asiF" min="0" value="0"
+                       oninput="calcular()">
+
+                <div class="total">
+                    Total asistencia:
+                    <span id="asiT">0</span>
+                </div>
+
+            </div>
+
+
+            <!-- DOCENTES -->
+            <div class="form-section">
+
+                <h3>Docentes</h3>
+
+                <label>Masculino</label>
+                <input type="number" id="docM" min="0" value="0"
+                       oninput="calcular()">
+
+                <label>Femenino</label>
+                <input type="number" id="docF" min="0" value="0"
+                       oninput="calcular()">
+
+                <div class="total">
+                    Total docentes:
+                    <span id="docT">0</span>
+                </div>
+
+            </div>
+
+
+            <!-- JUSTIFICADOS -->
+            <div class="form-section">
+
+                <h3>Docentes justificados</h3>
+
+                <label>Masculino</label>
+                <input type="number" id="jusM" min="0" value="0"
+                       oninput="calcular()">
+
+                <label>Femenino</label>
+                <input type="number" id="jusF" min="0" value="0"
+                       oninput="calcular()">
+
+                <div class="total">
+                    Total justificados:
+                    <span id="jusT">0</span>
+                </div>
+
+            </div>
+
+
+            <!-- INJUSTIFICADOS -->
+            <div class="form-section">
+
+                <h3>Docentes injustificados</h3>
+
+                <label>Masculino</label>
+                <input type="number" id="injM" min="0" value="0"
+                       oninput="calcular()">
+
+                <label>Femenino</label>
+                <input type="number" id="injF" min="0" value="0"
+                       oninput="calcular()">
+
+                <div class="total">
+                    Total injustificados:
+                    <span id="injT">0</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESUMEN DEL CENTRO -->
+        <div class="summary">
+
+            <h2>Resumen del centro educativo</h2>
+
+            <div class="summary-grid">
+
+                <div class="summary-box">
+                    <strong>Matrícula total</strong>
+                    <span id="sMat">0</span>
+                </div>
+
+                <div class="summary-box">
+                    <strong>Asistencia total</strong>
+                    <span id="sAsi">0</span>
+                </div>
+
+                <div class="summary-box">
+                    <strong>Docentes</strong>
+                    <span id="sDoc">0</span>
+                </div>
+
+                <div class="summary-box">
+                    <strong>Justificados</strong>
+                    <span id="sJus">0</span>
+                </div>
+
+                <div class="summary-box">
+                    <strong>Injustificados</strong>
+                    <span id="sInj">0</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <button class="btn btn-success" onclick="guardarReporte()">
+                Guardar reporte
+            </button>
+
+            <button class="btn btn-secondary" onclick="regresar()">
+                ← Regresar
+            </button>
+
+        </div>
+
+        <div id="mensaje" class="message">
+            Reporte registrado correctamente en esta sesión.
+        </div>
+
+    </div>
+
+
+    <!-- CONSOLIDADO -->
+    <div id="consolidado" class="consolidado">
+
+        <h2>CONSOLIDADO DEL NÚCLEO NER NUEVA ALIANZA</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Centro educativo</th>
+                        <th>Matrícula</th>
+                        <th>Asistencia</th>
+                        <th>Docentes</th>
+                        <th>Justificados</th>
+                        <th>Injustificados</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaConsolidado"></tbody>
+
+                <tfoot>
+
+                    <tr class="total-row">
+
+                        <td>TOTAL DEL NÚCLEO</td>
+
+                        <td id="totalMatricula">0</td>
+
+                        <td id="totalAsistencia">0</td>
+
+                        <td id="totalDocentes">0</td>
+
+                        <td id="totalJustificados">0</td>
+
+                        <td id="totalInjustificados">0</td>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+
+        <div class="note">
+            El consolidado se actualiza con los reportes registrados durante esta sesión.
+        </div>
+
+    </div>
 
 </div>
-
-<div class="escuelas">
-
-<button class="escuela" onclick="abrirEscuela(0)">
-Nueva Alianza
-</button>
-
-<button class="escuela" onclick="abrirEscuela(1)">
-Hugo Chávez Frías
-</button>
-
-<button class="escuela" onclick="abrirEscuela(2)">
-Rosa Sarmiento
-</button>
-
-<button class="escuela" onclick="abrirEscuela(3)">
-La Esperanza
-</button>
-
-<button class="escuela" onclick="abrirEscuela(4)">
-La Unión N.º 3
-</button>
-
-<button class="escuela" onclick="abrirEscuela(5)">
-Santa Lucía
-</button>
-
-<button class="escuela" onclick="abrirEscuela(6)">
-Sector del Limón
-</button>
-
-<button class="escuela" onclick="abrirEscuela(7)">
-Nueva Jerusalén
-</button>
-
-</div>
-
-</div>
-
-
-<div id="panel" class="panel">
-
-<div class="encabezado">
-
-<h2 id="nombreCentro"></h2>
-
-<p>REPORTE DIARIO DE ASISTENCIA</p>
-
-</div>
-
-
-<div class="datos">
-
-<div class="dato">
-
-<strong>Código de centro</strong>
-
-<span id="codigoCentro"></span>
-
-</div>
-
-
-<div class="dato">
-
-<strong>Modalidad</strong>
-
-<select id="modalidadCentro">
-
-<option>Educación Inicial</option>
-
-<option>Educación Primaria</option>
-
-<option>Secundaria a Distancia</option>
-
-</select>
-
-</div>
-
-
-<div class="dato">
-
-<strong>Turno</strong>
-
-<select id="turnoCentro">
-
-<option>Diurno</option>
-
-<option>Sabatino</option>
-
-</select>
-
-</div>
-
-
-<div class="dato">
-
-<strong>Fecha</strong>
-
-<span id="fechaActual"></span>
-
-</div>
-
-</div>
-
-
-<!-- MATRÍCULA -->
-
-<div class="seccion">
-
-<h3>MATRÍCULA</h3>
-
-<table>
-
-<tr>
-
-<th>Concepto</th>
-
-<th>Masculino</th>
-
-<th>Femenino</th>
-
-<th>Total</th>
-
-</tr>
-
-<tr>
-
-<td>Matrícula</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="matriculaM"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="matriculaF"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td
-class="total"
-id="matriculaTotal">
-
-0
-
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-
-<!-- ASISTENCIA -->
-
-<div class="seccion">
-
-<h3>ASISTENCIA DE HOY</h3>
-
-<table>
-
-<tr>
-
-<th>Concepto</th>
-
-<th>Masculino</th>
-
-<th>Femenino</th>
-
-<th>Total</th>
-
-</tr>
-
-<tr>
-
-<td>Asistencia</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="asistenciaM"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="asistenciaF"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td
-class="total"
-id="asistenciaTotal">
-
-0
-
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-
-<!-- DOCENTES -->
-
-<div class="seccion">
-
-<h3>DOCENTES</h3>
-
-<table>
-
-<tr>
-
-<th>Concepto</th>
-
-<th>Masculino</th>
-
-<th>Femenino</th>
-
-<th>Total</th>
-
-</tr>
-
-
-<tr>
-
-<td>Docentes</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="docenteM"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="docenteF"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td
-class="total"
-id="docenteTotal">
-
-0
-
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>Justificados</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="justificadoM"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="justificadoF"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td
-class="total"
-id="justificadoTotal">
-
-0
-
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>Injustificados</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="injustificadoM"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="entrada"
-id="injustificadoF"
-value="0"
-oninput="calcular()">
-
-</td>
-
-<td
-class="total"
-id="injustificadoTotal">
-
-0
-
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-
-<!-- TOTAL -->
-
-<div class="seccion">
-
-<h3>TOTAL DEL NÚCLEO</h3>
-
-<table>
-
-<tr>
-
-<th>Indicador</th>
-
-<th>Total</th>
-
-</tr>
-
-
-<tr>
-
-<td>Matrícula</td>
-
-<td
-class="total"
-id="resumenMatricula">
-
-0
-
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>Asistencia de hoy</td>
-
-<td
-class="total"
-id="resumenAsistencia">
-
-0
-
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>Docentes</td>
-
-<td
-class="total"
-id="resumenDocentes">
-
-0
-
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>Justificados</td>
-
-<td
-class="total"
-id="resumenJustificados">
-
-0
-
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>Injustificados</td>
-
-<td
-class="total"
-id="resumenInjustificados">
-
-0
-
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-
-<div class="botones">
-
-<button
-class="btn guardar"
-onclick="guardar()">
-
-✓ Guardar reporte
-
-</button>
-
-
-<button
-class="btn regresar"
-onclick="regresar()">
-
-← Regresar
-
-</button>
-
-</div>
-
-
-<div
-id="mensaje"
-class="mensaje">
-
-✓ Reporte registrado correctamente en esta sesión.
-
-</div>
-
-</div>
-
-</div>
-
-
-<footer>
-
-Sistema de Asistencia NER Nueva Alianza · 2026
-
-</footer>
 
 
 <script>
 
-const escuelas = [
+const centros = [
 
-{
-nombre:"Nueva Alianza",
-codigo:"17683"
-},
+    {
+        nombre:"Nueva Alianza",
+        codigo:"17683"
+    },
 
-{
-nombre:"Hugo Chávez Frías",
-codigo:"39183"
-},
+    {
+        nombre:"Hugo Chávez Frías",
+        codigo:"39183"
+    },
 
-{
-nombre:"Rosa Sarmiento",
-codigo:"29271"
-},
+    {
+        nombre:"Rosa Sarmiento",
+        codigo:"29271"
+    },
 
-{
-nombre:"La Esperanza",
-codigo:"17751"
-},
+    {
+        nombre:"La Esperanza",
+        codigo:"17751"
+    },
 
-{
-nombre:"La Unión N.º 3",
-codigo:"17858"
-},
+    {
+        nombre:"La Unión N.º 3",
+        codigo:"17858"
+    },
 
-{
-nombre:"Santa Lucía",
-codigo:"17880"
-},
+    {
+        nombre:"Santa Lucía",
+        codigo:"17880"
+    },
 
-{
-nombre:"Sector del Limón",
-codigo:"37038"
-},
+    {
+        nombre:"Sector del Limón",
+        codigo:"37038"
+    },
 
-{
-nombre:"Nueva Jerusalén",
-codigo:"30870"
-}
+    {
+        nombre:"Nueva Jerusalén",
+        codigo:"30870"
+    }
 
 ];
 
 
-let escuelaActual = null;
+let centroActual = null;
 
 
-function abrirEscuela(indice){
+let reportes = centros.map(() => ({
 
-escuelaActual = escuelas[indice];
+    matM:0,
+    matF:0,
 
+    asiM:0,
+    asiF:0,
 
-document.getElementById("inicio").style.display="none";
+    docM:0,
+    docF:0,
 
-document.getElementById("panel").style.display="block";
+    jusM:0,
+    jusF:0,
 
+    injM:0,
+    injF:0
 
-document.getElementById("nombreCentro").textContent =
-escuelaActual.nombre;
-
-
-document.getElementById("codigoCentro").textContent =
-escuelaActual.codigo;
-
-
-const fecha = new Date();
-
-
-document.getElementById("fechaActual").textContent =
-fecha.toLocaleDateString("es-NI",{
-
-weekday:"long",
-
-year:"numeric",
-
-month:"long",
-
-day:"numeric"
-
-});
+}));
 
 
-limpiar();
+function obtenerNumero(id){
+
+    return Number(document.getElementById(id).value) || 0;
 
 }
 
 
-function numero(id){
+function abrirCentro(indice){
 
-return Number(
-document.getElementById(id).value
-) || 0;
+    centroActual = indice;
+
+    const centro = centros[indice];
+
+    document.getElementById("inicio").classList.add("hidden");
+
+    document.getElementById("formulario").classList.remove("hidden");
+
+    document.getElementById("tituloCentro").textContent =
+        centro.nombre;
+
+    document.getElementById("codigoCentro").textContent =
+        centro.codigo;
+
+    document.getElementById("nombreCentro").textContent =
+        centro.nombre;
+
+    document.getElementById("fecha").textContent =
+        new Date().toLocaleDateString("es-NI",{
+            weekday:"long",
+            year:"numeric",
+            month:"long",
+            day:"numeric"
+        });
+
+
+    const datos = reportes[indice];
+
+
+    document.getElementById("matM").value = datos.matM;
+    document.getElementById("matF").value = datos.matF;
+
+    document.getElementById("asiM").value = datos.asiM;
+    document.getElementById("asiF").value = datos.asiF;
+
+    document.getElementById("docM").value = datos.docM;
+    document.getElementById("docF").value = datos.docF;
+
+    document.getElementById("jusM").value = datos.jusM;
+    document.getElementById("jusF").value = datos.jusF;
+
+    document.getElementById("injM").value = datos.injM;
+    document.getElementById("injF").value = datos.injF;
+
+    document.getElementById("mensaje").style.display = "none";
+
+    calcular();
 
 }
 
 
 function calcular(){
 
-const matricula =
-numero("matriculaM") +
-numero("matriculaF");
+    const matM = obtenerNumero("matM");
+    const matF = obtenerNumero("matF");
+
+    const asiM = obtenerNumero("asiM");
+    const asiF = obtenerNumero("asiF");
+
+    const docM = obtenerNumero("docM");
+    const docF = obtenerNumero("docF");
+
+    const jusM = obtenerNumero("jusM");
+    const jusF = obtenerNumero("jusF");
+
+    const injM = obtenerNumero("injM");
+    const injF = obtenerNumero("injF");
 
 
-const asistencia =
-numero("asistenciaM") +
-numero("asistenciaF");
+    const matT = matM + matF;
+    const asiT = asiM + asiF;
+    const docT = docM + docF;
+    const jusT = jusM + jusF;
+    const injT = injM + injF;
 
 
-const docentes =
-numero("docenteM") +
-numero("docenteF");
+    document.getElementById("matT").textContent = matT;
+    document.getElementById("asiT").textContent = asiT;
+    document.getElementById("docT").textContent = docT;
+    document.getElementById("jusT").textContent = jusT;
+    document.getElementById("injT").textContent = injT;
 
 
-const justificados =
-numero("justificadoM") +
-numero("justificadoF");
+    document.getElementById("sMat").textContent = matT;
+    document.getElementById("sAsi").textContent = asiT;
+    document.getElementById("sDoc").textContent = docT;
+    document.getElementById("sJus").textContent = jusT;
+    document.getElementById("sInj").textContent = injT;
 
 
-const injustificados =
-numero("injustificadoM") +
-numero("injustificadoF");
+    if(centroActual !== null){
 
+        reportes[centroActual] = {
 
-document.getElementById("matriculaTotal").textContent =
-matricula;
+            matM,
+            matF,
 
+            asiM,
+            asiF,
 
-document.getElementById("asistenciaTotal").textContent =
-asistencia;
+            docM,
+            docF,
 
+            jusM,
+            jusF,
 
-document.getElementById("docenteTotal").textContent =
-docentes;
+            injM,
+            injF
 
+        };
 
-document.getElementById("justificadoTotal").textContent =
-justificados;
+        actualizarConsolidado();
 
-
-document.getElementById("injustificadoTotal").textContent =
-injustificados;
-
-
-document.getElementById("resumenMatricula").textContent =
-matricula;
-
-
-document.getElementById("resumenAsistencia").textContent =
-asistencia;
-
-
-document.getElementById("resumenDocentes").textContent =
-docentes;
-
-
-document.getElementById("resumenJustificados").textContent =
-justificados;
-
-
-document.getElementById("resumenInjustificados").textContent =
-injustificados;
+    }
 
 }
 
 
-function limpiar(){
+function guardarReporte(){
 
-document.querySelectorAll(".entrada").forEach(
-campo => campo.value=0
-);
+    calcular();
 
-document.getElementById("modalidadCentro").value =
-"Educación Inicial";
+    document.getElementById("mensaje").style.display = "block";
 
-document.getElementById("turnoCentro").value =
-"Diurno";
-
-document.getElementById("mensaje").style.display="none";
-
-calcular();
+    actualizarConsolidado();
 
 }
 
 
-function guardar(){
+function actualizarConsolidado(){
 
-calcular();
+    const tbody =
+        document.getElementById("tablaConsolidado");
 
-document.getElementById("mensaje").style.display="block";
+    tbody.innerHTML = "";
+
+
+    let totalMatricula = 0;
+    let totalAsistencia = 0;
+    let totalDocentes = 0;
+    let totalJustificados = 0;
+    let totalInjustificados = 0;
+
+
+    centros.forEach((centro,index)=>{
+
+        const datos = reportes[index];
+
+
+        const matricula =
+            datos.matM + datos.matF;
+
+        const asistencia =
+            datos.asiM + datos.asiF;
+
+        const docentes =
+            datos.docM + datos.docF;
+
+        const justificados =
+            datos.jusM + datos.jusF;
+
+        const injustificados =
+            datos.injM + datos.injF;
+
+
+        totalMatricula += matricula;
+        totalAsistencia += asistencia;
+        totalDocentes += docentes;
+        totalJustificados += justificados;
+        totalInjustificados += injustificados;
+
+
+        const fila = document.createElement("tr");
+
+
+        fila.innerHTML = `
+
+            <td>
+                ${centro.nombre}
+                <br>
+                <small>${centro.codigo}</small>
+            </td>
+
+            <td>${matricula}</td>
+
+            <td>${asistencia}</td>
+
+            <td>${docentes}</td>
+
+            <td>${justificados}</td>
+
+            <td>${injustificados}</td>
+
+        `;
+
+
+        tbody.appendChild(fila);
+
+    });
+
+
+    document.getElementById("totalMatricula").textContent =
+        totalMatricula;
+
+    document.getElementById("totalAsistencia").textContent =
+        totalAsistencia;
+
+    document.getElementById("totalDocentes").textContent =
+        totalDocentes;
+
+    document.getElementById("totalJustificados").textContent =
+        totalJustificados;
+
+    document.getElementById("totalInjustificados").textContent =
+        totalInjustificados;
 
 }
 
 
 function regresar(){
 
-document.getElementById("panel").style.display="none";
+    document.getElementById("formulario").classList.add("hidden");
 
-document.getElementById("inicio").style.display="block";
+    document.getElementById("inicio").classList.remove("hidden");
+
+    centroActual = null;
+
+    actualizarConsolidado();
 
 }
+
+
+actualizarConsolidado();
 
 </script>
 
