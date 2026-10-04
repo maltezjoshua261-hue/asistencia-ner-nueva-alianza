@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistencia NER Nueva Alianza</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f766e, #2563eb);
+      color: white;
+      text-align: center;
+      padding: 28px 15px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 16px;
+    }
+
+    .contenedor {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    .tarjeta {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    }
+
+    .tarjeta h2 {
+      margin-bottom: 20px;
+      color: #0f766e;
+      text-align: center;
+    }
+
+    .escuelas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .escuela {
+      border: none;
+      border-radius: 12px;
+      padding: 18px;
+      background: #e0f2fe;
+      color: #0c4a6e;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .escuela:hover {
+      transform: translateY(-2px);
+      background: #bae6fd;
+    }
+
+    .oculto {
+      display: none;
+    }
+
+    .informacion {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .informacion h2 {
+      margin-bottom: 10px;
+    }
+
+    .fecha {
+      font-weight: bold;
+      color: #475569;
+    }
+
+    .botones {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-regresar {
+      background: #64748b;
+      color: white;
+    }
+
+    .btn-presente {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-ausente {
+      background: #dc2626;
+      color: white;
+    }
+
+    .mensaje {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f8fafc;
+      margin-top: 20px;
+      font-size: 17px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 23px;
+      }
+
+      .tarjeta {
+        padding: 18px;
+      }
+
+      .escuelas {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>ASISTENCIA NER NUEVA ALIANZA</h1>
+    <p>Sistema de control de asistencia</p>
+  </header>
+
+  <main class="contenedor">
+
+    <!-- SELECCIÓN DE ESCUELA -->
+    <section id="pantallaEscuelas" class="tarjeta">
+      <h2>Seleccione la escuela</h2>
+
+      <div class="escuelas">
+
+        <button class="escuela" onclick="seleccionarEscuela('Nueva Alianza')">
+          Nueva Alianza
+        </button>
+
+        <button class="escuela" onclick="seleccionarEscuela('Hugo Chávez Frías')">
+          Hugo Chávez Frías
+        </button>
+
+        <button class="escuela" onclick="seleccionarEscuela('Rosa Sarmiento')">
+          Rosa Sarmiento
+        </button>
+
+        <button class="escuela" onclick="seleccionarEscuela('La Esperanza')">
+          La Esperanza
+        </button>
+
+        <button class="escuela" onclick="seleccionarEscuela('La Unión N.º 3')">
+          La Unión N.º 3
+        </button>
+
+        <button class="escuela" onclick="seleccionarEscuela('Santa Lucía')">
+          Santa Lucía
+        </button>
+
+        <button class="escuela" onclick="seleccionarEscuela('Sector del Limón')">
+          Sector del Limón
+        </button>
+
+        <button class="escuela" onclick="seleccionarEscuela('Nueva Jerusalén')">
+          Nueva Jerusalén
+        </button>
+
+      </div>
+    </section>
+
+
+    <!-- PANTALLA DE ASISTENCIA -->
+    <section id="pantallaAsistencia" class="tarjeta oculto">
+
+      <div class="informacion">
+
+        <h2 id="nombreEscuela"></h2>
+
+        <div class="fecha" id="fechaActual"></div>
+
+      </div>
+
+      <div class="mensaje">
+        <p><strong>Asistencia diaria</strong></p>
+        <p style="margin-top:10px;">
+          Esta es la primera versión del sistema.
+        </p>
+        <p style="margin-top:8px;">
+          Próximamente agregaremos docentes y estudiantes.
+        </p>
+      </div>
+
+      <div class="botones">
+
+        <button class="btn btn-presente" onclick="marcar('Presente')">
+          ✓ Presente
+        </button>
+
+        <button class="btn btn-ausente" onclick="marcar('Ausente')">
+          ✕ Ausente
+        </button>
+
+        <button class="btn btn-regresar" onclick="regresar()">
+          ← Regresar
+        </button>
+
+      </div>
+
+      <div id="resultado" class="mensaje oculto"></div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    NER Nueva Alianza · Sistema de Asistencia
+  </footer>
+
+
+  <script>
+
+    function seleccionarEscuela(nombre) {
+
+      document.getElementById("pantallaEscuelas").classList.add("oculto");
+
+      document.getElementById("pantallaAsistencia").classList.remove("oculto");
+
+      document.getElementById("nombreEscuela").textContent =
+        nombre;
+
+      mostrarFecha();
+
+    }
+
+
+    function mostrarFecha() {
+
+      const fecha = new Date();
+
+      const opciones = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      };
+
+      document.getElementById("fechaActual").textContent =
+        fecha.toLocaleDateString("es-NI", opciones);
+
+    }
+
+
+    function marcar(estado) {
+
+      const resultado =
+        document.getElementById("resultado");
+
+      resultado.classList.remove("oculto");
+
+      resultado.textContent =
+        "Estado seleccionado: " + estado;
+
+    }
+
+
+    function regresar() {
+
+      document.getElementById("pantallaAsistencia")
+        .classList.add("oculto");
+
+      document.getElementById("pantallaEscuelas")
+        .classList.remove("oculto");
+
+      document.getElementById("resultado")
+        .classList.add("oculto");
+
+    }
+
+  </script>
+
+</body>
+</html>
