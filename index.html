@@ -6,9 +6,7 @@
 <title>Asistencia NER Nueva Alianza</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -40,7 +38,8 @@ header p{
     padding:0 15px;
 }
 
-.card{
+.card,
+.consolidado{
     background:white;
     border-radius:14px;
     padding:20px;
@@ -48,7 +47,8 @@ header p{
     box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
-.card h2{
+.card h2,
+.consolidado h2{
     margin-top:0;
     color:#075985;
 }
@@ -139,7 +139,8 @@ label{
     color:#475569;
 }
 
-input,select{
+input,
+select{
     width:100%;
     padding:10px;
     border:1px solid #cbd5e1;
@@ -148,7 +149,8 @@ input,select{
     margin-bottom:10px;
 }
 
-input:focus,select:focus{
+input:focus,
+select:focus{
     outline:none;
     border-color:#0284c7;
 }
@@ -183,17 +185,13 @@ input:focus,select:focus{
     color:white;
 }
 
-.btn-primary:hover{
-    background:#0369a1;
+.btn-success{
+    background:#16a34a;
+    color:white;
 }
 
 .btn-secondary{
     background:#64748b;
-    color:white;
-}
-
-.btn-success{
-    background:#16a34a;
     color:white;
 }
 
@@ -244,19 +242,6 @@ input:focus,select:focus{
     font-weight:bold;
 }
 
-.consolidado{
-    margin-top:25px;
-    background:white;
-    border-radius:14px;
-    padding:20px;
-    box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
-
-.consolidado h2{
-    color:#075985;
-    margin-top:0;
-}
-
 .table-container{
     overflow-x:auto;
 }
@@ -267,7 +252,8 @@ table{
     min-width:800px;
 }
 
-th,td{
+th,
+td{
     border:1px solid #cbd5e1;
     padding:10px;
     text-align:center;
@@ -285,6 +271,16 @@ td:first-child{
 
 .total-row{
     background:#e0f2fe;
+    font-weight:bold;
+}
+
+.save-status{
+    margin-bottom:15px;
+    padding:12px;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    border-radius:9px;
+    color:#166534;
     font-weight:bold;
 }
 
@@ -325,320 +321,319 @@ td:first-child{
 
 <div class="container">
 
-    <!-- SELECCIÓN DE CENTRO -->
-    <div id="inicio" class="card">
-        <h2>Seleccione el centro educativo</h2>
+<div id="inicio" class="card">
 
-        <div class="school-grid">
+    <h2>Seleccione el centro educativo</h2>
 
-            <button class="school-button" onclick="abrirCentro(0)">
-                Nueva Alianza
-                <small>Código: 17683</small>
-            </button>
+    <div class="school-grid">
 
-            <button class="school-button" onclick="abrirCentro(1)">
-                Hugo Chávez Frías
-                <small>Código: 39183</small>
-            </button>
+        <button class="school-button" onclick="abrirCentro(0)">
+            Nueva Alianza
+            <small>Código: 17683</small>
+        </button>
 
-            <button class="school-button" onclick="abrirCentro(2)">
-                Rosa Sarmiento
-                <small>Código: 29271</small>
-            </button>
+        <button class="school-button" onclick="abrirCentro(1)">
+            Hugo Chávez Frías
+            <small>Código: 39183</small>
+        </button>
 
-            <button class="school-button" onclick="abrirCentro(3)">
-                La Esperanza
-                <small>Código: 17751</small>
-            </button>
+        <button class="school-button" onclick="abrirCentro(2)">
+            Rosa Sarmiento
+            <small>Código: 29271</small>
+        </button>
 
-            <button class="school-button" onclick="abrirCentro(4)">
-                La Unión N.º 3
-                <small>Código: 17858</small>
-            </button>
+        <button class="school-button" onclick="abrirCentro(3)">
+            La Esperanza
+            <small>Código: 17751</small>
+        </button>
 
-            <button class="school-button" onclick="abrirCentro(5)">
-                Santa Lucía
-                <small>Código: 17880</small>
-            </button>
+        <button class="school-button" onclick="abrirCentro(4)">
+            La Unión N.º 3
+            <small>Código: 17858</small>
+        </button>
 
-            <button class="school-button" onclick="abrirCentro(6)">
-                Sector del Limón
-                <small>Código: 37038</small>
-            </button>
+        <button class="school-button" onclick="abrirCentro(5)">
+            Santa Lucía
+            <small>Código: 17880</small>
+        </button>
 
-            <button class="school-button" onclick="abrirCentro(7)">
-                Nueva Jerusalén
-                <small>Código: 30870</small>
-            </button>
+        <button class="school-button" onclick="abrirCentro(6)">
+            Sector del Limón
+            <small>Código: 37038</small>
+        </button>
 
-        </div>
+        <button class="school-button" onclick="abrirCentro(7)">
+            Nueva Jerusalén
+            <small>Código: 30870</small>
+        </button>
+
+    </div>
+</div>
+
+
+<div id="formulario" class="card hidden">
+
+    <h2 id="tituloCentro"></h2>
+
+    <div class="save-status">
+        📅 Reporte correspondiente al día:
+        <span id="fecha"></span>
     </div>
 
+    <div class="info">
 
-    <!-- FORMULARIO -->
-    <div id="formulario" class="card hidden">
-
-        <h2 id="tituloCentro"></h2>
-
-        <div class="info">
-
-            <div class="info-box">
-                <strong>Código de centro</strong>
-                <span id="codigoCentro"></span>
-            </div>
-
-            <div class="info-box">
-                <strong>Fecha</strong>
-                <span id="fecha"></span>
-            </div>
-
-            <div class="info-box">
-                <strong>Centro educativo</strong>
-                <span id="nombreCentro"></span>
-            </div>
-
+        <div class="info-box">
+            <strong>Código de centro</strong>
+            <span id="codigoCentro"></span>
         </div>
 
-
-        <div class="form-grid">
-
-            <!-- DATOS GENERALES -->
-            <div class="form-section">
-
-                <h3>Datos generales</h3>
-
-                <label>Modalidad</label>
-
-                <select id="modalidad">
-                    <option>Educación Inicial</option>
-                    <option>Educación Primaria</option>
-                    <option>Secundaria a Distancia</option>
-                </select>
-
-                <label>Turno</label>
-
-                <select id="turno">
-                    <option>Diurno</option>
-                    <option>Sabatino</option>
-                </select>
-
-            </div>
-
-
-            <!-- MATRÍCULA -->
-            <div class="form-section">
-
-                <h3>Matrícula</h3>
-
-                <label>Masculino</label>
-                <input type="number" id="matM" min="0" value="0"
-                       oninput="calcular()">
-
-                <label>Femenino</label>
-                <input type="number" id="matF" min="0" value="0"
-                       oninput="calcular()">
-
-                <div class="total">
-                    Total matrícula:
-                    <span id="matT">0</span>
-                </div>
-
-            </div>
-
-
-            <!-- ASISTENCIA -->
-            <div class="form-section">
-
-                <h3>Asistencia de hoy</h3>
-
-                <label>Masculino</label>
-                <input type="number" id="asiM" min="0" value="0"
-                       oninput="calcular()">
-
-                <label>Femenino</label>
-                <input type="number" id="asiF" min="0" value="0"
-                       oninput="calcular()">
-
-                <div class="total">
-                    Total asistencia:
-                    <span id="asiT">0</span>
-                </div>
-
-            </div>
-
-
-            <!-- DOCENTES -->
-            <div class="form-section">
-
-                <h3>Docentes</h3>
-
-                <label>Masculino</label>
-                <input type="number" id="docM" min="0" value="0"
-                       oninput="calcular()">
-
-                <label>Femenino</label>
-                <input type="number" id="docF" min="0" value="0"
-                       oninput="calcular()">
-
-                <div class="total">
-                    Total docentes:
-                    <span id="docT">0</span>
-                </div>
-
-            </div>
-
-
-            <!-- JUSTIFICADOS -->
-            <div class="form-section">
-
-                <h3>Docentes justificados</h3>
-
-                <label>Masculino</label>
-                <input type="number" id="jusM" min="0" value="0"
-                       oninput="calcular()">
-
-                <label>Femenino</label>
-                <input type="number" id="jusF" min="0" value="0"
-                       oninput="calcular()">
-
-                <div class="total">
-                    Total justificados:
-                    <span id="jusT">0</span>
-                </div>
-
-            </div>
-
-
-            <!-- INJUSTIFICADOS -->
-            <div class="form-section">
-
-                <h3>Docentes injustificados</h3>
-
-                <label>Masculino</label>
-                <input type="number" id="injM" min="0" value="0"
-                       oninput="calcular()">
-
-                <label>Femenino</label>
-                <input type="number" id="injF" min="0" value="0"
-                       oninput="calcular()">
-
-                <div class="total">
-                    Total injustificados:
-                    <span id="injT">0</span>
-                </div>
-
-            </div>
-
+        <div class="info-box">
+            <strong>Centro educativo</strong>
+            <span id="nombreCentro"></span>
         </div>
 
-
-        <!-- RESUMEN DEL CENTRO -->
-        <div class="summary">
-
-            <h2>Resumen del centro educativo</h2>
-
-            <div class="summary-grid">
-
-                <div class="summary-box">
-                    <strong>Matrícula total</strong>
-                    <span id="sMat">0</span>
-                </div>
-
-                <div class="summary-box">
-                    <strong>Asistencia total</strong>
-                    <span id="sAsi">0</span>
-                </div>
-
-                <div class="summary-box">
-                    <strong>Docentes</strong>
-                    <span id="sDoc">0</span>
-                </div>
-
-                <div class="summary-box">
-                    <strong>Justificados</strong>
-                    <span id="sJus">0</span>
-                </div>
-
-                <div class="summary-box">
-                    <strong>Injustificados</strong>
-                    <span id="sInj">0</span>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="buttons">
-
-            <button class="btn btn-success" onclick="guardarReporte()">
-                Guardar reporte
-            </button>
-
-            <button class="btn btn-secondary" onclick="regresar()">
-                ← Regresar
-            </button>
-
-        </div>
-
-        <div id="mensaje" class="message">
-            Reporte registrado correctamente en esta sesión.
+        <div class="info-box">
+            <strong>Estado del reporte</strong>
+            <span id="estadoReporte">Sin guardar</span>
         </div>
 
     </div>
 
 
-    <!-- CONSOLIDADO -->
-    <div id="consolidado" class="consolidado">
+    <div class="form-grid">
 
-        <h2>CONSOLIDADO DEL NÚCLEO NER NUEVA ALIANZA</h2>
+        <div class="form-section">
 
-        <div class="table-container">
+            <h3>Datos generales</h3>
 
-            <table>
+            <label>Modalidad</label>
 
-                <thead>
-                    <tr>
-                        <th>Centro educativo</th>
-                        <th>Matrícula</th>
-                        <th>Asistencia</th>
-                        <th>Docentes</th>
-                        <th>Justificados</th>
-                        <th>Injustificados</th>
-                    </tr>
-                </thead>
+            <select id="modalidad">
+                <option>Educación Inicial</option>
+                <option>Educación Primaria</option>
+                <option>Secundaria a Distancia</option>
+            </select>
 
-                <tbody id="tablaConsolidado"></tbody>
+            <label>Turno</label>
 
-                <tfoot>
-
-                    <tr class="total-row">
-
-                        <td>TOTAL DEL NÚCLEO</td>
-
-                        <td id="totalMatricula">0</td>
-
-                        <td id="totalAsistencia">0</td>
-
-                        <td id="totalDocentes">0</td>
-
-                        <td id="totalJustificados">0</td>
-
-                        <td id="totalInjustificados">0</td>
-
-                    </tr>
-
-                </tfoot>
-
-            </table>
+            <select id="turno">
+                <option>Diurno</option>
+                <option>Sabatino</option>
+            </select>
 
         </div>
 
-        <div class="note">
-            El consolidado se actualiza con los reportes registrados durante esta sesión.
+
+        <div class="form-section">
+
+            <h3>Matrícula</h3>
+
+            <label>Masculino</label>
+            <input type="number" id="matM" min="0" value="0"
+                   oninput="calcular()">
+
+            <label>Femenino</label>
+            <input type="number" id="matF" min="0" value="0"
+                   oninput="calcular()">
+
+            <div class="total">
+                Total matrícula:
+                <span id="matT">0</span>
+            </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+            <h3>Asistencia de hoy</h3>
+
+            <label>Masculino</label>
+            <input type="number" id="asiM" min="0" value="0"
+                   oninput="calcular()">
+
+            <label>Femenino</label>
+            <input type="number" id="asiF" min="0" value="0"
+                   oninput="calcular()">
+
+            <div class="total">
+                Total asistencia:
+                <span id="asiT">0</span>
+            </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+            <h3>Docentes</h3>
+
+            <label>Masculino</label>
+            <input type="number" id="docM" min="0" value="0"
+                   oninput="calcular()">
+
+            <label>Femenino</label>
+            <input type="number" id="docF" min="0" value="0"
+                   oninput="calcular()">
+
+            <div class="total">
+                Total docentes:
+                <span id="docT">0</span>
+            </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+            <h3>Docentes justificados</h3>
+
+            <label>Masculino</label>
+            <input type="number" id="jusM" min="0" value="0"
+                   oninput="calcular()">
+
+            <label>Femenino</label>
+            <input type="number" id="jusF" min="0" value="0"
+                   oninput="calcular()">
+
+            <div class="total">
+                Total justificados:
+                <span id="jusT">0</span>
+            </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+            <h3>Docentes injustificados</h3>
+
+            <label>Masculino</label>
+            <input type="number" id="injM" min="0" value="0"
+                   oninput="calcular()">
+
+            <label>Femenino</label>
+            <input type="number" id="injF" min="0" value="0"
+                   oninput="calcular()">
+
+            <div class="total">
+                Total injustificados:
+                <span id="injT">0</span>
+            </div>
+
         </div>
 
     </div>
+
+
+    <div class="summary">
+
+        <h2>Resumen del centro educativo</h2>
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+                <strong>Matrícula total</strong>
+                <span id="sMat">0</span>
+            </div>
+
+            <div class="summary-box">
+                <strong>Asistencia total</strong>
+                <span id="sAsi">0</span>
+            </div>
+
+            <div class="summary-box">
+                <strong>Docentes</strong>
+                <span id="sDoc">0</span>
+            </div>
+
+            <div class="summary-box">
+                <strong>Justificados</strong>
+                <span id="sJus">0</span>
+            </div>
+
+            <div class="summary-box">
+                <strong>Injustificados</strong>
+                <span id="sInj">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button class="btn btn-success" onclick="guardarReporte()">
+            💾 Guardar reporte
+        </button>
+
+        <button class="btn btn-secondary" onclick="regresar()">
+            ← Regresar
+        </button>
+
+    </div>
+
+    <div id="mensaje" class="message">
+        ✓ Reporte guardado correctamente.
+    </div>
+
+</div>
+
+
+<div id="consolidado" class="consolidado">
+
+    <h2>CONSOLIDADO DEL NÚCLEO NER NUEVA ALIANZA</h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Centro educativo</th>
+                    <th>Matrícula</th>
+                    <th>Asistencia</th>
+                    <th>Docentes</th>
+                    <th>Justificados</th>
+                    <th>Injustificados</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tablaConsolidado"></tbody>
+
+            <tfoot>
+
+                <tr class="total-row">
+
+                    <td>TOTAL DEL NÚCLEO</td>
+
+                    <td id="totalMatricula">0</td>
+
+                    <td id="totalAsistencia">0</td>
+
+                    <td id="totalDocentes">0</td>
+
+                    <td id="totalJustificados">0</td>
+
+                    <td id="totalInjustificados">0</td>
+
+                </tr>
+
+            </tfoot>
+
+        </table>
+
+    </div>
+
+    <div class="note">
+        Los datos mostrados corresponden al reporte guardado del día actual
+        en este dispositivo.
+    </div>
+
+</div>
 
 </div>
 
@@ -647,75 +642,142 @@ td:first-child{
 
 const centros = [
 
-    {
-        nombre:"Nueva Alianza",
-        codigo:"17683"
-    },
-
-    {
-        nombre:"Hugo Chávez Frías",
-        codigo:"39183"
-    },
-
-    {
-        nombre:"Rosa Sarmiento",
-        codigo:"29271"
-    },
-
-    {
-        nombre:"La Esperanza",
-        codigo:"17751"
-    },
-
-    {
-        nombre:"La Unión N.º 3",
-        codigo:"17858"
-    },
-
-    {
-        nombre:"Santa Lucía",
-        codigo:"17880"
-    },
-
-    {
-        nombre:"Sector del Limón",
-        codigo:"37038"
-    },
-
-    {
-        nombre:"Nueva Jerusalén",
-        codigo:"30870"
-    }
+    {nombre:"Nueva Alianza", codigo:"17683"},
+    {nombre:"Hugo Chávez Frías", codigo:"39183"},
+    {nombre:"Rosa Sarmiento", codigo:"29271"},
+    {nombre:"La Esperanza", codigo:"17751"},
+    {nombre:"La Unión N.º 3", codigo:"17858"},
+    {nombre:"Santa Lucía", codigo:"17880"},
+    {nombre:"Sector del Limón", codigo:"37038"},
+    {nombre:"Nueva Jerusalén", codigo:"30870"}
 
 ];
+
+
+const CLAVE = "ner_nueva_alianza_reportes";
 
 
 let centroActual = null;
 
 
-let reportes = centros.map(() => ({
+function fechaActual(){
 
-    matM:0,
-    matF:0,
+    const ahora = new Date();
 
-    asiM:0,
-    asiF:0,
+    const año = ahora.getFullYear();
 
-    docM:0,
-    docF:0,
+    const mes = String(ahora.getMonth()+1).padStart(2,"0");
 
-    jusM:0,
-    jusF:0,
+    const dia = String(ahora.getDate()).padStart(2,"0");
 
-    injM:0,
-    injF:0
+    return `${año}-${mes}-${dia}`;
 
-}));
+}
+
+
+function fechaBonita(){
+
+    return new Date().toLocaleDateString("es-NI",{
+
+        weekday:"long",
+        year:"numeric",
+        month:"long",
+        day:"numeric"
+
+    });
+
+}
+
+
+function crearReportesVacios(){
+
+    return centros.map(() => ({
+
+        matM:0,
+        matF:0,
+
+        asiM:0,
+        asiF:0,
+
+        docM:0,
+        docF:0,
+
+        jusM:0,
+        jusF:0,
+
+        injM:0,
+        injF:0,
+
+        modalidad:"Educación Inicial",
+        turno:"Diurno",
+
+        guardado:false
+
+    }));
+
+}
+
+
+function cargarDatosDelDia(){
+
+    const fecha = fechaActual();
+
+    const guardado = localStorage.getItem(CLAVE);
+
+    if(!guardado){
+
+        return crearReportesVacios();
+
+    }
+
+
+    try{
+
+        const datos = JSON.parse(guardado);
+
+        if(datos.fecha !== fecha){
+
+            return crearReportesVacios();
+
+        }
+
+        return datos.reportes;
+
+    }catch(error){
+
+        return crearReportesVacios();
+
+    }
+
+}
+
+
+let reportes = cargarDatosDelDia();
+
+
+function guardarDatosLocalmente(){
+
+    const informacion = {
+
+        fecha:fechaActual(),
+
+        reportes:reportes
+
+    };
+
+    localStorage.setItem(
+        CLAVE,
+        JSON.stringify(informacion)
+    );
+
+}
 
 
 function obtenerNumero(id){
 
-    return Number(document.getElementById(id).value) || 0;
+    return Number(
+        document.getElementById(id).value
+    ) || 0;
 
 }
 
@@ -726,29 +788,38 @@ function abrirCentro(indice){
 
     const centro = centros[indice];
 
-    document.getElementById("inicio").classList.add("hidden");
-
-    document.getElementById("formulario").classList.remove("hidden");
-
-    document.getElementById("tituloCentro").textContent =
-        centro.nombre;
-
-    document.getElementById("codigoCentro").textContent =
-        centro.codigo;
-
-    document.getElementById("nombreCentro").textContent =
-        centro.nombre;
-
-    document.getElementById("fecha").textContent =
-        new Date().toLocaleDateString("es-NI",{
-            weekday:"long",
-            year:"numeric",
-            month:"long",
-            day:"numeric"
-        });
-
-
     const datos = reportes[indice];
+
+
+    document.getElementById("inicio")
+        .classList.add("hidden");
+
+    document.getElementById("formulario")
+        .classList.remove("hidden");
+
+
+    document.getElementById("tituloCentro")
+        .textContent = centro.nombre;
+
+
+    document.getElementById("codigoCentro")
+        .textContent = centro.codigo;
+
+
+    document.getElementById("nombreCentro")
+        .textContent = centro.nombre;
+
+
+    document.getElementById("fecha")
+        .textContent = fechaBonita();
+
+
+    document.getElementById("modalidad")
+        .value = datos.modalidad;
+
+
+    document.getElementById("turno")
+        .value = datos.turno;
 
 
     document.getElementById("matM").value = datos.matM;
@@ -766,7 +837,23 @@ function abrirCentro(indice){
     document.getElementById("injM").value = datos.injM;
     document.getElementById("injF").value = datos.injF;
 
-    document.getElementById("mensaje").style.display = "none";
+
+    if(datos.guardado){
+
+        document.getElementById("estadoReporte")
+            .textContent = "✓ Guardado";
+
+    }else{
+
+        document.getElementById("estadoReporte")
+            .textContent = "Sin guardar";
+
+    }
+
+
+    document.getElementById("mensaje")
+        .style.display = "none";
+
 
     calcular();
 
@@ -816,6 +903,8 @@ function calcular(){
 
         reportes[centroActual] = {
 
+            ...reportes[centroActual],
+
             matM,
             matF,
 
@@ -829,7 +918,13 @@ function calcular(){
             jusF,
 
             injM,
-            injF
+            injF,
+
+            modalidad:
+                document.getElementById("modalidad").value,
+
+            turno:
+                document.getElementById("turno").value
 
         };
 
@@ -844,7 +939,20 @@ function guardarReporte(){
 
     calcular();
 
-    document.getElementById("mensaje").style.display = "block";
+
+    reportes[centroActual].guardado = true;
+
+
+    guardarDatosLocalmente();
+
+
+    document.getElementById("estadoReporte")
+        .textContent = "✓ Guardado";
+
+
+    document.getElementById("mensaje")
+        .style.display = "block";
+
 
     actualizarConsolidado();
 
@@ -855,6 +963,7 @@ function actualizarConsolidado(){
 
     const tbody =
         document.getElementById("tablaConsolidado");
+
 
     tbody.innerHTML = "";
 
@@ -894,7 +1003,8 @@ function actualizarConsolidado(){
         totalInjustificados += injustificados;
 
 
-        const fila = document.createElement("tr");
+        const fila =
+            document.createElement("tr");
 
 
         fila.innerHTML = `
@@ -923,35 +1033,52 @@ function actualizarConsolidado(){
     });
 
 
-    document.getElementById("totalMatricula").textContent =
-        totalMatricula;
+    document.getElementById("totalMatricula")
+        .textContent = totalMatricula;
 
-    document.getElementById("totalAsistencia").textContent =
-        totalAsistencia;
 
-    document.getElementById("totalDocentes").textContent =
-        totalDocentes;
+    document.getElementById("totalAsistencia")
+        .textContent = totalAsistencia;
 
-    document.getElementById("totalJustificados").textContent =
-        totalJustificados;
 
-    document.getElementById("totalInjustificados").textContent =
-        totalInjustificados;
+    document.getElementById("totalDocentes")
+        .textContent = totalDocentes;
+
+
+    document.getElementById("totalJustificados")
+        .textContent = totalJustificados;
+
+
+    document.getElementById("totalInjustificados")
+        .textContent = totalInjustificados;
 
 }
 
 
 function regresar(){
 
-    document.getElementById("formulario").classList.add("hidden");
+    document.getElementById("formulario")
+        .classList.add("hidden");
 
-    document.getElementById("inicio").classList.remove("hidden");
+
+    document.getElementById("inicio")
+        .classList.remove("hidden");
+
 
     centroActual = null;
+
 
     actualizarConsolidado();
 
 }
+
+
+document.getElementById("modalidad")
+    .addEventListener("change",calcular);
+
+
+document.getElementById("turno")
+    .addEventListener("change",calcular);
 
 
 actualizarConsolidado();
