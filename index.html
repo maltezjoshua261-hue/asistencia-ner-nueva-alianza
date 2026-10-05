@@ -267,7 +267,7 @@ footer{
         padding:15px;
     }
 }
-.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px;background:linear-gradient(135deg,#0f766e,#2563eb);}
+.login-screen{position:fixed;inset:0;z-index:99999;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px;background:linear-gradient(135deg,#0f766e,#2563eb);overflow:auto;}
 .login-box{width:min(480px,94%);background:white;border-radius:18px;padding:28px;box-shadow:0 12px 35px rgba(0,0,0,.18);}
 .login-box h2{margin-top:0;color:#0f766e;text-align:center;}
 .login-box .logo-login{text-align:center;font-size:42px;margin-bottom:8px;}
@@ -567,42 +567,50 @@ const escuelas = [
 
     {
         codigo:"17683",
-        nombre:"Nueva Alianza"
+        nombre:"Nueva Alianza",
+        password:"17683NA"
     },
 
     {
         codigo:"39183",
-        nombre:"Hugo Chávez Frías"
+        nombre:"Hugo Chávez Frías",
+        password:"39183HCF"
     },
 
     {
         codigo:"29271",
-        nombre:"Rosa Sarmiento"
+        nombre:"Rosa Sarmiento",
+        password:"29271RS"
     },
 
     {
         codigo:"17751",
-        nombre:"La Esperanza"
+        nombre:"La Esperanza",
+        password:"17751LE"
     },
 
     {
         codigo:"17858",
-        nombre:"La Unión N.º 3"
+        nombre:"La Unión N.º 3",
+        password:"17858LUN3"
     },
 
     {
         codigo:"17880",
-        nombre:"Santa Lucía"
+        nombre:"Santa Lucía",
+        password:"17880SL"
     },
 
     {
         codigo:"37038",
-        nombre:"Sector del Limón"
+        nombre:"Sector del Limón",
+        password:"37038SDL"
     },
 
     {
         codigo:"30870",
-        nombre:"Nueva Jerusalén"
+        nombre:"Nueva Jerusalén",
+        password:"30870NJ"
     }
 
 ];
@@ -648,77 +656,25 @@ function iniciarSesion(){
 
     mostrarMensaje("loginMensaje","⏳ Verificando acceso...","info");
 
-    const callbackName="loginCallback_"+Date.now();
-
-    window[callbackName]=function(datos){
-
-        try{
-            if(!datos.ok||!datos.autenticado){
-                throw new Error(datos.error||"Credenciales incorrectas.");
-            }
-
-            sesion={
-                codigo:datos.codigo,
-                centro:datos.centro,
-                password:password
-            };
-
-            sessionStorage.setItem(
-                "nerSesion",
-                JSON.stringify(sesion)
-            );
-
-            mostrarAplicacion();
-
-        }catch(error){
-
-            mostrarMensaje(
-                "loginMensaje",
-                "❌ "+(error.message||"No se pudo validar el acceso."),
-                "warning"
-            );
-
-        }finally{
-
-            delete window[callbackName];
-
-            const script=document.getElementById(callbackName);
-
-            if(script){
-                script.remove();
-            }
-
+    setTimeout(function(){
+        if(password!==escuela.password){
+            mostrarMensaje("loginMensaje","❌ Contraseña incorrecta.","warning");
+            return;
         }
-    };
 
-    const script=document.createElement("script");
+        sesion={
+            codigo:escuela.codigo,
+            centro:escuela.nombre,
+            password:escuela.password
+        };
 
-    script.id=callbackName;
-
-    script.src=
-        API_URL+
-        "?accion=login"+
-        "&codigo="+encodeURIComponent(codigo)+
-        "&centro="+encodeURIComponent(escuela.nombre)+
-        "&password="+encodeURIComponent(password)+
-        "&callback="+encodeURIComponent(callbackName)+
-        "&_="+Date.now();
-
-    script.onerror=function(){
-
-        delete window[callbackName];
-
-        script.remove();
-
-        mostrarMensaje(
-            "loginMensaje",
-            "❌ No se pudo conectar con el servidor de acceso.",
-            "warning"
+        sessionStorage.setItem(
+            "nerSesion",
+            JSON.stringify(sesion)
         );
 
-    };
-
-    document.body.appendChild(script);
+        mostrarAplicacion();
+    },250);
 }
 
 function mostrarAplicacion(){
@@ -1834,6 +1790,8 @@ function mostrarMensaje(
 ===================================================== */
 
 prepararLogin();
+document.getElementById("app").classList.add("hidden");
+document.getElementById("loginScreen").classList.remove("hidden");
 
 if(restaurarSesion()){
     mostrarAplicacion();
