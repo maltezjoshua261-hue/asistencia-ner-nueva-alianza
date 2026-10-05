@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -524,13 +525,8 @@ footer{
 
 <script>
 
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
-
 const API_URL =
-"https://script.google.com/macros/s/AKfycbyAE1uTKOK-YGzNYCZsVsOGKf-x5tWaTcKomupf4IrqCUXjjgV1ZqC6u1qeAPyDM9wf/exec";
-
+"https://script.google.com/macros/s/AKfycbyAE1uTKOK-YGzNYCZsOGKf-x5tWaTcKomupf4IrqCUXjjgV1ZqC6u1qeAPyDM9wf/exec";
 
 const escuelas = [
 
@@ -576,9 +572,7 @@ const escuelas = [
 
 ];
 
-
 let reportes = [];
-
 let escuelaSeleccionada = null;
 
 
@@ -590,8 +584,7 @@ function fechaHoy(){
 
     const ahora = new Date();
 
-    const año =
-        ahora.getFullYear();
+    const año = ahora.getFullYear();
 
     const mes =
         String(
@@ -607,10 +600,8 @@ function fechaHoy(){
 
 }
 
-
 document.getElementById("fecha").value =
     fechaHoy();
-
 
 document.getElementById("fecha")
 .addEventListener("change",function(){
@@ -658,7 +649,7 @@ function actualizarDia(){
 
         contenedor.innerHTML =
             `<div class="warning">
-                🚫 DOMINGO — NO HAY CLASES
+                🚫 DOMINGO — NO HAY CLASES. NO SE PUEDEN GUARDAR REPORTES.
             </div>`;
 
     }
@@ -913,17 +904,23 @@ function calcular(){
 
 
     if(asiM > matM){
+
         asiM = matM;
+
         document.getElementById(
             "asiM"
         ).value = asiM;
+
     }
 
     if(asiF > matF){
+
         asiF = matF;
+
         document.getElementById(
             "asiF"
         ).value = asiF;
+
     }
 
 
@@ -1095,6 +1092,31 @@ async function guardarReporte(){
         mostrarMensaje(
             "formMensaje",
             "⚠️ Selecciona una fecha.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    /* =================================================
+       REGLA DEFINITIVA:
+       DOMINGO NO HAY CLASES
+    ================================================= */
+
+    const fechaSeleccionada =
+        new Date(
+            fecha + "T12:00:00"
+        );
+
+    const dia =
+        fechaSeleccionada.getDay();
+
+    if(dia === 0){
+
+        mostrarMensaje(
+            "formMensaje",
+            "🚫 DOMINGO — NO HAY CLASES. NO SE PUEDE GUARDAR UN REPORTE.",
             "warning"
         );
 
@@ -1630,3 +1652,4 @@ cargarDatosCompartidos();
 
 </body>
 </html>
+```
