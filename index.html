@@ -561,7 +561,7 @@ footer{
 <script>
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbyAE1uTKOK-YGzNYCZsOGKf-x5tWaTcKomupf4IrqCUXjjgV1ZqC6u1qeAPyDM9wf/exec";
+"https://script.google.com/macros/s/AKfycbyAE1uTKOK-YGzNYCZsVsOGKf-x5tWaTcKomupf4IrqCUXjjgV1ZqC6u1qeAPyDM9wf/exec";
 
 const escuelas = [
 
@@ -624,7 +624,7 @@ function prepararLogin(){
     });
 }
 
-async function iniciarSesion(){
+function iniciarSesion(){
     const codigo=document.getElementById("loginCodigo").value.trim();
     const centroCodigo=document.getElementById("loginCentro").value;
     const password=document.getElementById("loginPassword").value;
@@ -633,33 +633,92 @@ async function iniciarSesion(){
         mostrarMensaje("loginMensaje","⚠️ Complete centro, código y contraseña.","warning");
         return;
     }
+
     if(codigo!==centroCodigo){
         mostrarMensaje("loginMensaje","⚠️ El código no corresponde al centro seleccionado.","warning");
         return;
     }
 
+    const escuela=escuelas.find(e=>e.codigo===codigo);
+
+    if(!escuela){
+        mostrarMensaje("loginMensaje","❌ Centro educativo no válido.","warning");
+        return;
+    }
+
     mostrarMensaje("loginMensaje","⏳ Verificando acceso...","info");
 
-    try{
-        const escuela=escuelas.find(e=>e.codigo===codigo);
-        if(!escuela){
-            throw new Error("Centro educativo no válido.");
+    const callbackName="loginCallback_"+Date.now();
+
+    window[callbackName]=function(datos){
+
+        try{
+            if(!datos.ok||!datos.autenticado){
+                throw new Error(datos.error||"Credenciales incorrectas.");
+            }
+
+            sesion={
+                codigo:datos.codigo,
+                centro:datos.centro,
+                password:password
+            };
+
+            sessionStorage.setItem(
+                "nerSesion",
+                JSON.stringify(sesion)
+            );
+
+            mostrarAplicacion();
+
+        }catch(error){
+
+            mostrarMensaje(
+                "loginMensaje",
+                "❌ "+(error.message||"No se pudo validar el acceso."),
+                "warning"
+            );
+
+        }finally{
+
+            delete window[callbackName];
+
+            const script=document.getElementById(callbackName);
+
+            if(script){
+                script.remove();
+            }
+
         }
+    };
 
-        const url=API_URL+"?accion=login&codigo="+encodeURIComponent(codigo)+"&centro="+encodeURIComponent(escuela.nombre)+"&password="+encodeURIComponent(password);
-        const respuesta=await fetch(url,{method:"GET",cache:"no-store"});
-        const datos=await respuesta.json();
+    const script=document.createElement("script");
 
-        if(!datos.ok||!datos.autenticado){
-            throw new Error(datos.error||"Credenciales incorrectas.");
-        }
+    script.id=callbackName;
 
-        sesion={codigo:datos.codigo,centro:datos.centro,password:password};
-        sessionStorage.setItem("nerSesion",JSON.stringify(sesion));
-        mostrarAplicacion();
-    }catch(error){
-        mostrarMensaje("loginMensaje","❌ "+(error.message||"No se pudo validar el acceso."),"warning");
-    }
+    script.src=
+        API_URL+
+        "?accion=login"+
+        "&codigo="+encodeURIComponent(codigo)+
+        "&centro="+encodeURIComponent(escuela.nombre)+
+        "&password="+encodeURIComponent(password)+
+        "&callback="+encodeURIComponent(callbackName)+
+        "&_="+Date.now();
+
+    script.onerror=function(){
+
+        delete window[callbackName];
+
+        script.remove();
+
+        mostrarMensaje(
+            "loginMensaje",
+            "❌ No se pudo conectar con el servidor de acceso.",
+            "warning"
+        );
+
+    };
+
+    document.body.appendChild(script);
 }
 
 function mostrarAplicacion(){
