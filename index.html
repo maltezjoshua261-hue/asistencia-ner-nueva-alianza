@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Asistencia NER Nueva Alianza V2.0</title>
+<title>Asistencia NER Nueva Alianza V2.1</title>
 
 <style>
 *{
@@ -272,7 +272,7 @@ footer{
 .login-box{width:min(480px,94%);background:white;border-radius:18px;padding:28px;box-shadow:0 12px 35px rgba(0,0,0,.18);}
 .login-box h2{margin-top:0;color:#0f766e;text-align:center;}
 .login-box .logo-login{text-align:center;font-size:42px;margin-bottom:8px;}
-.login-box .login-help{text-align:center;color:#64748b;font-size:14px;margin-bottom:20px;}
+.login-box .login-help{text-align:center;color:#64748b;font-size:14px;margin-bottom:20px;} .access-mode{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 18px;} .access-mode button{margin:0!important;background:#e2e8f0!important;color:#334155!important;font-size:14px!important;} .access-mode button.active{background:#2563eb!important;color:white!important;} .admin-box{background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:14px;margin-top:10px;} .admin-panel{background:white;border-radius:14px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:20px;} .admin-panel h2{margin-top:0;color:#0f766e;} .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;} .admin-actions button{border:0;border-radius:8px;padding:10px 15px;font-weight:bold;cursor:pointer;background:#2563eb;color:white;} .admin-actions button.secondary-admin{background:#64748b;}
 .login-box button{width:100%;margin-top:18px;border:0;border-radius:9px;padding:13px;background:#2563eb;color:white;font-size:16px;font-weight:bold;cursor:pointer;}
 .login-box button:hover{background:#1d4ed8;}
 .session-bar{background:#ecfdf5;color:#047857;border-radius:10px;padding:12px 15px;margin-bottom:18px;font-weight:bold;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;}
@@ -287,6 +287,11 @@ footer{
     <div class="logo-login">🏫</div>
     <h2>Acceso escolar</h2>
     <div class="login-help">Asistencia NER Nueva Alianza</div>
+    <div class="access-mode">
+      <button type="button" id="modoEscuela" class="active" onclick="seleccionarModoAcceso('escuela')">🏫 Escuela</button>
+      <button type="button" id="modoCoordinador" onclick="seleccionarModoAcceso('coordinador')">👤 Coordinador</button>
+    </div>
+    <div id="loginEscuelaBox">
     <div class="field">
       <label>Centro educativo</label>
       <select id="loginCentro"><option value="">Seleccione su centro educativo</option></select>
@@ -301,26 +306,47 @@ footer{
       <label>Contraseña</label>
       <input type="password" id="loginPassword" placeholder="Ingrese su contraseña">
     </div>
+    </div>
+    <div id="loginCoordinadorBox" class="admin-box hidden">
+      <div class="field"><label>Usuario del coordinador</label><input type="text" id="adminUsuario" value="COORDINADOR" autocomplete="username"></div>
+      <br>
+      <div class="field"><label>Contraseña</label><input type="password" id="adminPassword" placeholder="Contraseña de coordinador" autocomplete="current-password"></div>
+    </div>
     <div id="loginMensaje"></div>
-    <button onclick="iniciarSesion()">🔐 Iniciar sesión</button>
+    <button onclick="iniciarSesion()" id="btnAcceso">🔐 Iniciar sesión</button>
   </div>
 </div>
 <div id="app" class="hidden">
 
 <header>
     <h1>ASISTENCIA NER NUEVA ALIANZA</h1>
-    <p>Control diario de asistencia escolar — V2.0</p>
+    <p>Control diario de asistencia escolar — V2.1</p>
 </header>
 
 <div class="container">
 
     <div id="sessionBar" class="session-bar hidden"></div>
 
+    <div id="adminPanel" class="admin-panel hidden">
+<h2>👤 Panel del Coordinador</h2>
+<div class="info">Consulta general del NER. Aquí se muestran las 8 escuelas y todos los reportes de la fecha seleccionada.</div>
+<div class="grid"><div class="field"><label>Fecha de consulta</label><input type="date" id="adminFecha"></div></div>
+<div class="dashboard" style="margin-top:18px">
+<div class="card">Escuelas que reportaron<strong id="adminRecibidos">0/8</strong></div>
+<div class="card">Escuelas pendientes<strong id="adminPendientes">8</strong></div>
+<div class="card">Reportes<strong id="adminCantidad">0</strong></div>
+<div class="card">Matrícula registrada<strong id="adminMatricula">0</strong></div>
+<div class="card">Asistencia registrada<strong id="adminAsistencia">0</strong></div>
+</div>
+<div id="adminEscuelas" class="schools"></div>
+<div class="table-box"><h3>📋 Reportes de la fecha</h3><div id="adminTabla">No hay reportes.</div></div>
+<div class="admin-actions"><button onclick="cargarDatosAdmin()">🔄 Actualizar</button><button class="secondary-admin" onclick="cerrarSesion()">Cerrar sesión</button></div>
+</div>
     <div id="serverStatus" class="server">
         🔄 Conectando con datos compartidos...
     </div>
 
-    <div class="dashboard">
+    <div id="dashboardGeneral" class="dashboard">
 
         <div class="card">
             Matrícula
@@ -556,7 +582,7 @@ footer{
 </div>
 
 <footer>
-    Sistema de Asistencia NER Nueva Alianza · V2.0
+    Sistema de Asistencia NER Nueva Alianza · V2.1
 </footer>
 
 <script>
@@ -619,6 +645,8 @@ const escuelas = [
 let reportes = [];
 let escuelaSeleccionada = null;
 let sesion = null;
+let modoAcceso = "escuela";
+let reportesAdmin = [];
 
 function prepararLogin(){
     const select=document.getElementById("loginCentro");
@@ -633,7 +661,18 @@ function prepararLogin(){
     });
 }
 
-function iniciarSesion(){
+function seleccionarModoAcceso(modo){
+    modoAcceso=modo;
+    document.getElementById("modoEscuela").classList.toggle("active",modo==="escuela");
+    document.getElementById("modoCoordinador").classList.toggle("active",modo==="coordinador");
+    document.getElementById("loginEscuelaBox").classList.toggle("hidden",modo!=="escuela");
+    document.getElementById("loginCoordinadorBox").classList.toggle("hidden",modo!=="coordinador");
+    document.getElementById("btnAcceso").textContent=modo==="coordinador"?"👤 Entrar como coordinador":"🔐 Iniciar sesión";
+    document.getElementById("loginMensaje").innerHTML="";
+}
+
+async function iniciarSesion(){
+    if(modoAcceso==="coordinador"){await iniciarSesionCoordinador();return;}
     const codigo=document.getElementById("loginCodigo").value.trim();
     const centroCodigo=document.getElementById("loginCentro").value;
     const password=document.getElementById("loginPassword").value;
@@ -678,6 +717,22 @@ function iniciarSesion(){
     },250);
 }
 
+async function iniciarSesionCoordinador(){
+    const usuario=document.getElementById("adminUsuario").value.trim();
+    const password=document.getElementById("adminPassword").value;
+    if(!usuario||!password){mostrarMensaje("loginMensaje","⚠️ Ingrese usuario y contraseña.","warning");return;}
+    mostrarMensaje("loginMensaje","⏳ Verificando acceso de coordinador...","info");
+    try{
+        const url=API_URL+"?accion=admin_login&usuario="+encodeURIComponent(usuario)+"&password="+encodeURIComponent(password)+"&_="+Date.now();
+        const respuesta=await fetch(url,{cache:"no-store"});
+        const datos=await respuesta.json();
+        if(!datos.ok){mostrarMensaje("loginMensaje","❌ "+(datos.error||"Credenciales incorrectas."),"warning");return;}
+        sesion={rol:"coordinador",usuario:usuario,password:password};
+        sessionStorage.setItem("nerSesion",JSON.stringify(sesion));
+        mostrarAplicacion();
+    }catch(error){mostrarMensaje("loginMensaje","❌ No se pudo verificar el acceso.","warning");console.error(error);}
+}
+
 function mostrarAplicacion(){
     if(!sesion)return;
 
@@ -688,8 +743,8 @@ function mostrarAplicacion(){
     barra.classList.remove("hidden");
     barra.innerHTML="<span>🔐 Sesión activa: "+sesion.centro+" · Código "+sesion.codigo+"</span><button class='logout' onclick='cerrarSesion()'>Cerrar sesión</button>";
 
+    if(sesion.rol==="coordinador"){mostrarPanelCoordinador();return;}
     escuelaSeleccionada=escuelas.find(e=>e.codigo===sesion.codigo)||null;
-
     cargarDatosCompartidos().then(()=>cargarEscuela(sesion.codigo));
 }
 
@@ -713,6 +768,51 @@ function restaurarSesion(){
     }
 }
 
+
+function mostrarPanelCoordinador(){
+    document.getElementById("sessionBar").innerHTML="<span>👤 Sesión de Coordinador: "+sesion.usuario+"</span><button class='logout' onclick='cerrarSesion()'>Cerrar sesión</button>";
+    document.getElementById("dashboardGeneral").classList.add("hidden");
+    document.getElementById("adminPanel").classList.remove("hidden");
+    document.querySelector("#adminPanel").previousElementSibling.classList.add("hidden");
+    document.getElementById("dashboardGeneral").classList.add("hidden");
+    document.getElementById("formulario").classList.add("hidden");
+    document.getElementById("schools").parentElement.classList.add("hidden");
+    document.getElementById("tablaReportes").parentElement.classList.add("hidden");
+    document.getElementById("adminFecha").value=fechaHoy();
+    document.getElementById("serverStatus").className="server ok";
+    document.getElementById("serverStatus").textContent="☁️ Panel de coordinador conectado";
+    document.querySelector("#adminFecha").onchange=renderAdmin;
+    cargarDatosAdmin();
+}
+async function cargarDatosAdmin(){
+    try{
+        const url=API_URL+"?accion=admin_reportes&usuario="+encodeURIComponent(sesion.usuario)+"&password="+encodeURIComponent(sesion.password)+"&_="+Date.now();
+        const respuesta=await fetch(url,{cache:"no-store"});
+        const datos=await respuesta.json();
+        if(!datos.ok)throw new Error(datos.error||"Acceso no autorizado");
+        reportesAdmin=datos.reportes||[];
+        renderAdmin();
+    }catch(error){document.getElementById("adminTabla").innerHTML="<div class='warning'>❌ "+error.message+"</div>";}
+}
+function renderAdmin(){
+    const fecha=document.getElementById("adminFecha").value;
+    const diarios=reportesAdmin.filter(r=>String(r["Fecha"]).substring(0,10)===fecha);
+    const recibidos=new Set(diarios.map(r=>String(r["Código"])));
+    document.getElementById("adminRecibidos").textContent=recibidos.size+"/8";
+    document.getElementById("adminPendientes").textContent=Math.max(0,8-recibidos.size);
+    document.getElementById("adminCantidad").textContent=diarios.length;
+    let mat=0,asi=0;
+    diarios.forEach(r=>{mat+=Number(r["Matrícula Total"])||0;asi+=Number(r["Asistencia Total"])||0;});
+    document.getElementById("adminMatricula").textContent=mat;
+    document.getElementById("adminAsistencia").textContent=asi;
+    const box=document.getElementById("adminEscuelas");box.innerHTML="";
+    escuelas.forEach(e=>{const existe=recibidos.has(e.codigo);const b=document.createElement("div");b.className="school";b.innerHTML="<div class='name'>"+e.nombre+"</div><div class='code'>Código: "+e.codigo+"</div><div class='status'>"+(existe?"🟢 REPORTE RECIBIDO":"🔴 PENDIENTE")+"</div>";box.appendChild(b);});
+    const cont=document.getElementById("adminTabla");
+    if(!diarios.length){cont.innerHTML="No hay reportes registrados para esta fecha.";return;}
+    let html="<table><thead><tr><th>Código</th><th>Centro</th><th>Modalidad</th><th>Turno</th><th>Matrícula</th><th>Asistencia</th><th>%</th><th>Docentes</th><th>Estado</th></tr></thead><tbody>";
+    diarios.forEach(r=>{html+="<tr><td>"+(r["Código"]||"")+"</td><td>"+(r["Centro Educativo"]||"")+"</td><td>"+(r["Modalidad"]||"")+"</td><td>"+(r["Turno"]||"")+"</td><td>"+(r["Matrícula Total"]||0)+"</td><td>"+(r["Asistencia Total"]||0)+"</td><td>"+(r["Porcentaje"]||0)+"%</td><td>"+(r["Docentes Total"]||0)+"</td><td>"+(r["Estado"]||"")+"</td></tr>";});
+    html+="</tbody></table>";cont.innerHTML=html;
+}
 
 /* =====================================================
    FECHA
