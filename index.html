@@ -810,9 +810,11 @@ async function cargarDatosAdmin(){
         const respuesta=await fetch(url,{cache:"no-store"});
         const datos=await respuesta.json();
         if(!datos.ok)throw new Error(datos.error||"Acceso no autorizado");
+        conexionServidorDisponible=true;
         reportesAdmin=datos.reportes||[];
         renderAdmin();
-    }catch(error){document.getElementById("adminTabla").innerHTML="<div class='warning'>❌ "+error.message+"</div>";}
+        actualizarPanelOffline();
+    }catch(error){conexionServidorDisponible=false;actualizarPanelOffline();document.getElementById("adminTabla").innerHTML="<div class='warning'>❌ "+error.message+"</div>";}
 }
 function renderAdmin(){
     const fecha=document.getElementById("adminFecha").value;
@@ -1616,11 +1618,11 @@ async function guardarReporte(){
         }
         reportes=combinarReportesConPendientes(leerJSONLocal(LOCAL_REPORTS_KEY,reportes));
         actualizarDashboard();mostrarEscuelas();mostrarTabla();
-        mostrarMensaje("formMensaje",navigator.onLine
+        mostrarMensaje("formMensaje",navigator.onLine && conexionServidorDisponible!==false
             ?"💾 Reporte guardado en este dispositivo. Intentando sincronizar y verificar con el servidor..."
-            :"📴 Reporte guardado en este dispositivo. Quedará pendiente hasta recuperar internet.","success");
+            :"📴 Reporte guardado en este dispositivo. Quedará pendiente hasta recuperar conexión con el servidor.","success");
         actualizarPanelOffline();
-        if(navigator.onLine) await sincronizarPendientes();
+        if(navigator.onLine && conexionServidorDisponible!==false) await sincronizarPendientes();
     }catch(error){
         mostrarMensaje("formMensaje","❌ No se pudo guardar en este dispositivo. No cierre la página; revise el almacenamiento del navegador.","warning");
         console.error(error);
