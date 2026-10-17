@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<title>Prueba segura de guardado local · Asistencia NER</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f5f9;color:#1e293b;font-family:Arial,Helvetica,sans-serif;line-height:1.5}.wrap{max-width:760px;margin:28px auto;padding:0 16px}.card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 10px #00000012;margin-bottom:16px}h1{font-size:25px;color:#0f766e;margin-top:0}.notice{background:#fff7ed;border-left:5px solid #ea580c;padding:12px;border-radius:8px}.status{padding:12px;border-radius:8px;background:#f1f5f9;margin:12px 0;overflow-wrap:anywhere}.good{background:#dcfce7;color:#166534}.bad{background:#fee2e2;color:#991b1b}button,a.btn{display:inline-block;border:0;border-radius:8px;padding:11px 15px;margin:5px 5px 5px 0;background:#0f766e;color:#fff;font-weight:bold;text-decoration:none;cursor:pointer}button.secondary{background:#64748b}small{color:#64748b}code{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="card">
+<h1>🧪 Prueba segura del guardado local</h1>
+<p>Esta página sirve únicamente para comprobar que este navegador puede guardar una pequeña prueba y conservarla al recargar, incluso sin internet.</p>
+<div class="notice"><strong>Importante:</strong> esta prueba NO registra asistencia, NO usa la cola de reportes reales y NO envía información al servidor. Utiliza una clave local independiente.</div>
+<div id="estado" class="status">Comprobando almacenamiento de este dispositivo…</div>
+<button id="guardar" type="button">Guardar prueba solo en este dispositivo</button>
+<button id="comprobar" type="button" class="secondary">Comprobar si quedó guardada</button>
+<button id="borrar" type="button" class="secondary">Borrar solo esta prueba</button>
+<p><small>Después de guardar, recargue esta misma página. Si aparece la prueba guardada, el almacenamiento local persiste. Para probar sin internet, primero abra esta página con conexión y luego active “Offline” en Chrome.</small></p>
+<a class="btn" href="./">Volver al sistema de asistencia</a>
+</section>
+<section class="card">
+<h2>Resultado de la prueba</h2>
+<div id="resultado" class="status">Todavía no se ha ejecutado la prueba.</div>
+<p><small>Esta prueba confirma el almacenamiento local del navegador. No confirma todavía la sincronización de reportes de asistencia con el servidor.</small></p>
+</section>
+</main>
+<script>
+(function(){
+  "use strict";
+  const KEY = "nerOfflineDiagnosticOnlyV1";
+  const estado = document.getElementById("estado");
+  const resultado = document.getElementById("resultado");
+  function leer(){
+    try { return JSON.parse(localStorage.getItem(KEY) || "null"); }
+    catch(e){ return null; }
+  }
+  function mostrar(){
+    const dato = leer();
+    if(dato && dato.testOnly === true){
+      estado.className = "status good";
+      estado.textContent = "✅ La prueba está guardada en este dispositivo. Guardada: " + dato.savedAt;
+      resultado.className = "status good";
+      resultado.textContent = "Guardado local confirmado. Identificador de prueba: " + dato.id + ". No se ha enviado al servidor.";
+    } else {
+      estado.className = "status";
+      estado.textContent = "No hay ninguna prueba guardada en esta página.";
+      resultado.className = "status";
+      resultado.textContent = "Pulse “Guardar prueba solo en este dispositivo”.";
+    }
+  }
+  document.getElementById("guardar").addEventListener("click", function(){
+    try {
+      const dato = {testOnly:true,id:"PRUEBA-LOCAL-"+Date.now(),savedAt:new Date().toLocaleString("es-NI"),purpose:"diagnostico-local-no-asistencia"};
+      localStorage.setItem(KEY, JSON.stringify(dato));
+      mostrar();
+    } catch(e) {
+      estado.className = "status bad";
+      estado.textContent = "❌ El navegador no permitió guardar la prueba local: " + (e.message || e);
+      resultado.className = "status bad";
+      resultado.textContent = "No se pudo confirmar el almacenamiento local.";
+    }
+  });
+  document.getElementById("comprobar").addEventListener("click", mostrar);
+  document.getElementById("borrar").addEventListener("click", function(){
+    try {
+      localStorage.removeItem(KEY);
+      estado.className = "status";
+      estado.textContent = "La prueba de diagnóstico fue borrada. No se tocaron los reportes reales.";
+      resultado.className = "status";
+      resultado.textContent = "Prueba eliminada de esta página únicamente.";
+    } catch(e) {
+      estado.className = "status bad";
+      estado.textContent = "No se pudo borrar la prueba: " + (e.message || e);
+    }
+  });
+  mostrar();
+})();
+</script>
+</body>
+</html>
