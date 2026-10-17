@@ -361,7 +361,7 @@ footer{
     <section id="offlinePanel" class="offline-panel" aria-live="polite">
       <div class="offline-top"><strong id="offlineEstado">📡 Comprobando conexión...</strong><span id="offlinePendientes" class="offline-badge">0 pendientes</span></div>
       <p id="offlineAyuda">Los reportes pueden guardarse en este dispositivo si no hay internet.</p>
-      <div class="offline-top"><span id="offlineDetalle"></span><button id="btnSincronizar" type="button" onclick="sincronizarPendientes()">☁️ Sincronizar pendientes</button></div>
+      <div class="offline-top"><span id="offlineDetalle"></span><div><button id="btnComprobarConexion" type="button" onclick="comprobarConexionServidor()">🔎 Comprobar conexión</button> <button id="btnSincronizar" type="button" onclick="sincronizarPendientes()">☁️ Sincronizar pendientes</button></div></div>
       <div id="offlineLista" class="pending-list"></div>
     </section>
 
@@ -666,6 +666,7 @@ let escuelaSeleccionada = null;
 let sesion = null;
 let modoAcceso = "escuela";
 let reportesAdmin = [];
+let conexionServidorDisponible = null;
 
 function prepararLogin(){
     const select=document.getElementById("loginCentro");
@@ -1443,8 +1444,34 @@ function mismoReporteEnServidor(r, p){
         Number(r["Injustificados M"]||0)===Number(p.injM||0) &&
         Number(r["Injustificados F"]||0)===Number(p.injF||0);
 }
+async function comprobarConexionServidor(){
+    const boton=document.getElementById("btnComprobarConexion");
+    if(!navigator.onLine){
+        conexionServidorDisponible=false;
+        actualizarPanelOffline();
+        return false;
+    }
+    if(boton) boton.disabled=true;
+    const controlador=new AbortController();
+    const limite=setTimeout(()=>controlador.abort(),6000);
+    try{
+        const respuesta=await fetch(API_URL,{method:"GET",cache:"no-store",signal:controlador.signal});
+        if(!respuesta.ok) throw new Error("El servidor no respondió correctamente.");
+        const datos=await respuesta.json();
+        if(!datos || !datos.ok) throw new Error("No se pudo confirmar la conexión con el servidor.");
+        conexionServidorDisponible=true;
+        return true;
+    }catch(error){
+        conexionServidorDisponible=false;
+        return false;
+    }finally{
+        clearTimeout(limite);
+        if(boton) boton.disabled=false;
+        actualizarPanelOffline();
+    }
+}
 function actualizarPanelOffline(){
-    const online = navigator.onLine;
+    const online = navigator.onLine && conexionServidorDisponible !== false;
     const cola = obtenerColaPendiente();
     const estado = document.getElementById("offlineEstado");
     const badge = document.getElementById("offlinePendientes");
@@ -1453,7 +1480,7 @@ function actualizarPanelOffline(){
     const lista = document.getElementById("offlineLista");
     const boton = document.getElementById("btnSincronizar");
     if(!estado || !badge || !ayuda || !detalle || !lista || !boton) return;
-    estado.textContent = online ? "🟢 Con conexión a internet" : "📴 SIN CONEXIÓN — modo local";
+    estado.textContent = (!navigator.onLine || conexionServidorDisponible===false) ? "📴 SIN CONEXIÓN — modo local" : (conexionServidorDisponible===true ? "🟢 Con conexión a internet" : "📡 Conexión pendiente de verificar");
     badge.textContent = cola.length + (cola.length===1 ? " reporte pendiente" : " reportes pendientes");
     badge.classList.toggle("offline", !online || cola.length>0);
     ayuda.textContent = online
@@ -1484,8 +1511,8 @@ async function obtenerReportesServidor(){
 }
 async function sincronizarPendientes(){
     if(sincronizandoPendientesAhora) return;
-    if(!navigator.onLine){
-        mostrarMensaje("formMensaje","📴 No hay internet. El reporte sigue guardado en este dispositivo.","info");
+    if(!navigator.onLine || conexionServidorDisponible===false){
+        mostrarMensaje("formMensaje","📴 No se confirma conexión con el servidor. El reporte sigue guardado en este dispositivo.","info");
         actualizarPanelOffline();
         return;
     }
@@ -1540,12 +1567,14 @@ async function sincronizarPendientes(){
         reportes=combinarReportesConPendientes(cacheFinal);
         actualizarDashboard(); mostrarEscuelas(); mostrarTabla();
         if(escuelaSeleccionada) cargarEscuela(escuelaSeleccionada.codigo);
+        conexionServidorDisponible=true;
         if(confirmados){
             mostrarMensaje("formMensaje","✅ "+confirmados+" reporte(s) confirmado(s) en el servidor.","success");
         }else if(obtenerColaPendiente().length){
             mostrarMensaje("formMensaje","⚠️ Los reportes siguen guardados localmente. El servidor aún no confirma su recepción; no borre los datos del navegador.","warning");
         }
     }catch(error){
+        conexionServidorDisponible=false;
         mostrarMensaje("formMensaje","📴 No se pudo confirmar la conexión. Los reportes permanecen guardados en este dispositivo.","warning");
     }finally{
         sincronizandoPendientesAhora=false;
@@ -1604,11 +1633,13 @@ async function cargarDatosCompartidos(){
         /* En el dispositivo de cada escuela solo guardamos su propio historial. */
         localStorage.setItem(LOCAL_REPORTS_KEY,JSON.stringify(propios));
         reportes=combinarReportesConPendientes(datos);
+        conexionServidorDisponible=true;
         document.getElementById("serverStatus").className="server ok";
         document.getElementById("serverStatus").textContent="☁️ Datos compartidos activos";
         actualizarDashboard();mostrarEscuelas();mostrarTabla();actualizarPanelOffline();
         return true;
     }catch(error){
+        conexionServidorDisponible=false;
         const guardados=leerJSONLocal(LOCAL_REPORTS_KEY,[]);
         reportes=combinarReportesConPendientes(guardados);
         document.getElementById("serverStatus").className="server error";
@@ -1911,8 +1942,13 @@ function mostrarMensaje(
 
 prepararLogin();
 actualizarPanelOffline();
-window.addEventListener("online", function(){ actualizarPanelOffline(); sincronizarPendientes(); });
-window.addEventListener("offline", actualizarPanelOffline);
+window.addEventListener("online", async function(){
+    conexionServidorDisponible=null;
+    actualizarPanelOffline();
+    const disponible=await comprobarConexionServidor();
+    if(disponible) await sincronizarPendientes();
+});
+window.addEventListener("offline", function(){ conexionServidorDisponible=false; actualizarPanelOffline(); });
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", function(){ navigator.serviceWorker.register("./sw.js").catch(function(e){ console.warn("No se pudo preparar el modo sin conexión:",e); }); });
 }
