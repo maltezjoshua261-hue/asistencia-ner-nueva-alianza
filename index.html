@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f766e">
+<link rel="manifest" href="./manifest.webmanifest">
 
 <title>Asistencia NER Nueva Alianza V2.1</title>
 
@@ -277,6 +279,15 @@ footer{
 .login-box button:hover{background:#1d4ed8;}
 .session-bar{background:#ecfdf5;color:#047857;border-radius:10px;padding:12px 15px;margin-bottom:18px;font-weight:bold;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;}
 .logout{border:0;border-radius:8px;padding:8px 12px;background:#dc2626;color:white;font-weight:bold;cursor:pointer;}
+
+.offline-panel{background:white;border-radius:12px;padding:14px 16px;margin:-4px 0 18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:5px solid #0f766e}
+.offline-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.offline-panel p{margin:7px 0;color:#475569;font-weight:normal}
+.offline-panel button{border:0;border-radius:8px;padding:10px 14px;background:#0f766e;color:white;font-weight:bold;cursor:pointer}
+.offline-panel button:disabled{opacity:.55;cursor:not-allowed}
+.pending-list{margin-top:8px;font-size:13px;color:#92400e}
+.offline-badge{font-size:13px;font-weight:bold;padding:5px 9px;border-radius:999px;background:#dcfce7;color:#166534}
+.offline-badge.offline{background:#ffedd5;color:#9a3412}
 </style>
 </head>
 
@@ -346,6 +357,13 @@ footer{
     <div id="serverStatus" class="server">
         🔄 Conectando con datos compartidos...
     </div>
+
+    <section id="offlinePanel" class="offline-panel" aria-live="polite">
+      <div class="offline-top"><strong id="offlineEstado">📡 Comprobando conexión...</strong><span id="offlinePendientes" class="offline-badge">0 pendientes</span></div>
+      <p id="offlineAyuda">Los reportes pueden guardarse en este dispositivo si no hay internet.</p>
+      <div class="offline-top"><span id="offlineDetalle"></span><button id="btnSincronizar" type="button" onclick="sincronizarPendientes()">☁️ Sincronizar pendientes</button></div>
+      <div id="offlineLista" class="pending-list"></div>
+    </section>
 
     <div id="dashboardGeneral" class="dashboard">
 
@@ -1350,289 +1368,256 @@ function calcular(){
    GUARDAR
 ===================================================== */
 
-async function guardarReporte(){
+const LOCAL_QUEUE_KEY = "nerOfflineQueueV1";
+const LOCAL_REPORTS_KEY = "nerCachedReportsV1";
+let sincronizandoPendientesAhora = false;
 
-    calcular();
-
-    const fecha =
-        document.getElementById(
-            "fecha"
-        ).value;
-
-    if(!fecha){
-
-        mostrarMensaje(
-            "formMensaje",
-            "⚠️ Selecciona una fecha.",
-            "warning"
-        );
-
-        return;
+function leerJSONLocal(clave, defecto){
+    try {
+        const valor = localStorage.getItem(clave);
+        return valor ? JSON.parse(valor) : defecto;
+    } catch (e) {
+        return defecto;
     }
-
-
-    /* =================================================
-       REGLA DEFINITIVA:
-       DOMINGO NO HAY CLASES
-    ================================================= */
-
-    const fechaSeleccionada =
-        new Date(
-            fecha + "T12:00:00"
-        );
-
-    const dia =
-        fechaSeleccionada.getDay();
-
-    if(dia === 0){
-
-        mostrarMensaje(
-            "formMensaje",
-            "🚫 DOMINGO — NO HAY CLASES. NO SE PUEDE GUARDAR UN REPORTE.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    if(!escuelaSeleccionada){
-
-        mostrarMensaje(
-            "formMensaje",
-            "⚠️ Selecciona un centro educativo.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    const payload = {
-
-        fecha:fecha,
-
-        codigo:
-            document.getElementById(
-                "codigo"
-            ).value,
-
-        centro:
-            document.getElementById(
-                "centro"
-            ).value,
-
-        modalidad:
-            document.getElementById(
-                "modalidad"
-            ).value,
-
-        turno:
-            document.getElementById(
-                "turno"
-            ).value,
-
-        matM:
-            numero("matM"),
-
-        matF:
-            numero("matF"),
-
-        matTotal:
-            numero("matTotal"),
-
-        asiM:
-            numero("asiM"),
-
-        asiF:
-            numero("asiF"),
-
-        asiTotal:
-            numero("asiTotal"),
-
-        porcentaje:
-            numero("porcentaje"),
-
-        docM:
-            numero("docM"),
-
-        docF:
-            numero("docF"),
-
-        docTotal:
-            numero("docTotal"),
-
-        jusM:
-            numero("jusM"),
-
-        jusF:
-            numero("jusF"),
-
-        jusTotal:
-            numero("jusTotal"),
-
-        injM:
-            numero("injM"),
-
-        injF:
-            numero("injF"),
-
-        injTotal:
-            numero("injTotal"),
-
-        estado:
-            "RECIBIDO",
-
-        password:
-            sesion.password
-
+}
+function obtenerColaPendiente(){
+    const cola = leerJSONLocal(LOCAL_QUEUE_KEY, []);
+    return Array.isArray(cola) ? cola : [];
+}
+function guardarColaPendiente(cola){
+    localStorage.setItem(LOCAL_QUEUE_KEY, JSON.stringify(cola));
+    actualizarPanelOffline();
+}
+function reporteLocalDesdePayload(p, pendiente){
+    return {
+        "Fecha": p.fecha,
+        "Código": String(p.codigo),
+        "Centro Educativo": p.centro,
+        "Modalidad": p.modalidad,
+        "Turno": p.turno,
+        "Matrícula M": Number(p.matM)||0,
+        "Matrícula F": Number(p.matF)||0,
+        "Matrícula Total": Number(p.matTotal)||0,
+        "Asistencia M": Number(p.asiM)||0,
+        "Asistencia F": Number(p.asiF)||0,
+        "Asistencia Total": Number(p.asiTotal)||0,
+        "Porcentaje": Number(p.porcentaje)||0,
+        "Docentes M": Number(p.docM)||0,
+        "Docentes F": Number(p.docF)||0,
+        "Docentes Total": Number(p.docTotal)||0,
+        "Justificados M": Number(p.jusM)||0,
+        "Justificados F": Number(p.jusF)||0,
+        "Justificados Total": Number(p.jusTotal)||0,
+        "Injustificados M": Number(p.injM)||0,
+        "Injustificados F": Number(p.injF)||0,
+        "Injustificados Total": Number(p.injTotal)||0,
+        "Estado": pendiente ? "PENDIENTE DE SINCRONIZAR" : "RECIBIDO"
     };
-
-
-    try{
-
-        mostrarMensaje(
-            "formMensaje",
-            "⏳ Guardando reporte...",
-            "info"
+}
+function combinarReportesConPendientes(base){
+    const resultado = Array.isArray(base) ? base.slice() : [];
+    obtenerColaPendiente().forEach(item => {
+        if(!item || !item.payload) return;
+        const fila = reporteLocalDesdePayload(item.payload, true);
+        const idx = resultado.findIndex(r =>
+            String(r["Código"])===String(fila["Código"]) &&
+            String(r["Fecha"]).substring(0,10)===String(fila["Fecha"]).substring(0,10)
         );
-
-
-        await fetch(
-            API_URL,
-            {
-                method:"POST",
-                mode:"no-cors",
-                headers:{
-                    "Content-Type":
-                    "text/plain;charset=UTF-8"
-                },
-                body:
-                    JSON.stringify(
-                        payload
-                    )
+        if(idx>=0) resultado[idx]=fila; else resultado.push(fila);
+    });
+    return resultado;
+}
+function mismoReporteEnServidor(r, p){
+    return String(r["Código"])===String(p.codigo) &&
+        String(r["Fecha"]).substring(0,10)===String(p.fecha) &&
+        String(r["Modalidad"]||"")===String(p.modalidad||"") &&
+        String(r["Turno"]||"")===String(p.turno||"") &&
+        Number(r["Matrícula M"]||0)===Number(p.matM||0) &&
+        Number(r["Matrícula F"]||0)===Number(p.matF||0) &&
+        Number(r["Asistencia M"]||0)===Number(p.asiM||0) &&
+        Number(r["Asistencia F"]||0)===Number(p.asiF||0) &&
+        Number(r["Docentes M"]||0)===Number(p.docM||0) &&
+        Number(r["Docentes F"]||0)===Number(p.docF||0) &&
+        Number(r["Justificados M"]||0)===Number(p.jusM||0) &&
+        Number(r["Justificados F"]||0)===Number(p.jusF||0) &&
+        Number(r["Injustificados M"]||0)===Number(p.injM||0) &&
+        Number(r["Injustificados F"]||0)===Number(p.injF||0);
+}
+function actualizarPanelOffline(){
+    const online = navigator.onLine;
+    const cola = obtenerColaPendiente();
+    const estado = document.getElementById("offlineEstado");
+    const badge = document.getElementById("offlinePendientes");
+    const ayuda = document.getElementById("offlineAyuda");
+    const detalle = document.getElementById("offlineDetalle");
+    const lista = document.getElementById("offlineLista");
+    const boton = document.getElementById("btnSincronizar");
+    if(!estado || !badge || !ayuda || !detalle || !lista || !boton) return;
+    estado.textContent = online ? "🟢 Con conexión a internet" : "📴 SIN CONEXIÓN — modo local";
+    badge.textContent = cola.length + (cola.length===1 ? " reporte pendiente" : " reportes pendientes");
+    badge.classList.toggle("offline", !online || cola.length>0);
+    ayuda.textContent = online
+        ? "Los reportes pendientes se conservarán aquí hasta comprobar que llegaron al servidor."
+        : "Puede seguir registrando asistencia. Los datos se guardan en este dispositivo y no se envían todavía.";
+    detalle.textContent = cola.length ? "No borre los datos del navegador mientras haya reportes pendientes." : "No hay reportes locales pendientes.";
+    boton.disabled = !online || cola.length===0 || sincronizandoPendientesAhora;
+    lista.textContent = cola.map(item => {
+        const p=item.payload||{};
+        return (p.fecha||"Sin fecha")+" · "+(p.centro||p.codigo||"Escuela")+
+            (item.sentAt ? " — envío realizado; falta confirmar en el servidor" : " — guardado en este dispositivo");
+    }).join(" | ");
+}
+function actualizarVistaConDatosLocales(){
+    reportes = combinarReportesConPendientes(leerJSONLocal(LOCAL_REPORTS_KEY, reportes));
+    actualizarDashboard();
+    mostrarEscuelas();
+    mostrarTabla();
+    if(escuelaSeleccionada) cargarEscuela(escuelaSeleccionada.codigo);
+    actualizarPanelOffline();
+}
+async function obtenerReportesServidor(){
+    const respuesta = await fetch(API_URL, {method:"GET", cache:"no-store"});
+    if(!respuesta.ok) throw new Error("No se pudo consultar el servidor.");
+    const datos = await respuesta.json();
+    if(!datos.ok) throw new Error(datos.error || "Error del servidor.");
+    return datos.reportes || [];
+}
+async function sincronizarPendientes(){
+    if(sincronizandoPendientesAhora) return;
+    if(!navigator.onLine){
+        mostrarMensaje("formMensaje","📴 No hay internet. El reporte sigue guardado en este dispositivo.","info");
+        actualizarPanelOffline();
+        return;
+    }
+    const colaInicial=obtenerColaPendiente();
+    if(!colaInicial.length){actualizarPanelOffline();return;}
+    sincronizandoPendientesAhora=true;
+    actualizarPanelOffline();
+    let cola=obtenerColaPendiente();
+    let confirmados=0;
+    try{
+        let servidor=await obtenerReportesServidor();
+        for(let i=0;i<cola.length;i++){
+            const item=cola[i];
+            if(!item || !item.payload) continue;
+            if(servidor.some(r=>mismoReporteEnServidor(r,item.payload))){
+                cola=cola.filter(x=>x.id!==item.id);
+                guardarColaPendiente(cola);
+                confirmados++;
+                continue;
             }
-        );
-
-
-        mostrarMensaje(
-            "formMensaje",
-            "✅ Reporte enviado correctamente.",
-            "success"
-        );
-
-
-        setTimeout(
-            async () => {
-
-                await cargarDatosCompartidos();
-
-                cargarEscuela(
-                    escuelaSeleccionada.codigo
-                );
-
-            },
-            800
-        );
-
-
-    }catch(error){
-
-        mostrarMensaje(
-            "formMensaje",
-            "❌ No se pudo enviar el reporte.",
-            "warning"
-        );
-
-        console.error(error);
-
-    }
-
-}
-
-
-/* =====================================================
-   CARGAR DATOS COMPARTIDOS
-===================================================== */
-
-async function cargarDatosCompartidos(){
-
-    try{
-
-        const respuesta =
-            await fetch(
-                API_URL,
-                {
-                    method:"GET",
-                    cache:"no-store"
+            /* Evita enviar dos veces el mismo reporte si el servidor ya recibió
+               el POST pero la confirmación tarda en aparecer. */
+            if(item.sentAt) continue;
+            try{
+                await fetch(API_URL,{
+                    method:"POST",
+                    mode:"no-cors",
+                    headers:{"Content-Type":"text/plain;charset=UTF-8"},
+                    body:JSON.stringify(item.payload)
+                });
+                item.sentAt=Date.now();
+                cola=cola.map(x=>x.id===item.id?item:x);
+                guardarColaPendiente(cola);
+                await new Promise(resolve=>setTimeout(resolve,1200));
+                try{
+                    servidor=await obtenerReportesServidor();
+                    if(servidor.some(r=>mismoReporteEnServidor(r,item.payload))){
+                        cola=cola.filter(x=>x.id!==item.id);
+                        guardarColaPendiente(cola);
+                        confirmados++;
+                    }
+                }catch(e){
+                    /* Se conserva en cola hasta poder confirmar la llegada. */
                 }
-            );
-
-        if(!respuesta.ok){
-
-            throw new Error(
-                "No se pudo consultar el servidor."
-            );
-
+            }catch(e){
+                /* Si no se pudo iniciar el envío, se deja sin sentAt para reintentar. */
+                console.warn("No se pudo enviar reporte pendiente",e);
+            }
         }
-
-        const datos =
-            await respuesta.json();
-
-        if(!datos.ok){
-
-            throw new Error(
-                datos.error ||
-                "Error del servidor."
-            );
-
+        const cacheFinal=servidor;
+        localStorage.setItem(LOCAL_REPORTS_KEY,JSON.stringify(cacheFinal));
+        reportes=combinarReportesConPendientes(cacheFinal);
+        actualizarDashboard(); mostrarEscuelas(); mostrarTabla();
+        if(escuelaSeleccionada) cargarEscuela(escuelaSeleccionada.codigo);
+        if(confirmados){
+            mostrarMensaje("formMensaje","✅ "+confirmados+" reporte(s) confirmado(s) en el servidor.","success");
+        }else if(obtenerColaPendiente().length){
+            mostrarMensaje("formMensaje","⚠️ Los reportes siguen guardados localmente. El servidor aún no confirma su recepción; no borre los datos del navegador.","warning");
         }
-
-        reportes =
-            datos.reportes || [];
-
-        document.getElementById(
-            "serverStatus"
-        ).className =
-            "server ok";
-
-        document.getElementById(
-            "serverStatus"
-        ).textContent =
-            "☁️ Datos compartidos activos";
-
-
-        actualizarDashboard();
-
-        mostrarEscuelas();
-
-        mostrarTabla();
-
-        return true;
-
     }catch(error){
-
-        document.getElementById(
-            "serverStatus"
-        ).className =
-            "server error";
-
-        document.getElementById(
-            "serverStatus"
-        ).textContent =
-            "📱 Modo local / servidor pendiente";
-
-        console.warn(
-            "Datos compartidos no disponibles:",
-            error
-        );
-
-        return false;
-
+        mostrarMensaje("formMensaje","📴 No se pudo confirmar la conexión. Los reportes permanecen guardados en este dispositivo.","warning");
+    }finally{
+        sincronizandoPendientesAhora=false;
+        actualizarPanelOffline();
     }
-
 }
-
+async function guardarReporte(){
+    calcular();
+    const fecha=document.getElementById("fecha").value;
+    if(!fecha){mostrarMensaje("formMensaje","⚠️ Selecciona una fecha.","warning");return;}
+    const fechaSeleccionada=new Date(fecha+"T12:00:00");
+    if(fechaSeleccionada.getDay()===0){
+        mostrarMensaje("formMensaje","🚫 DOMINGO — NO HAY CLASES. NO SE PUEDE GUARDAR UN REPORTE.","warning");return;
+    }
+    if(!escuelaSeleccionada){mostrarMensaje("formMensaje","⚠️ Selecciona un centro educativo.","warning");return;}
+    const payload={
+        fecha:fecha,
+        codigo:document.getElementById("codigo").value,
+        centro:document.getElementById("centro").value,
+        modalidad:document.getElementById("modalidad").value,
+        turno:document.getElementById("turno").value,
+        matM:numero("matM"),matF:numero("matF"),matTotal:numero("matTotal"),
+        asiM:numero("asiM"),asiF:numero("asiF"),asiTotal:numero("asiTotal"),
+        porcentaje:numero("porcentaje"),docM:numero("docM"),docF:numero("docF"),
+        docTotal:numero("docTotal"),jusM:numero("jusM"),jusF:numero("jusF"),
+        jusTotal:numero("jusTotal"),injM:numero("injM"),injF:numero("injF"),
+        injTotal:numero("injTotal"),estado:"RECIBIDO",password:sesion.password
+    };
+    try{
+        const cola=obtenerColaPendiente();
+        const existente=cola.find(x=>x.payload && String(x.payload.codigo)===String(payload.codigo) && String(x.payload.fecha)===String(payload.fecha));
+        if(existente){
+            existente.payload=payload;
+            existente.sentAt=null;
+            guardarColaPendiente(cola);
+        }else{
+            cola.push({id:String(payload.codigo)+"-"+payload.fecha+"-"+Date.now(),payload:payload,createdAt:Date.now(),sentAt:null});
+            guardarColaPendiente(cola);
+        }
+        reportes=combinarReportesConPendientes(leerJSONLocal(LOCAL_REPORTS_KEY,reportes));
+        actualizarDashboard();mostrarEscuelas();mostrarTabla();
+        mostrarMensaje("formMensaje",navigator.onLine
+            ?"💾 Reporte guardado en este dispositivo. Intentando sincronizar y verificar con el servidor..."
+            :"📴 Reporte guardado en este dispositivo. Quedará pendiente hasta recuperar internet.","success");
+        actualizarPanelOffline();
+        if(navigator.onLine) await sincronizarPendientes();
+    }catch(error){
+        mostrarMensaje("formMensaje","❌ No se pudo guardar en este dispositivo. No cierre la página; revise el almacenamiento del navegador.","warning");
+        console.error(error);
+    }
+}
+async function cargarDatosCompartidos(){
+    try{
+        const datos=await obtenerReportesServidor();
+        localStorage.setItem(LOCAL_REPORTS_KEY,JSON.stringify(datos));
+        reportes=combinarReportesConPendientes(datos);
+        document.getElementById("serverStatus").className="server ok";
+        document.getElementById("serverStatus").textContent="☁️ Datos compartidos activos";
+        actualizarDashboard();mostrarEscuelas();mostrarTabla();actualizarPanelOffline();
+        return true;
+    }catch(error){
+        const guardados=leerJSONLocal(LOCAL_REPORTS_KEY,[]);
+        reportes=combinarReportesConPendientes(guardados);
+        document.getElementById("serverStatus").className="server error";
+        document.getElementById("serverStatus").textContent=guardados.length
+            ?"📴 Modo sin conexión: se muestran datos guardados en este dispositivo"
+            :"📴 Sin conexión: puede registrar reportes nuevos; aún no hay datos anteriores guardados aquí";
+        actualizarDashboard();mostrarEscuelas();mostrarTabla();actualizarPanelOffline();
+        console.warn("Datos compartidos no disponibles:",error);
+        return false;
+    }
+}
 
 /* =====================================================
    DASHBOARD
@@ -1923,6 +1908,12 @@ function mostrarMensaje(
 ===================================================== */
 
 prepararLogin();
+actualizarPanelOffline();
+window.addEventListener("online", function(){ actualizarPanelOffline(); sincronizarPendientes(); });
+window.addEventListener("offline", actualizarPanelOffline);
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function(){ navigator.serviceWorker.register("./sw.js").catch(function(e){ console.warn("No se pudo preparar el modo sin conexión:",e); }); });
+}
 document.getElementById("app").classList.add("hidden");
 document.getElementById("loginScreen").classList.remove("hidden");
 
