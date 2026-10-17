@@ -1514,7 +1514,7 @@ async function sincronizarPendientes(){
                     method:"POST",
                     mode:"no-cors",
                     headers:{"Content-Type":"text/plain;charset=UTF-8"},
-                    body:JSON.stringify(item.payload)
+                    body:JSON.stringify(Object.assign({},item.payload,{password:(escuelas.find(e=>String(e.codigo)===String(item.payload.codigo))||{}).password||""}))
                 });
                 item.sentAt=Date.now();
                 cola=cola.map(x=>x.id===item.id?item:x);
@@ -1572,7 +1572,7 @@ async function guardarReporte(){
         porcentaje:numero("porcentaje"),docM:numero("docM"),docF:numero("docF"),
         docTotal:numero("docTotal"),jusM:numero("jusM"),jusF:numero("jusF"),
         jusTotal:numero("jusTotal"),injM:numero("injM"),injF:numero("injF"),
-        injTotal:numero("injTotal"),estado:"RECIBIDO",password:sesion.password
+        injTotal:numero("injTotal"),estado:"RECIBIDO"
     };
     try{
         const cola=obtenerColaPendiente();
