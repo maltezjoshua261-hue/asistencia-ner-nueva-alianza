@@ -1600,7 +1600,9 @@ async function guardarReporte(){
 async function cargarDatosCompartidos(){
     try{
         const datos=await obtenerReportesServidor();
-        localStorage.setItem(LOCAL_REPORTS_KEY,JSON.stringify(datos));
+        const propios=datos.filter(r=>String(r["Código"])===String(sesion.codigo));
+        /* En el dispositivo de cada escuela solo guardamos su propio historial. */
+        localStorage.setItem(LOCAL_REPORTS_KEY,JSON.stringify(propios));
         reportes=combinarReportesConPendientes(datos);
         document.getElementById("serverStatus").className="server ok";
         document.getElementById("serverStatus").textContent="☁️ Datos compartidos activos";
