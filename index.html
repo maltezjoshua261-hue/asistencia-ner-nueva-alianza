@@ -339,6 +339,7 @@ footer{
 <div class="card">Asistencia registrada<strong id="adminAsistencia">0</strong></div>
 </div>
 <div id="adminEscuelas" class="schools"></div>
+<div id="adminDetalle" class="table-box"><h3>🔎 Detalle de escuela</h3><p>Seleccione una escuela para consultar sus datos de la fecha elegida.</p></div>
 <div class="table-box"><h3>📋 Reportes de la fecha</h3><div id="adminTabla">No hay reportes.</div></div>
 <div class="admin-actions"><button onclick="cargarDatosAdmin()">🔄 Actualizar</button><button class="secondary-admin" onclick="cerrarSesion()">Cerrar sesión</button></div>
 </div>
@@ -806,12 +807,41 @@ function renderAdmin(){
     document.getElementById("adminMatricula").textContent=mat;
     document.getElementById("adminAsistencia").textContent=asi;
     const box=document.getElementById("adminEscuelas");box.innerHTML="";
-    escuelas.forEach(e=>{const existe=recibidos.has(e.codigo);const b=document.createElement("div");b.className="school";b.innerHTML="<div class='name'>"+e.nombre+"</div><div class='code'>Código: "+e.codigo+"</div><div class='status'>"+(existe?"🟢 REPORTE RECIBIDO":"🔴 PENDIENTE")+"</div>";box.appendChild(b);});
+    escuelas.forEach(e=>{
+        const existe=recibidos.has(e.codigo);
+        const b=document.createElement("button");
+        b.type="button";
+        b.className="school"+(window.adminEscuelaActiva===e.codigo?" active":"");
+        b.style.fontFamily="inherit";
+        b.innerHTML="<div class='name'>"+e.nombre+"</div><div class='code'>Código: "+e.codigo+"</div><div class='status'>"+(existe?"🟢 REPORTE RECIBIDO":"🔴 PENDIENTE")+"</div><div class='code' style='margin-top:6px'>👆 Clic para ver datos</div>";
+        b.onclick=()=>mostrarDetalleEscuela(e.codigo);
+        box.appendChild(b);
+    });
     const cont=document.getElementById("adminTabla");
     if(!diarios.length){cont.innerHTML="No hay reportes registrados para esta fecha.";return;}
     let html="<table><thead><tr><th>Código</th><th>Centro</th><th>Modalidad</th><th>Turno</th><th>Matrícula</th><th>Asistencia</th><th>%</th><th>Docentes</th><th>Estado</th></tr></thead><tbody>";
     diarios.forEach(r=>{html+="<tr><td>"+(r["Código"]||"")+"</td><td>"+(r["Centro Educativo"]||"")+"</td><td>"+(r["Modalidad"]||"")+"</td><td>"+(r["Turno"]||"")+"</td><td>"+(r["Matrícula Total"]||0)+"</td><td>"+(r["Asistencia Total"]||0)+"</td><td>"+(r["Porcentaje"]||0)+"%</td><td>"+(r["Docentes Total"]||0)+"</td><td>"+(r["Estado"]||"")+"</td></tr>";});
     html+="</tbody></table>";cont.innerHTML=html;
+}
+function mostrarDetalleEscuela(codigo){
+    window.adminEscuelaActiva=codigo;
+    const escuela=escuelas.find(e=>e.codigo===codigo);
+    const fecha=document.getElementById("adminFecha").value;
+    const detalle=document.getElementById("adminDetalle");
+    if(!escuela||!detalle)return;
+    const filas=reportesAdmin.filter(r=>String(r["Código"])===String(codigo)&&String(r["Fecha"]).substring(0,10)===fecha);
+    renderAdmin();
+    detalle.innerHTML="<h3>🏫 "+escuela.nombre+" — Código "+escuela.codigo+"</h3><p><strong>Fecha consultada:</strong> "+fecha+"</p>";
+    if(!filas.length){
+        detalle.innerHTML+="<div class='warning'>🔴 Esta escuela no tiene un reporte registrado para la fecha seleccionada.</div><p>Pruebe otra fecha en «Fecha de consulta» para revisar reportes anteriores.</p>";
+        return;
+    }
+    let html="<table><thead><tr><th>Fecha</th><th>Modalidad</th><th>Turno</th><th>Matrícula M</th><th>Matrícula F</th><th>Matrícula total</th><th>Asistencia M</th><th>Asistencia F</th><th>Asistencia total</th><th>Porcentaje</th><th>Docentes M</th><th>Docentes F</th><th>Docentes total</th><th>Justificados</th><th>Injustificados</th><th>Estado</th></tr></thead><tbody>";
+    filas.forEach(r=>{
+        html+="<tr><td>"+(r["Fecha"]||"")+"</td><td>"+(r["Modalidad"]||"")+"</td><td>"+(r["Turno"]||"")+"</td><td>"+(r["Matrícula M"]||0)+"</td><td>"+(r["Matrícula F"]||0)+"</td><td>"+(r["Matrícula Total"]||0)+"</td><td>"+(r["Asistencia M"]||0)+"</td><td>"+(r["Asistencia F"]||0)+"</td><td>"+(r["Asistencia Total"]||0)+"</td><td>"+(r["Porcentaje"]||0)+"%</td><td>"+(r["Docentes M"]||0)+"</td><td>"+(r["Docentes F"]||0)+"</td><td>"+(r["Docentes Total"]||0)+"</td><td>"+(r["Justificados Total"]||0)+"</td><td>"+(r["Injustificados Total"]||0)+"</td><td>"+(r["Estado"]||"")+"</td></tr>";
+    });
+    html+="</tbody></table>";
+    detalle.innerHTML+="<div style='overflow:auto'>"+html+"</div>";
 }
 
 /* =====================================================
