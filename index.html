@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0f766e">
 <link rel="manifest" href="./manifest.webmanifest">
 
-<title>Asistencia NER Nueva Alianza V2.1</title>
+<title>Asistencia NER Nueva Alianza V2.2</title>
 
 <style>
 *{
@@ -331,7 +331,7 @@ footer{
 
 <header>
     <h1>ASISTENCIA NER NUEVA ALIANZA</h1>
-    <p>Control diario de asistencia escolar — V2.1</p>
+    <p>Control diario de asistencia escolar — V2.2</p>
 </header>
 
 <div class="container">
@@ -601,7 +601,7 @@ footer{
 </div>
 
 <footer>
-    Sistema de Asistencia NER Nueva Alianza · V2.1
+    Sistema de Asistencia NER Nueva Alianza · V2.2
 </footer>
 
 <script>
@@ -1417,15 +1417,18 @@ function reporteLocalDesdePayload(p, pendiente){
         "Estado": pendiente ? "PENDIENTE DE SINCRONIZAR" : "RECIBIDO"
     };
 }
+function mismaClaveReporte(a,b){
+    return String(a.codigo ?? a["Código"] ?? "")===String(b.codigo ?? b["Código"] ?? "") &&
+        String(a.fecha ?? a["Fecha"] ?? "").substring(0,10)===String(b.fecha ?? b["Fecha"] ?? "").substring(0,10) &&
+        String(a.modalidad ?? a["Modalidad"] ?? "")===String(b.modalidad ?? b["Modalidad"] ?? "") &&
+        String(a.turno ?? a["Turno"] ?? "")===String(b.turno ?? b["Turno"] ?? "");
+}
 function combinarReportesConPendientes(base){
     const resultado = Array.isArray(base) ? base.slice() : [];
     obtenerColaPendiente().forEach(item => {
         if(!item || !item.payload) return;
         const fila = reporteLocalDesdePayload(item.payload, true);
-        const idx = resultado.findIndex(r =>
-            String(r["Código"])===String(fila["Código"]) &&
-            String(r["Fecha"]).substring(0,10)===String(fila["Fecha"]).substring(0,10)
-        );
+        const idx = resultado.findIndex(r => mismaClaveReporte(r,item.payload));
         if(idx>=0) resultado[idx]=fila; else resultado.push(fila);
     });
     return resultado;
@@ -1535,9 +1538,9 @@ async function sincronizarPendientes(){
                 confirmados++;
                 continue;
             }
-            /* Evita enviar dos veces el mismo reporte si el servidor ya recibió
-               el POST pero la confirmación tarda en aparecer. */
-            if(item.sentAt) continue;
+            /* El servidor actualiza por fecha + centro + modalidad + turno.
+               Reintentar este envío es idempotente y evita que una confirmación
+               perdida deje el reporte pendiente para siempre. */
             try{
                 await fetch(API_URL,{
                     method:"POST",
@@ -1607,7 +1610,7 @@ async function guardarReporte(){
     };
     try{
         const cola=obtenerColaPendiente();
-        const existente=cola.find(x=>x.payload && String(x.payload.codigo)===String(payload.codigo) && String(x.payload.fecha)===String(payload.fecha));
+        const existente=cola.find(x=>x.payload && mismaClaveReporte(x.payload,payload));
         if(existente){
             existente.payload=payload;
             existente.sentAt=null;
