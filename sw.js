@@ -1,11 +1,12 @@
-const CACHE_NAME = "asistencia-ner-shell-v2";
+const CACHE_NAME = "asistencia-ner-shell-v3";
 const APP_ROOT = new URL("./", self.location.href).href;
 const INDEX_URL = new URL("./index.html", self.location.href).href;
 const SHELL_FILES = [
   APP_ROOT,
   INDEX_URL,
   new URL("./manifest.webmanifest", self.location.href).href,
-  new URL("./icon.svg", self.location.href).href
+  new URL("./icon.svg", self.location.href).href,
+  new URL("./prueba-asistencia-local.html", self.location.href).href
 ];
 
 self.addEventListener("install", event => {
