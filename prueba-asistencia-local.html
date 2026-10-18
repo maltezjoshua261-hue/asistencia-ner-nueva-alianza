@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<title>Prueba aislada de asistencia local · NER</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f5f9;color:#1e293b;font-family:Arial,Helvetica,sans-serif;line-height:1.5}.wrap{max-width:780px;margin:24px auto;padding:0 14px}.card{background:white;border-radius:14px;padding:20px;box-shadow:0 2px 10px #00000012;margin-bottom:16px}h1{font-size:24px;color:#0f766e;margin-top:0}.warning{background:#fff7ed;border-left:5px solid #ea580c;padding:12px;border-radius:8px}.status{padding:12px;border-radius:8px;background:#f1f5f9;margin:12px 0;overflow-wrap:anywhere}.good{background:#dcfce7;color:#166534}.bad{background:#fee2e2;color:#991b1b}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;font-weight:bold;margin:8px 0 4px}input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}button,a.btn{display:inline-block;border:0;border-radius:8px;padding:11px 14px;margin:6px 5px 4px 0;background:#0f766e;color:white;font-weight:bold;text-decoration:none;cursor:pointer}button.secondary{background:#64748b}button.danger{background:#b91c1c}small{color:#64748b}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #e2e8f0}code{overflow-wrap:anywhere}@media(max-width:520px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="card">
+<h1>🧪 Prueba aislada de asistencia sin internet</h1>
+<div class="warning"><strong>SOLO SIMULACIÓN — NO ES EL REGISTRO OFICIAL.</strong><br>Esta página usa una clave local exclusiva de prueba. No consulta ni envía datos al servidor, no usa la cola oficial y no modifica reportes de ninguna escuela. Use únicamente números ficticios.</div>
+<div id="connection" class="status">Comprobando conexión del navegador…</div>
+<p>Primero abra esta página con internet. Después puede activar <strong>Network → Offline</strong> en las herramientas del navegador y guardar la simulación.</p>
+<form id="form">
+<label for="fecha">Fecha de prueba</label>
+<input id="fecha" type="date" required>
+<div class="grid">
+<div><label for="matM">Matrícula ficticia — varones</label><input id="matM" type="number" min="0" step="1" value="10" required></div>
+<div><label for="matF">Matrícula ficticia — mujeres</label><input id="matF" type="number" min="0" step="1" value="10" required></div>
+<div><label for="asisM">Asistencia ficticia — varones</label><input id="asisM" type="number" min="0" step="1" value="8" required></div>
+<div><label for="asisF">Asistencia ficticia — mujeres</label><input id="asisF" type="number" min="0" step="1" value="9" required></div>
+</div>
+<button type="submit">💾 Guardar simulación solo en este dispositivo</button>
+<button type="button" class="secondary" id="leer">🔎 Comprobar guardado local</button>
+<button type="button" class="danger" id="borrar">Borrar solo esta simulación</button>
+</form>
+<div id="estado" class="status">No se ha ejecutado la prueba todavía.</div>
+</section>
+<section class="card">
+<h2>Resultado recuperado del dispositivo</h2>
+<div id="resultado" class="status">Todavía no hay simulación guardada.</div>
+<p><small>Para verificar persistencia, guarde la simulación, mantenga esta página abierta mientras activa Offline y pulse “Comprobar guardado local”. Luego vuelva a conectar el navegador antes de salir. No pulse sincronizar en el sistema oficial.</small></p>
+<a class="btn" href="./">Volver al sistema oficial</a>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+const KEY="nerOfflineAttendanceSimulationOnlyV1";
+const $=id=>document.getElementById(id);
+$("fecha").value=new Date().toISOString().slice(0,10);
+function connection(){const el=$("connection");if(navigator.onLine){el.className="status good";el.textContent="🟢 El navegador indica conexión. Esta prueba no contacta al servidor.";}else{el.className="status bad";el.textContent="📴 Navegador sin conexión. La simulación se guarda únicamente en este dispositivo."}}
+function read(){try{const d=JSON.parse(localStorage.getItem(KEY)||"null");return d&&d.testOnly===true?d:null}catch(e){return null}}
+function show(){const d=read();if(!d){$("resultado").className="status";$("resultado").textContent="No hay simulación guardada en esta página.";return}
+$("resultado").className="status good";$("resultado").textContent="Guardado local confirmado · "+d.id+" · Fecha: "+d.fecha+" · Matrícula ficticia: "+d.matricula.varones+" varones y "+d.matricula.mujeres+" mujeres · Asistencia ficticia: "+d.asistencia.varones+" varones y "+d.asistencia.mujeres+" mujeres · Guardado: "+d.savedAt+". No se envió al servidor."}
+$("form").addEventListener("submit",e=>{e.preventDefault();const nums=["matM","matF","asisM","asisF"].map(id=>Number($(id).value));if(nums.some(n=>!Number.isInteger(n)||n<0)){alert("Use solamente números enteros iguales o mayores que cero.");return}if(nums[2]>nums[0]||nums[3]>nums[1]){alert("La asistencia no puede superar la matrícula ficticia.");return}
+const d={testOnly:true,id:"SIMULACION-LOCAL-"+Date.now(),fecha:$("fecha").value,matricula:{varones:nums[0],mujeres:nums[1],total:nums[0]+nums[1]},asistencia:{varones:nums[2],mujeres:nums[3],total:nums[2]+nums[3]},savedAt:new Date().toLocaleString("es-NI"),purpose:"simulacion-local-aislada-no-oficial"};
+try{localStorage.setItem(KEY,JSON.stringify(d));$("estado").className="status good";$("estado").textContent="✅ Simulación guardada en este dispositivo. No se envió al servidor ni se modificaron reportes oficiales.";show()}catch(err){$("estado").className="status bad";$("estado").textContent="❌ No se pudo guardar localmente: "+(err.message||err)}});
+$("leer").addEventListener("click",()=>{connection();const d=read();$("estado").className=d?"status good":"status";$("estado").textContent=d?"Guardado local confirmado. La simulación continúa en este dispositivo.":"No se encontró una simulación guardada.";show()});
+$("borrar").addEventListener("click",()=>{try{localStorage.removeItem(KEY);$("estado").className="status";$("estado").textContent="Se borró únicamente la simulación aislada. Los reportes oficiales no fueron tocados.";show()}catch(err){$("estado").className="status bad";$("estado").textContent="No se pudo borrar la simulación: "+(err.message||err)}});
+window.addEventListener("online",connection);window.addEventListener("offline",connection);connection();show();
+})();
+</script>
+</body>
+</html>
