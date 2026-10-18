@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0f766e">
 <link rel="manifest" href="./manifest.webmanifest">
 
-<title>Asistencia NER Nueva Alianza V2.2</title>
+<title>Asistencia NER Nueva Alianza V2.3</title>
 
 <style>
 *{
@@ -1953,6 +1953,28 @@ window.addEventListener("online", async function(){
     if(disponible) await sincronizarPendientes();
 });
 window.addEventListener("offline", function(){ conexionServidorDisponible=false; actualizarPanelOffline(); });
+// Reintentos automáticos adicionales: cubren redes que vuelven sin disparar
+// el evento "online" de forma fiable y cuando el usuario regresa a la pestaña.
+let reintentoOfflineEnCurso = false;
+async function reintentarSincronizacionAutomatica(){
+    if(reintentoOfflineEnCurso || !navigator.onLine) return;
+    if(!obtenerColaPendiente().length) return;
+    reintentoOfflineEnCurso = true;
+    try{
+        const disponible = await comprobarConexionServidor();
+        if(disponible) await sincronizarPendientes();
+    }catch(e){
+        console.warn("Se reintentará la sincronización más tarde.",e);
+    }finally{
+        reintentoOfflineEnCurso = false;
+    }
+}
+window.addEventListener("focus", reintentarSincronizacionAutomatica);
+document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState === "visible") reintentarSincronizacionAutomatica();
+});
+// Revisa cada 45 segundos únicamente si hay reportes pendientes.
+window.setInterval(reintentarSincronizacionAutomatica, 45000);
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", function(){ navigator.serviceWorker.register("./sw.js").catch(function(e){ console.warn("No se pudo preparar el modo sin conexión:",e); }); });
 }
