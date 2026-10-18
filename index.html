@@ -896,19 +896,21 @@ document.getElementById("fecha")
 .addEventListener("change",function(){
 
     actualizarDia();
-
     actualizarDashboard();
-
     mostrarEscuelas();
 
     if(escuelaSeleccionada){
-
-        cargarEscuela(
-            escuelaSeleccionada.codigo
-        );
-
+        cargarEscuela(escuelaSeleccionada.codigo);
     }
 
+});
+
+["modalidad","turno"].forEach(id => {
+    document.getElementById(id).addEventListener("change",function(){
+        if(escuelaSeleccionada){
+            cargarEscuela(escuelaSeleccionada.codigo);
+        }
+    });
 });
 
 
@@ -1094,17 +1096,14 @@ function cargarEscuela(codigo){
             "fecha"
         ).value;
 
-    const existente =
-        reportes.find(
-            r =>
-            String(r["Fecha"])
-            .substring(0,10)
-            === fecha
-            &&
-            String(r["Código"])
-            ===
-            escuelaSeleccionada.codigo
-        );
+    const modalidadSeleccionada = document.getElementById("modalidad").value;
+    const turnoSeleccionado = document.getElementById("turno").value;
+    const existente = reportes.find(r =>
+        String(r["Fecha"]).substring(0,10) === fecha &&
+        String(r["Código"]) === String(escuelaSeleccionada.codigo) &&
+        String(r["Modalidad"] || "") === modalidadSeleccionada &&
+        String(r["Turno"] || "") === turnoSeleccionado
+    );
 
     if(existente){
 
