@@ -1,4 +1,4 @@
-const CACHE_NAME = "asistencia-ner-shell-v4";
+const CACHE_NAME = "asistencia-ner-shell-v5";
 const APP_ROOT = new URL("./", self.location.href).href;
 const INDEX_URL = new URL("./index.html", self.location.href).href;
 const SHELL_FILES = [
